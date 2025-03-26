@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    private static Sprite backOfCard;
     private CardShape shape;
     private int value;
 
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Initialize()
     {
-        
+
+    }
+
+    private void TestMethod()
+    {
+        print("Card");
     }
 }
 

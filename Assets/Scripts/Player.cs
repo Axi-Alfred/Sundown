@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private string playerName;
+    private List<GameObject> handOfCards;
 
     // Start is called before the first frame update
     void Start()
@@ -17,4 +18,5 @@ public class Player : MonoBehaviour
     {
         
     }
+
 }

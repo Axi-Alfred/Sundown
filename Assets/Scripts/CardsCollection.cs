@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CardsCollection : MonoBehaviour
 {
+    public GameObject[] cardsCollection = new GameObject[3];
+    public Sprite[] cardSprites = new Sprite[3];
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +17,10 @@ public class CardsCollection : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void CreateCard(Sprite sprite, CardShape shape, int value)
+    {
+
     }
 }
