@@ -4,28 +4,30 @@ using UnityEngine;
 
 public class CardsCollection : MonoBehaviour
 {
-    public GameObject[] cardsCollection = new GameObject[3];
+    public CardData[] cardsCollection = new CardData[3]; 
     public Sprite[] cardSprites = new Sprite[3];
 
-    [SerializeField] private GameObject cardsPrefab;
+    [SerializeField] private GameObject cardPrefab;
 
-    // Start is called before the first frame update
     void Start()
     {
-        CreateCard(cardSprites[2], CardShape.Shape2, 3, 0);
+        CreateCard(cardSprites[0], CardShape.Circle, 5, 0);
+        CreateCard(cardSprites[1], CardShape.Square, 10, 1);
+        CreateCard(cardSprites[2], CardShape.Triangle, 3, 2);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CreateCard(Sprite sprite, CardShape shape, int value, int index)
     {
-        
+        cardsCollection[index] = new CardData(sprite, shape, value);
     }
 
-    private void CreateCard(Sprite sprite, CardShape shape, int value, int cardIndexInArray)
+    public void SpawnCard(int index)
     {
-        GameObject newCard = Instantiate(cardsPrefab);
-        Card cardClass = newCard.GetComponent<Card>(); 
-        cardClass.Initialize(sprite, shape, value);
-        cardsCollection[cardIndexInArray] = newCard;
+        if (cardsCollection[index] != null)
+        {
+            GameObject newCard = Instantiate(cardPrefab);
+            Card cardScript = newCard.GetComponent<Card>();
+            cardScript.Initialize(cardsCollection[index]); 
+        }
     }
 }
