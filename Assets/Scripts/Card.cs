@@ -1,22 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    private static Sprite backOfCard;
+    [SerializeField] private static Sprite backOfCard;
+
+    [SerializeField] private TextMeshPro valueText;
+
     private CardShape shape;
     private int value;
+    private Sprite Sprite;
+
+    private SpriteRenderer spriteRend;
 
     // Start is called before the first frame update
     private void Awake()
     {
-        
+        spriteRend = GetComponent<SpriteRenderer>();
     }
 
-    private void Initialize()
+    public void Initialize(Sprite sprite, CardShape shape, int value)
     {
-
+        this.value = value;
+        this.shape = shape;
+        spriteRend.sprite = sprite;
+        valueText.text = value.ToString();
     }
 
     private void TestMethod()
