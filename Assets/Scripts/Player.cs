@@ -5,10 +5,10 @@ using UnityEngine;
 public class Player
 {
     private string playerName;
-
     private int playerId;
-
     private int playerScore;
+
+    private bool hasPlayed;
 
     // Start is called before the first frame update
     
@@ -31,6 +31,11 @@ public class Player
     public void AddScore()
     {
         playerScore++;
+    }
+
+    public bool HasPlayed()
+    {
+        return hasPlayed;
     }
 
     override
