@@ -22,5 +22,6 @@ public class GyroControl : MonoBehaviour
                 transform.Rotate(0, 0, -zRotation * rotationSpeed * Time.deltaTime);
             }
         }
+
     }
 }

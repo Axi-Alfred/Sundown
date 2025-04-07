@@ -13,7 +13,7 @@ public class SpinWheel : MonoBehaviour
     private Vector2 lastTouchPos;
     private bool isDragging;
     private bool isSpinning;
-    private bool hasSpinned; //has already spinned and is currently stationary
+    private bool hasSpinned; //has already bombaclat spinned and is currently stationary
     private bool hasReachedMotionThreshold;
 
     // Start is called before the first frame update
