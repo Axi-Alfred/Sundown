@@ -5,66 +5,51 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;
+    public float xBoundary = 8f;
 
-    public Rigidbody2D playerRidgidbody;
-    public GameObject block;
+    private Rigidbody2D rb;
 
-    public float moveSpeed;
-
-    public bool alive = true;
-
-
-    // Start is called before the first frame update
     void Start()
     {
-
+        rb = GetComponent<Rigidbody2D>();
     }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Block"))
-        {
-
-           Debug.Log("Player is hit");
-            alive = false;
-            Debug.Log("DEAD");
-
-        }
-    }
-
 
     private void FixedUpdate()
     {
-        TouchmoveSpeed();
+        HandleTouchInput();
+        ClampPosition();
     }
 
-    void TouchmoveSpeed()
+    void HandleTouchInput()
     {
-        if (Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(0))
         {
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            if (touchPosition.x < 0)
-            {
-                //moveSpeed left
-                playerRidgidbody.velocity = Vector2.left * moveSpeed;
-            }
-            else
-            {
-                //moveSpeed right
-                playerRidgidbody.velocity = Vector2.right * moveSpeed;
-            }
+            rb.velocity = Vector2.zero;
+            return;
         }
-        else
+
+        Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        rb.velocity = touchPosition.x < 0 ?
+            Vector2.left * moveSpeed :
+            Vector2.right * moveSpeed;
+    }
+
+    void ClampPosition()
+    {
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, -xBoundary, xBoundary);
+        transform.position = pos;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Block"))
         {
-            playerRidgidbody.velocity = Vector2.zero;
+            Debug.Log("Game Over");
+            // Add your game over logic here
+            Time.timeScale = 0; // Freeze game
         }
     }
 }

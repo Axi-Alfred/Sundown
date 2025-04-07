@@ -6,36 +6,60 @@ public class BlockSpawnerScript : MonoBehaviour
 {
 
     public GameObject block;
-    public float spawnRate;
-    private float timer = 0;
-    public float widthOffset = 10;
 
-    // Start is called before the first frame update
+    //public float spawnRate;  //First iteration
+    public float baseSpawnRate = 2f; //Second iteration
+
+    public float widthOffset = 10f;
+
+    private float timer;
+
+    private float currentSpawnRate; //Second iteration
+
+
+
     void Start()
     {
-        spawnBlock();
+        currentSpawnRate = baseSpawnRate; //Second iteration
+        SpawnBlock();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (timer < spawnRate)
+        timer += Time.deltaTime;
+
+        if (timer >= currentSpawnRate)
+        {
+            SpawnBlock();
+            timer = 0;
+            // Gradually increase spawn rate
+            currentSpawnRate = baseSpawnRate / (DifficultyManagerScript.Instance.CurrentMultiplier * 0.5f);
+        }
+
+        /*if (timer < spawnRate)
         {
             timer = timer + Time.deltaTime;
         }
         else
         {
-            spawnBlock();
+            SpawnBlock();
             timer = 0;
         }
+        */
     }
-    void spawnBlock()
+    void SpawnBlock()
     {
-        float leftRange = transform.position.x - widthOffset;
-        float rightRange = transform.position.x + widthOffset;
-
-        Instantiate(block, new Vector3(Random.Range(leftRange, rightRange), transform.position.y, 0), transform.rotation);
+        float xPos = Random.Range(
+            transform.position.x - widthOffset,
+            transform.position.x + widthOffset
+        );
+        Instantiate(block, new Vector3(xPos, transform.position.y, 0), Quaternion.identity);
     }
 
+    /*float leftRange = transform.position.x - widthOffset;
+    float rightRange = transform.position.x + widthOffset;
 
+    Instantiate(block, new Vector3(Random.Range(leftRange, rightRange), transform.position.y, 0), transform.rotation);
+    */
 }

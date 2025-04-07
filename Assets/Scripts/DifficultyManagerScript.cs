@@ -9,7 +9,8 @@ public class DifficultyManagerScript : MonoBehaviour
     [Header("Difficulty Settings")]
     public float baseFallSpeed = 5f;
     public float speedIncreaseRate = 0.1f;
-    private float currentMultiplier = 1f;
+    [SerializeField] private float currentMultiplier = 1f;
+    public float CurrentMultiplier => currentMultiplier;
 
     void Awake()
     {

@@ -5,27 +5,37 @@ using UnityEngine;
 public class BlockMoveScript : MonoBehaviour
 {
 
-    public float movieSpeed = 5;
+    //public float movieSpeed = 5;
+
     private double deadZone = -11.88;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-       transform.position = transform.position + (Vector3.down * movieSpeed) * Time.deltaTime;
+        /*transform.position = transform.position + (Vector3.down * movieSpeed) * Time.deltaTime;
 
-       if(transform.position.y < deadZone){
-        //Debug.Log("Block destroyed");
-        Destroy(gameObject);
-       }
+        if(transform.position.y < deadZone){
+         //Debug.Log("Block destroyed");
+         Destroy(gameObject);
+        }*/
+
+        float currentSpeed = DifficultyManagerScript.Instance.GetCurrentSpeed();
+        transform.position += Vector3.down * currentSpeed * Time.deltaTime;
+
+        if (transform.position.y < deadZone)
+        {
+            Destroy(gameObject);
+            Debug.Log("DESTROYED");
+            {
+                
+            }
+        }
     }
 
-   
+
 }
