@@ -7,7 +7,7 @@ public class BlockMoveScript : MonoBehaviour
 
     //public float movieSpeed = 5;
 
-    private double deadZone = -11.88;
+    private float deadZone = -11.88f;
 
     void Start()
     {

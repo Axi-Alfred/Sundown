@@ -7,13 +7,34 @@ public class PlayerScript : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed = 8f;
-    public float xBoundary = 8f;
+    public float xBoundary = 17.8f;
 
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        
+        // Automatically set boundaries based on camera view
+        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+        xBoundary = screenWidth - 1f; // 1f padding
+    }
+
+    void Update()
+    {
+        // Draw left boundary
+        Debug.DrawLine(
+            new Vector3(-xBoundary, -10),  // Start point (left bottom)
+            new Vector3(-xBoundary, 10),   // End point (left top)
+            Color.red                      // Color: RED
+        );
+
+        // Draw right boundary
+        Debug.DrawLine(
+            new Vector3(xBoundary, -10),   // Start point (right bottom)
+            new Vector3(xBoundary, 10),    // End point (right top)
+            Color.red                      // Color: RED
+        );
     }
 
     private void FixedUpdate()
@@ -48,7 +69,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Block"))
         {
             Debug.Log("Game Over");
-            // Add your game over logic here
+            // Game logic here
             Time.timeScale = 0; // Freeze game
         }
     }
