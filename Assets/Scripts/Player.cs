@@ -28,8 +28,14 @@ public class Player
         playerName = newName;
     }
 
-    private void AddScore()
+    public void AddScore()
     {
         playerScore++;
+    }
+
+    override
+    public string ToString()
+    {
+        return "Player name: " + playerName + ", " + "Player iD: " + playerId;
     }
 }
