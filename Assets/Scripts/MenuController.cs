@@ -10,7 +10,7 @@ public class MenuController : MonoBehaviour
     
     public void ConfirmGame()
     {
-        SceneManager.LoadScene("Scene 1"); // Ersätt Scene 1 med den första scenen
+        //SceneManager.LoadScene("Scene 1"); // Ersätt Scene 1 med den första scenen
     }
 
     public void ShowPlay()
