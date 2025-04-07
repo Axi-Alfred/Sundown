@@ -216,6 +216,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 22159727}
+  - {fileID: 604977331}
   - {fileID: 98051028}
   - {fileID: 111325199}
   - {fileID: 1218356453}
@@ -253,14 +255,14 @@ RectTransform:
   m_GameObject: {fileID: 22159726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.312037, y: 1.312037, z: 1.312037}
+  m_LocalScale: {x: 0.8069476, y: 0.8069476, z: 0.8069476}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 11105594}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 540.00006, y: 545.5611}
+  m_AnchoredPosition: {x: -207.88147, y: -272.115}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &22159728
@@ -2011,15 +2013,15 @@ RectTransform:
   m_GameObject: {fileID: 604977330}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.312037, y: 1.312037, z: 1.312037}
+  m_LocalScale: {x: 0.8069476, y: 0.8069476, z: 0.8069476}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 851428339}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 11105594}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 540.00006, y: 61.891308}
+  m_AnchoredPosition: {x: -207.88147, y: 38.065254}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &604977332
@@ -5798,7 +5800,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creditsPanel: {fileID: 768630209}
   playPanel: {fileID: 1530265418}
-  wheelSpinner: {fileID: 0}
 --- !u!4 &1983119294
 Transform:
   m_ObjectHideFlags: 0
@@ -6384,8 +6385,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1178934443}
   - {fileID: 189837972}
-  - {fileID: 604977331}
-  - {fileID: 22159727}
   - {fileID: 11105594}
   - {fileID: 902687414}
   - {fileID: 1983119294}
