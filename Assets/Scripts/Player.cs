@@ -11,15 +11,11 @@ public class Player
     private int playerScore;
 
     // Start is called before the first frame update
-    void Start()
+    
+    public Player(string name, int iD)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        playerName = name;
+        playerId = iD;
     }
 
     private string GetPlayerName()
@@ -30,5 +26,10 @@ public class Player
     private void SetPlayerName(string newName)
     {
         playerName = newName;
+    }
+
+    private void AddScore()
+    {
+        playerScore++;
     }
 }
