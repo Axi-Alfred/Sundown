@@ -86,12 +86,12 @@ public class LetterTile : MonoBehaviour
         if (isCorrect)
         {
             GetComponent<Image>().color = Color.green;
-            GameManager.Instance.OnCorrectLetterTapped(this);
+            isItRight.Instance.OnCorrectLetterTapped(this);
         }
         else
         {
             GetComponent<Image>().color = Color.red;
-            GameManager.Instance.OnWrongLetterTapped(this);
+            isItRight.Instance.OnWrongLetterTapped(this);
         }
 
         // 🔁 Flip back (scale X → 1)
@@ -126,7 +126,7 @@ public class LetterTile : MonoBehaviour
 
         // Show red & disable
         GetComponent<Image>().color = Color.red;
-        GameManager.Instance.OnWrongLetterTapped(this);
+        isItRight.Instance.OnWrongLetterTapped(this);
         GetComponent<Button>().interactable = false;
     }
 

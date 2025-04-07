@@ -4,9 +4,9 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class isItRight: MonoBehaviour
 {
-    public static GameManager Instance;
+    public static isItRight Instance;
 
     [Header("Setup")]
     public GameObject letterTilePrefab;
