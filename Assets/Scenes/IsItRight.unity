@@ -398,22 +398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f5a4ce8b8f3c04e816baf89492bcb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  letterTilePrefab: {fileID: 3328203379672074029, guid: 3ba57c969f1bbcb46aaa70b8ba0fe76b, type: 3}
-  letterParent: {fileID: 1147276989}
-  wordList:
-  - apple
-  - hello
-  - world
-  - dream
-  - mirror
-  - flip
-  - level
-  - cloud
-  - right
-  - brain
-  currentWordIndex: 0
-  totalToFix: 0
-  fixedCount: 0
 --- !u!4 &608171599
 Transform:
   m_ObjectHideFlags: 0
