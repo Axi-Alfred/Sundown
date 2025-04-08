@@ -183,7 +183,6 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
   orthographic size: 10
   m_Depth: -1
   m_CullingMask:
@@ -206,7 +205,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 794131012}
 
   m_GameObject: {fileID: 519420028}
 
@@ -922,7 +920,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 794131015}
 
   - {fileID: 519420032}
   - {fileID: 940662644}
