@@ -29,6 +29,11 @@ public class GameManager1
     {
         tempPlayers = new List<Player>(PlayerData.playersArray);
 
+        foreach (Player i in tempPlayers)
+        {
+            i.SetHasPlayed(false);
+        }
+
         for (int i = 0; i < PlayerData.playersArray.Length;)
         {
             NextTurn();
