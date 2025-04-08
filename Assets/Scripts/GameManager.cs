@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
+    private static List<Player> tempPlayers;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -11,30 +13,41 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    void Update()
     {
         
     }
 
-    public void NextTurn()
+    public static void NextTurn()
     {
-        List<Player> tempPlayers = new List<Player>(PlayerData.playersArray);
-
-
         int placeHolderTurn = Random.Range(0, tempPlayers.Count);
         PlayerData.currentPlayerTurn = tempPlayers[placeHolderTurn];
-        tempPlayers.RemoveAt(placeHolderTurn);
-
-        //while (placeHolderTurn =! )
-        //Maybe add a boolean named alreadyPlayed??
-        
+        tempPlayers.RemoveAt(placeHolderTurn);        
     }
 
-    //public bool LoopPerRound()
-  
+    public bool PlayerTurnLoop()
+    {
+        tempPlayers = new List<Player>(PlayerData.playersArray);
 
+        for (int i = 0; i < PlayerData.playersArray.Length;)
+        {
+            NextTurn();
+            if (PlayerData.currentPlayerTurn.HasPlayed())
+            {
+                i++;
+            }
+        }
+        return true;
+    }
+  
     public void RoundsLoop()
     {
-
+        for (int i = 0; i < PlayerData.numberOfRounds;)
+        {
+            if (PlayerTurnLoop())
+            {
+                i++;
+            }
+        }
     }
 }
