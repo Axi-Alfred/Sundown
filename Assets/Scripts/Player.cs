@@ -36,9 +36,9 @@ public class Player
         playerIcon = icon;
     }
 
-    public void AddScore()
+    public void AddScore(int score)
     {
-        playerScore++;
+        playerScore += score;
     }
 
     public bool HasPlayed()
