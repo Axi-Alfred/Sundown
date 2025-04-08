@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Pointer : MonoBehaviour
 {
+    [SerializeField] private TMP_Text text;
     private bool wheelHasSpinned;
     // Start is called before the first frame update
     void Start()
     {
-        
+        GetComponent<BoxCollider2D>().enabled = false;
     }
 
     // Update is called once per frame
@@ -22,15 +26,15 @@ public class Pointer : MonoBehaviour
         switch (other.tag)
         {
             case "Game1":
-                print("Game1 will begin now");
+                text.text = "Game1 will begin now";
                 break;
 
             case "Game2":
-                print("Game2 will begin now");
+                text.text = "Game2 will begin now";
                 break;
 
             case "Game3":
-                print("Game3 will begin now");
+                text.text = "Game3 will begin now";
                 break;
         }
     }

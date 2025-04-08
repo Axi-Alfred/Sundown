@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //[SerializeField] private List<PlayerData>
     // Start is called before the first frame update
     void Start()
     {
@@ -12,8 +11,30 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
+    }
+
+    public void NextTurn()
+    {
+        List<Player> tempPlayers = new List<Player>(PlayerData.playersArray);
+
+
+        int placeHolderTurn = Random.Range(0, tempPlayers.Count);
+        PlayerData.currentPlayerTurn = tempPlayers[placeHolderTurn];
+        tempPlayers.RemoveAt(placeHolderTurn);
+
+        //while (placeHolderTurn =! )
+        //Maybe add a boolean named alreadyPlayed??
+        
+    }
+
+    //public bool LoopPerRound()
+  
+
+    public void RoundsLoop()
+    {
+
     }
 }
