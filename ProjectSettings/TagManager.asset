@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Shape
+  - Pointer
+  - Game1
+  - Game2
+  - Game3
   layers:
   - Default
   - TransparentFX
