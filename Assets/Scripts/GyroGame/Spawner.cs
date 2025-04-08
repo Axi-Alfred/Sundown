@@ -27,5 +27,4 @@ public class Spawner : MonoBehaviour
         return Random.Range(-5, 5);
     }
 
-    
 }

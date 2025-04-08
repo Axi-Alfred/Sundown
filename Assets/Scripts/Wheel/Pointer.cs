@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class Pointer : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
+    [SerializeField] private TMP_Text playerText;
     private bool wheelHasSpinned;
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,10 @@ public class Pointer : MonoBehaviour
     void Update()
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
+
+        GameManager1.RoundsLoop();
+        print(PlayerData.currentPlayerTurn);
+        playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.GetPlayerName();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

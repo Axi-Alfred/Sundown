@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager1
@@ -25,9 +26,10 @@ public class GameManager1
         tempPlayers.RemoveAt(placeHolderTurn);        
     }
 
-    public bool PlayerTurnLoop()
+    public static bool PlayerTurnLoop()
     {
-        tempPlayers = new List<Player>(PlayerData.playersArray);
+        tempPlayers = PlayerData.playersArray.ToList();
+        //tempPlayers = tempPlayers.OrderBy(p => Random.value).ToList();
 
         foreach (Player i in tempPlayers)
         {
@@ -45,7 +47,7 @@ public class GameManager1
         return true;
     }
   
-    public void RoundsLoop()
+    public static void RoundsLoop()
     {
         for (int i = 0; i < PlayerData.numberOfRounds;)
         {

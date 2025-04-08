@@ -9,14 +9,14 @@ public class PlayerData : MonoBehaviour
 
     //public static int currentPlayerTurn = 0;
 
+    public static int numberOfRounds = 5;
+
     public static Player currentPlayerTurn;
 
     public static Player[] playersArray;
 
     private int maxNumberOfPlayer = 6;
     private int minNumberOfPlayer = 3;
-
-    public static int numberOfRounds;
 
     // Start is called before the first frame update
     void Start()

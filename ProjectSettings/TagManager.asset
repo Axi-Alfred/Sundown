@@ -9,6 +9,7 @@ TagManager:
   - Game2
   - Game3
   - Block
+  - GyroGameBlock
   layers:
   - Default
   - TransparentFX
