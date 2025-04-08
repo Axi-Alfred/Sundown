@@ -46,6 +46,11 @@ public class Player
         return hasPlayed;
     }
 
+    public void SetHasPlayed(bool hasPlayed)
+    {
+        this.hasPlayed = hasPlayed;
+    }
+
     override
     public string ToString()
     {
