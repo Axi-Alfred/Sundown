@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GyroControl : MonoBehaviour
+public class GyroControlMovement : MonoBehaviour
 {
     [SerializeField] private float movementSpeed = 50f;
 
