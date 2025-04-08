@@ -10,22 +10,30 @@ public class Player
 
     private bool hasPlayed;
 
+    private Sprite playerIcon;
+
     // Start is called before the first frame update
     
-    public Player(string name, int iD)
+    public Player(string name, int iD, Sprite icon)
     {
         playerName = name;
         playerId = iD;
+        playerIcon = icon;
     }
 
-    private string GetPlayerName()
+    public string GetPlayerName()
     {
         return playerName;
     }
 
-    private void SetPlayerName(string newName)
+    public void SetPlayerName(string newName)
     {
         playerName = newName;
+    }
+
+    public void SetPlayerIcon(Sprite icon)
+    {
+        playerIcon = icon;
     }
 
     public void AddScore()

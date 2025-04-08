@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     [SerializeField] private int numberOfPlayers;
+    [SerializeField] private Sprite[] iconsArray;
 
     //public static int currentPlayerTurn = 0;
 
@@ -27,7 +28,7 @@ public class PlayerData : MonoBehaviour
 
         for (int i = 0; i < playersArray.Length; i++)
         {
-            playersArray[i] = new Player("Player " + (i+1), i);
+            playersArray[i] = new Player("Player " + (i+1), i, iconsArray[i]);
         }
 
         foreach (Player player in playersArray)
