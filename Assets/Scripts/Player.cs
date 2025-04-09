@@ -5,32 +5,50 @@ using UnityEngine;
 public class Player
 {
     private string playerName;
-
     private int playerId;
-
     private int playerScore;
+
+    private bool hasPlayed;
+
+    private Sprite playerIcon;
 
     // Start is called before the first frame update
     
-    public Player(string name, int iD)
+    public Player(string name, int iD, Sprite icon)
     {
         playerName = name;
         playerId = iD;
+        playerIcon = icon;
     }
 
-    private string GetPlayerName()
+    public string GetPlayerName()
     {
         return playerName;
     }
 
-    private void SetPlayerName(string newName)
+    public void SetPlayerName(string newName)
     {
         playerName = newName;
     }
 
-    public void AddScore()
+    public void SetPlayerIcon(Sprite icon)
     {
-        playerScore++;
+        playerIcon = icon;
+    }
+
+    public void AddScore(int score)
+    {
+        playerScore += score;
+    }
+
+    public bool HasPlayed()
+    {
+        return hasPlayed;
+    }
+
+    public void SetHasPlayed(bool hasPlayed)
+    {
+        this.hasPlayed = hasPlayed;
     }
 
     override

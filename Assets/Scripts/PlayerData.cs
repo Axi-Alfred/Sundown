@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     [SerializeField] private int numberOfPlayers;
+    [SerializeField] private Sprite[] iconsArray;
 
     //public static int currentPlayerTurn = 0;
 
@@ -14,6 +15,8 @@ public class PlayerData : MonoBehaviour
 
     private int maxNumberOfPlayer = 6;
     private int minNumberOfPlayer = 3;
+
+    public static int numberOfRounds;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +28,7 @@ public class PlayerData : MonoBehaviour
 
         for (int i = 0; i < playersArray.Length; i++)
         {
-            playersArray[i] = new Player("Player " + (i+1), i);
+            playersArray[i] = new Player("Player " + (i+1), i, iconsArray[i]);
         }
 
         foreach (Player player in playersArray)
