@@ -15,10 +15,11 @@ public class FallingBlocksBehaviour : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         isFalling = true;
         rb2D.gravityScale = 0;
+        //rb2D.freezeRotation = true;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (isFalling)
         {
@@ -31,8 +32,12 @@ public class FallingBlocksBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("GyroGameBlock"))
         {
             isFalling = false;
-            rb2D.gravityScale = 1;
+            rb2D.gravityScale = 1.5f;
+        }
+
+        if (other.gameObject.CompareTag("GyroGameGround"))
+        {
+            Destroy(gameObject);
         }
     }
-   
 }

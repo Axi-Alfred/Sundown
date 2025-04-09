@@ -18,6 +18,8 @@ public class PlayerData : MonoBehaviour
     private int maxNumberOfPlayer = 6;
     private int minNumberOfPlayer = 3;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,10 +33,10 @@ public class PlayerData : MonoBehaviour
             playersArray[i] = new Player("Player " + (i+1), i, iconsArray[i]);
         }
 
-        foreach (Player player in playersArray)
+        /* foreach (Player player in playersArray)
         {
             print(player);
-        }
+        } */
     }
 
     // Update is called once per frame

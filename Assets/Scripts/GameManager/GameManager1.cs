@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager1
 {
     private static List<Player> tempPlayers;
+    public static int currentRound;
 
     // Start is called before the first frame update
     void Start()
@@ -19,42 +20,39 @@ public class GameManager1
         
     }
 
-    public static void NextTurn()
-    {
-        int placeHolderTurn = Random.Range(0, tempPlayers.Count);
-        PlayerData.currentPlayerTurn = tempPlayers[placeHolderTurn];
-        tempPlayers.RemoveAt(placeHolderTurn);        
-    }
-
-    public static bool PlayerTurnLoop()
+    public static IEnumerator PlayerTurnLoop()
     {
         tempPlayers = PlayerData.playersArray.ToList();
-        //tempPlayers = tempPlayers.OrderBy(p => Random.value).ToList();
+        tempPlayers = tempPlayers.OrderBy(p => Random.value).ToList();
 
         foreach (Player i in tempPlayers)
         {
             i.SetHasPlayed(false);
         }
 
-        for (int i = 0; i < PlayerData.playersArray.Length;)
+        for (int i = 0; i < tempPlayers.Count; i++)
         {
-            NextTurn();
-            if (PlayerData.currentPlayerTurn.HasPlayed())
-            {
-                i++;
-            }
+            PlayerData.currentPlayerTurn = tempPlayers[i];
+            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.GetPlayerName());
+
+            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed());
+
+            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.GetPlayerName());
         }
-        return true;
+
+        yield break;
     }
-  
-    public static void RoundsLoop()
+
+    public static IEnumerator RoundsLoop()
     {
-        for (int i = 0; i < PlayerData.numberOfRounds;)
+        for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            if (PlayerTurnLoop())
-            {
-                i++;
-            }
+            Debug.Log("round " + currentRound);
+            yield return PlayerTurnLoop();
         }
+
+        Debug.Log("All rounds finished!");
     }
+
+
 }

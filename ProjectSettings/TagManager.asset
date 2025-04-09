@@ -10,6 +10,7 @@ TagManager:
   - Game3
   - Block
   - GyroGameBlock
+  - GyroGameGround
   layers:
   - Default
   - TransparentFX

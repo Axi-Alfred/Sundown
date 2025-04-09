@@ -843,50 +843,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133946660}
   m_CullTransparentMesh: 1
---- !u!1 &1141755364
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1141755366}
-  - component: {fileID: 1141755365}
-  m_Layer: 0
-  m_Name: GyroControll
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1141755365
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1141755364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e185c80424ee0e499cdc54de9dba2f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1141755366
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1141755364}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1193718817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5b0ef18083d0b84083fdb99cb8677d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
+  movementSpeed: 20
 --- !u!50 &1193718822
 Rigidbody2D:
   serializedVersion: 4
@@ -1044,11 +1000,11 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 4c1c86faae53dc040acb0b8837c49796, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1057,8 +1013,8 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 6
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &1327644972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1119,8 +1075,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 100
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 12.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1309,7 +1265,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawningBlocks: {fileID: 8792147510571599071, guid: 019b224cdf1e0fe4d9de9e8d6b9e7ab5, type: 3}
-  timeBetweenSpawn: 0
+  timeBetweenSpawn: 4
+  spawnerOffsetFromTop: 2
 --- !u!1 &1690914186
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,7 +1280,7 @@ GameObject:
   - component: {fileID: 1690914189}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: GyroGameGround
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1445,7 +1402,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1327644975}
-  - {fileID: 1141755366}
   - {fileID: 15108260}
   - {fileID: 1690914188}
   - {fileID: 1193718820}
