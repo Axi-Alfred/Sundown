@@ -129,6 +129,14 @@ public class LetterTile : MonoBehaviour
         isItRight.Instance.OnWrongLetterTapped(this);
         GetComponent<Button>().interactable = false;
     }
+    public IEnumerator ShowVictoryState(Color finalColor)
+    {
+        GetComponent<Image>().color = Color.white; // optional reset
+        yield return new WaitForSeconds(0.05f);    // optional delay
+        GetComponent<Image>().color = finalColor;
+    }
+
+
 
 
 }

@@ -6,7 +6,10 @@ using UnityEngine.UI;
 
 public class isItRight: MonoBehaviour
 {
+    private List<LetterTile> allTiles = new();
+
     public static isItRight Instance;
+    private readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f); // nice, strong green
 
     [Header("Setup")]
     public GameObject letterTilePrefab;
@@ -17,6 +20,7 @@ public class isItRight: MonoBehaviour
     private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
     };
+    List<LetterTile> spawnedTiles = new();
 
     private int currentWordIndex = 0;
     private int totalToFix = 0;
@@ -44,6 +48,8 @@ public class isItRight: MonoBehaviour
 
     public void GenerateWord(string word)
     {
+        allTiles.Clear();
+
         // Clean up old tiles
         foreach (Transform child in letterParent)
             Destroy(child.gameObject);
@@ -52,7 +58,7 @@ public class isItRight: MonoBehaviour
         totalToFix = 0;
 
         System.Random rand = new();
-        char[] nonFlippableLetters = { 'l', 'o', 'x', 's', 'z', 'i'};
+        HashSet<string> nonFlippableLetters = new() { "l", "o", "x", "s", "z", "i", "" };
         List<int> flippedIndices = new();
         List<int> flippableIndices = new(); // ✅ used to enforce min flipped
         List<LetterTile> spawnedTiles = new();
@@ -62,7 +68,7 @@ public class isItRight: MonoBehaviour
             char c = word[i];
             string correct = c.ToString();
 
-            bool isFlippable = !nonFlippableLetters.Contains(char.ToLower(c));
+            bool isFlippable = !nonFlippableLetters.Contains(correct);
             bool startsCorrect = rand.NextDouble() < 0.4f;
 
             // Prevent flipping non-flippable letters
@@ -88,6 +94,7 @@ public class isItRight: MonoBehaviour
             go.GetComponent<Button>().onClick.AddListener(tile.OnClick);
 
             spawnedTiles.Add(tile);
+            allTiles.Add(tile); // ✅ Store for later
         }
 
         // ✅ Enforce minimum 3 flipped (wrong) letters
@@ -130,9 +137,16 @@ public class isItRight: MonoBehaviour
     void WinGame()
     {
         Debug.Log("🏆 You fixed the word: " + wordList[currentWordIndex]);
+
+        foreach (LetterTile tile in allTiles)
+        {
+            StartCoroutine(tile.ShowVictoryState(victoryGreen));
+        }
+
         currentWordIndex++;
-        Invoke(nameof(LoadNextWord), 1.5f); // Delay for feedback
+        Invoke(nameof(LoadNextWord), 1.5f);
     }
+
 }
 
 

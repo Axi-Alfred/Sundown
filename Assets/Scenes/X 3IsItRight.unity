@@ -399,10 +399,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   letterTilePrefab: {fileID: 3328203379672074029, guid: 3ba57c969f1bbcb46aaa70b8ba0fe76b, type: 3}
-  fixedLetterPrefab: {fileID: 8448263504133325134, guid: b6d246f93c535b24b88783813a8a4bb8, type: 3}
   letterParent: {fileID: 1147276989}
-  fixedWordParent: {fileID: 94835055}
-  correctWord: apple
+  wordList:
+  - clown
+  - carnival
+  - cotton candy
+  - gymnastics
+  - popcorn
 --- !u!4 &608171599
 Transform:
   m_ObjectHideFlags: 0
