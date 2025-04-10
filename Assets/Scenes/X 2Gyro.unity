@@ -1267,6 +1267,7 @@ MonoBehaviour:
   spawningBlocks: {fileID: 8792147510571599071, guid: 019b224cdf1e0fe4d9de9e8d6b9e7ab5, type: 3}
   timeBetweenSpawn: 4
   spawnerOffsetFromTop: 2
+  spawnCountMax: 20
 --- !u!1 &1690914186
 GameObject:
   m_ObjectHideFlags: 0

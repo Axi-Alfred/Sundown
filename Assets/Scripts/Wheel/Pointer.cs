@@ -11,6 +11,7 @@ public class Pointer : MonoBehaviour
     [SerializeField] private TMP_Text text;
     [SerializeField] private TMP_Text playerText;
     [SerializeField] private TMP_Text roundText;
+    [SerializeField] private Image playerSprite;
     private bool wheelHasSpinned;
 
     private bool playersHaveBeenAssigned;
@@ -40,6 +41,7 @@ public class Pointer : MonoBehaviour
         {
             playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.GetPlayerName();
             roundText.text = "Round " + GameManager1.currentRound;
+            playerSprite.sprite = PlayerData.currentPlayerTurn.GetPlayerIcon();
         }
     }
 

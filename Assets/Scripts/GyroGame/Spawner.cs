@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject spawningBlocks;
     [SerializeField] private float timeBetweenSpawn;
     [SerializeField] private float spawnerOffsetFromTop;
+    [SerializeField] private int spawnCountMax;
 
     private int spawnCount;
     private float spawnerYPos;
@@ -34,7 +35,7 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator SpawnLoop()
     {
-        while (spawnCount < 10)
+        while (spawnCount < spawnCountMax)
         {
             transform.position = ReturnSpawnPosition();
             Instantiate(spawningBlocks, transform.position, Quaternion.identity);

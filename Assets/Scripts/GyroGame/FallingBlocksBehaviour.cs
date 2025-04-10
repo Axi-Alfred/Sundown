@@ -15,7 +15,6 @@ public class FallingBlocksBehaviour : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         isFalling = true;
         rb2D.gravityScale = 0;
-        //rb2D.freezeRotation = true;
     }
 
     // Update is called once per frame

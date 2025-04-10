@@ -36,9 +36,19 @@ public class Player
         playerIcon = icon;
     }
 
+    public Sprite GetPlayerIcon()
+    {
+        return playerIcon;  
+    }
+
     public void AddScore(int score)
     {
         playerScore += score;
+    }
+
+    public int GetPlayerScore()
+    {
+        return playerScore;
     }
 
     public bool HasPlayed()

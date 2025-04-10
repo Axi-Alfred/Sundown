@@ -13,7 +13,8 @@ public class FrontCamera : MonoBehaviour
     private WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
 
-    void Start()
+    private float aspectRatio;
+    private void OnEnable()
     {
         foreach (WebCamDevice i in WebCamTexture.devices)
         {
@@ -28,8 +29,58 @@ public class FrontCamera : MonoBehaviour
         webcamTexture = new WebCamTexture(webcamDevice.name);
 
         cameraPreview.texture = webcamTexture;
-        cameraPreview.rectTransform.localScale = new Vector3(-1, 1, 1);
         webcamTexture.Play();
-       
-    }   
+        aspectRatio = (float)webcamTexture.width / (float)webcamTexture.height;
+
+        AdjustRawImageAspectRation();
+    }
+
+    private void AdjustRawImageAspectRation()
+    {
+        RectTransform rectTransform = cameraPreview.rectTransform;
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
+        rectTransform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    private void AdjustTakenImageAspectRatio()
+    {
+        RectTransform rectTransform = capturedImageDisplay.rectTransform;
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
+        rectTransform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    private IEnumerator TakePicture()
+    {
+        capturedImageDisplay.gameObject.SetActive(true);
+
+        yield return new WaitForEndOfFrame();
+
+        Color[] pixels = webcamTexture.GetPixels();
+        Texture2D picTexture = new Texture2D(webcamTexture.width, webcamTexture.height);
+        picTexture.SetPixels(pixels);
+        Sprite picSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f));
+        capturedImageDisplay.sprite = picSprite;
+        picTexture.Apply();
+
+        AdjustTakenImageAspectRatio();
+
+        cameraPreview.gameObject.SetActive(false);
+        takeButton.SetActive(false);
+        retakeButton.SetActive(true);
+    }
+
+    public void TakePictureButton()
+    {
+        StartCoroutine(TakePicture());
+    }
+
+    public void RetakePictureButton()
+    {
+        cameraPreview.gameObject.SetActive(true);
+
+        capturedImageDisplay.sprite = null;
+        capturedImageDisplay.gameObject.SetActive(false);
+        retakeButton.SetActive(false);
+        takeButton.SetActive(true);
+    }
 }
