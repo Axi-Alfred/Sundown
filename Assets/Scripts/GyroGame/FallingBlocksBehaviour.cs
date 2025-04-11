@@ -28,10 +28,13 @@ public class FallingBlocksBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("GyroGameBlock"))
+        if (other.gameObject.CompareTag("GyroGameBlock") || other.gameObject.CompareTag("Root"))
         {
             isFalling = false;
             rb2D.gravityScale = 1.5f;
+
+            GameObject root = GameObject.FindGameObjectWithTag("Root");
+            transform.SetParent(root.transform);
         }
 
         if (other.gameObject.CompareTag("GyroGameGround"))

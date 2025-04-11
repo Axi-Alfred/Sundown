@@ -28,13 +28,14 @@ public class GyroControlMovement : MonoBehaviour
     void Update()
     {
         float zRotation = Input.gyro.rotationRateUnbiased.z;
-        print(zRotation);
+        //print(zRotation);
         horizontalValue = zRotation * movementSpeed;
     }
 
     private void FixedUpdate()
     {
-        Vector2 targetVelocity = new Vector2(-horizontalValue, rb2D.velocity.y);
-        rb2D.velocity = Vector2.Lerp(rb2D.velocity, targetVelocity, 0.15f);
+        rb2D.velocity = new Vector2(-horizontalValue, rb2D.velocity.y);
     }
+
+    //Testa Viggos ide om du har tid med att skära dem
 }

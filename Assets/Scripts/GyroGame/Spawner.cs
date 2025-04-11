@@ -11,14 +11,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private int spawnCountMax;
 
     private int spawnCount;
-    private float spawnerYPos;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        spawnerYPos = Camera.main.transform.position.y + Camera.main.orthographicSize;
         StartCoroutine(SpawnLoop());
+
+        print(Screen.height);
     }
 
     // Update is called once per frame
@@ -30,7 +30,7 @@ public class Spawner : MonoBehaviour
 
     private Vector2 ReturnSpawnPosition()
     {
-        return new Vector2(Random.Range(-4.5f, 4.5f), spawnerYPos);
+        return new Vector2(Random.Range(-4.5f, 4.5f), CalculateSpawnerY());
     }
 
     private IEnumerator SpawnLoop()
@@ -43,6 +43,17 @@ public class Spawner : MonoBehaviour
 
             yield return new WaitForSeconds(timeBetweenSpawn);
         }
+    }
+
+    private float CalculateSpawnerY()
+    {
+        Camera cam = Camera.main;
+        int screenResX = Screen.width;
+        int screenResY = Screen.height;
+        Vector3 topOfScreenDisplayPos = new Vector3(screenResX - 1f, screenResY - 1f, 0);
+        Vector3 topOfScreenWorldPos = cam.ScreenToWorldPoint(topOfScreenDisplayPos);
+        return topOfScreenWorldPos.y - spawnerOffsetFromTop;
+
     }
 
 }
