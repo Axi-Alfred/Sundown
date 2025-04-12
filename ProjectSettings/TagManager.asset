@@ -9,6 +9,8 @@ TagManager:
   - Game2
   - Game3
   - Block
+  - Shape
+  - Pie
   layers:
   - Default
   - TransparentFX
