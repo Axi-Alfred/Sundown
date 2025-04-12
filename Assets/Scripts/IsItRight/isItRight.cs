@@ -9,7 +9,7 @@ public class isItRight: MonoBehaviour
     private List<LetterTile> allTiles = new();
 
     public static isItRight Instance;
-    private readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f); // nice, strong green
+    public readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f); // nice, strong green
 
     [Header("Setup")]
     public GameObject letterTilePrefab;
@@ -51,8 +51,17 @@ public class isItRight: MonoBehaviour
         allTiles.Clear();
 
         // Clean up old tiles
-        foreach (Transform child in letterParent)
-            Destroy(child.gameObject);
+foreach (LetterTile tile in allTiles)
+{
+    Color current = tile.GetComponent<Image>().color;
+
+    // Only update tiles that are still white or red
+    if (current == Color.white || current == Color.red)
+    {
+        tile.ShowVictoryState(victoryGreen);
+    }
+}
+
 
         fixedCount = 0;
         totalToFix = 0;

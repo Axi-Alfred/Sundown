@@ -18,15 +18,23 @@ public class LetterTile : MonoBehaviour
     private bool hasBeenPressed = false;
 
     public void Setup(string shown, string correct, bool isCorrectLetter, bool startsCorrect)
-
     {
+        StopAllCoroutines(); // 🛑 Stop lingering fades or shakes
+
         displayedLetter = shown;
         correctLetter = correct;
         isCorrect = isCorrectLetter;
+        hasBeenPressed = false;
 
         letterText.text = shown;
 
+        // ✅ Always reset visuals
+        Image img = GetComponent<Image>();
+        img.color = Color.white;
+
+        GetComponent<Button>().interactable = true;
     }
+
 
     public static string FlipLetter(string c)
     {
@@ -59,10 +67,14 @@ public class LetterTile : MonoBehaviour
         isCorrect = true;
         displayedLetter = FlipLetter(correctLetter);
         letterText.text = displayedLetter;
+
+        // ✅ Reset visuals
         GetComponent<Button>().interactable = true;
         GetComponent<Image>().color = Color.white;
         hasBeenPressed = false;
     }
+
+
     private IEnumerator AnimateFlip()
     {
         float duration = 0.08f;
@@ -83,9 +95,10 @@ public class LetterTile : MonoBehaviour
         letterText.text = correctLetter;
 
         // ✅ Color based on correctness
+        // ✅ Color based on correctness
         if (isCorrect)
         {
-            GetComponent<Image>().color = Color.green;
+            GetComponent<Image>().color = isItRight.Instance.victoryGreen;
             isItRight.Instance.OnCorrectLetterTapped(this);
         }
         else
@@ -93,6 +106,7 @@ public class LetterTile : MonoBehaviour
             GetComponent<Image>().color = Color.red;
             isItRight.Instance.OnWrongLetterTapped(this);
         }
+
 
         // 🔁 Flip back (scale X → 1)
         elapsed = 0f;
@@ -129,13 +143,59 @@ public class LetterTile : MonoBehaviour
         isItRight.Instance.OnWrongLetterTapped(this);
         GetComponent<Button>().interactable = false;
     }
-    public IEnumerator ShowVictoryState(Color finalColor)
+    public IEnumerator ShowVictoryState(Color green)
     {
-        GetComponent<Image>().color = Color.white; // optional reset
-        yield return new WaitForSeconds(0.05f);    // optional delay
-        GetComponent<Image>().color = finalColor;
+        yield return FadeToColor(green);
     }
 
+
+    private IEnumerator FadeToColor(Color targetColor)
+    {
+        Image img = GetComponent<Image>();
+        Color startColor = img.color;
+        float duration = 0.3f;
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            img.color = Color.Lerp(startColor, targetColor, t);
+            yield return null;
+        }
+    }
+    IEnumerator Bounce()
+    {
+        Vector3 originalScale = transform.localScale;
+        Vector3 target = originalScale * 1.2f;
+        float t = 0f;
+
+        while (t < 0.1f)
+        {
+            t += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(originalScale, target, t / 0.1f);
+            yield return null;
+        }
+
+        t = 0f;
+        while (t < 0.1f)
+        {
+            t += Time.deltaTime;
+            transform.localScale = Vector3.Lerp(target, originalScale, t / 0.1f);
+            yield return null;
+        }
+    }
+    public void ResetTile()
+    {
+        hasBeenPressed = false;
+        StopAllCoroutines(); // cancel fades/shakes/etc.
+
+        // ⛔ Instantly set to fully white (no fade!)
+        Image img = GetComponent<Image>();
+        img.color = Color.white;
+
+        GetComponent<Button>().interactable = true;
+        letterText.text = "";
+    }
 
 
 
