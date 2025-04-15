@@ -126,7 +126,7 @@ public class LetterTile : MonoBehaviour
 
     }
 
-    private IEnumerator AnimateShake()
+    public IEnumerator AnimateShake()
     {
         Vector3 originalPos = transform.localPosition;
         float shakeAmount = 10f;
@@ -154,7 +154,7 @@ public class LetterTile : MonoBehaviour
     }
 
 
-    private IEnumerator FadeToColor(Color targetColor)
+    public IEnumerator FadeToColor(Color targetColor)
     {
         Image img = GetComponent<Image>();
         Color startColor = img.color;

@@ -7,7 +7,7 @@ using System.Collections;
 
 public class isItRight : MonoBehaviour
 {
-    [SerializeField] private int maxMistakes = 3;
+    [SerializeField] private int maxMistakes = 2;
     [SerializeField] private TMP_Text mistakeText;
     [SerializeField] private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
@@ -124,7 +124,10 @@ public class isItRight : MonoBehaviour
     }
     private void EnsureMinimumFlips(int wordLength)
     {
-        int minFlipped = Mathf.Min(3, wordLength);
+        // Sätt minsta antal bokstäver som måste vara fel:
+        int distinctLetters = spawnedTiles.Select(t => t.correctLetter).Distinct().Count();
+        int minFlipped = distinctLetters > 5 ? 3 : Mathf.Min(2, wordLength);
+
         System.Random rand = new();
 
         while (flippedIndices.Count < minFlipped)
@@ -141,14 +144,15 @@ public class isItRight : MonoBehaviour
         }
 
         totalToFix = spawnedTiles.Count(t => t.isCorrect);
-    }
-    private void FinalizeWordSetup()
-    {
-        displayedMaxMistakes = totalToFix < 3 ? totalToFix : 3;
-        maxMistakes = 3;
-        UpdateMistakeUI();
+        displayedMaxMistakes = totalToFix;
+        maxMistakes = distinctLetters > 5 ? 3 : 2;
     }
 
+    private void FinalizeWordSetup()
+    {
+        // Don't touch displayedMaxMistakes here
+        UpdateMistakeUI();
+    }
 
     public void OnCorrectLetterTapped(LetterTile tile)
     {
@@ -170,24 +174,19 @@ public class isItRight : MonoBehaviour
 
         Debug.Log($"❌ Mistake {currentMistakes}/{maxMistakes}");
 
-        currentMistakes++;
-
-        if (currentMistakes >= 3)
+        if (currentMistakes >= maxMistakes)
         {
             LoseGame();
         }
 
     }
+
     private void UpdateMistakeUI()
     {
-        mistakeText.text = $"Mistakes: {currentMistakes}/{displayedMaxMistakes}";
+        mistakeText.text = $"Mistakes: {currentMistakes}/{maxMistakes}";
     }
 
-    void WinGame()
-    {
-        Debug.Log("🏆 You fixed the word: " + wordList[currentWordIndex]);
-        StartCoroutine(PlayVictorySequence());
-    }
+
     private IEnumerator PlayVictorySequence()
     {
         float delay = 0.05f;
@@ -205,16 +204,37 @@ public class isItRight : MonoBehaviour
 
         Invoke(nameof(LoadNextWord), 1.5f);
     }
+    private IEnumerator PlayLoseSequence()
+    {
+        float flashDelay = 0.08f;
+
+        foreach (var tile in allTiles)
+        {
+            tile.GetComponent<Button>().interactable = false;
+            StartCoroutine(tile.AnimateShake());
+            yield return new WaitForSeconds(flashDelay); // left to right
+        }
+
+        yield return new WaitForSeconds(0.4f); // wait before greying out
+
+        foreach (var tile in allTiles)
+        {
+            tile.StartCoroutine(tile.FadeToColor(Color.gray));
+        }
+    }
+
+    void WinGame()
+    {
+        Debug.Log("🏆 You fixed the word: " + wordList[currentWordIndex]);
+        StartCoroutine(PlayVictorySequence());
+    }
     private void LoseGame()
     {
         gameOver = true;
         Debug.Log("💀 You lost!");
 
-        foreach (var tile in allTiles)
-        {
-            tile.GetComponent<Button>().interactable = false;
-            tile.GetComponent<Image>().color = Color.gray;
-        }
+        StartCoroutine(PlayLoseSequence());
+
 
         // Du kan lägga till mer: ljud, grafik, restart-knapp etc.
     }
