@@ -9,9 +9,17 @@ public class FrontCamera : MonoBehaviour
     [SerializeField] private Image capturedImageDisplay;
     [SerializeField] private GameObject takeButton;
     [SerializeField] private GameObject retakeButton;
+    [SerializeField] private GameObject cameraSystemObject;
+    [SerializeField] private GameObject playerSelectionObject;
 
     private WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
+
+    private void Start()
+    {
+        cameraSystemObject.gameObject.SetActive(false);
+        playerSelectionObject.gameObject.SetActive(true);  
+    }
 
     private float aspectRatio;
     private void OnEnable()
@@ -82,5 +90,11 @@ public class FrontCamera : MonoBehaviour
         capturedImageDisplay.gameObject.SetActive(false);
         retakeButton.SetActive(false);
         takeButton.SetActive(true);
+    }
+
+    public void OpenCamera()
+    {
+        cameraSystemObject.gameObject.SetActive(true);
+        playerSelectionObject.gameObject.SetActive(false);
     }
 }

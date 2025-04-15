@@ -1684,12 +1684,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfPlayers: 5
-  iconsArray:
-  - {fileID: -2413806693520163455, guid: deee0937d98334d4f947c7221c7e8dd7, type: 3}
-  - {fileID: -2413806693520163455, guid: deee0937d98334d4f947c7221c7e8dd7, type: 3}
-  - {fileID: -2413806693520163455, guid: deee0937d98334d4f947c7221c7e8dd7, type: 3}
-  - {fileID: -2413806693520163455, guid: deee0937d98334d4f947c7221c7e8dd7, type: 3}
-  - {fileID: -2413806693520163455, guid: deee0937d98334d4f947c7221c7e8dd7, type: 3}
 --- !u!4 &1392847358
 Transform:
   m_ObjectHideFlags: 0

@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
-    [SerializeField] private int numberOfPlayers;
-    [SerializeField] private Sprite[] iconsArray;
+    public static bool playersHaveBeenAssigned;
 
-    //public static int currentPlayerTurn = 0;
+    [SerializeField] private int numberOfPlayers;
+
+    public static IconDatabase iconDatabase;
 
     public static int numberOfRounds = 5;
 
@@ -15,14 +17,16 @@ public class PlayerData : MonoBehaviour
 
     public static Player[] playersArray;
 
-    private int maxNumberOfPlayer = 6;
-    private int minNumberOfPlayer = 3;
+    private int maxNumberOfPlayer = 4;
+    private int minNumberOfPlayer = 1;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        iconDatabase = Resources.Load<IconDatabase>("GlobalIcons");
+
         if (numberOfPlayers > maxNumberOfPlayer) numberOfPlayers = maxNumberOfPlayer;
         if (numberOfPlayers < minNumberOfPlayer) numberOfPlayers += minNumberOfPlayer;
 
@@ -30,8 +34,10 @@ public class PlayerData : MonoBehaviour
 
         for (int i = 0; i < playersArray.Length; i++)
         {
-            playersArray[i] = new Player("Player " + (i+1), i, iconsArray[i]);
+            playersArray[i] = new Player("Player " + (i+1), i, iconDatabase.iconsArray[i]);
         }
+
+        StartCoroutine(CheckIfPlayersHaveBeenAssigned());
 
         /* foreach (Player player in playersArray)
         {
@@ -43,5 +49,12 @@ public class PlayerData : MonoBehaviour
     void Update()
     {
         
+    }
+
+    IEnumerator CheckIfPlayersHaveBeenAssigned()
+    {
+        yield return new WaitUntil(() => PlayerData.playersArray != null && PlayerData.playersArray.All(p => p != null));
+
+        playersHaveBeenAssigned = true;
     }
 }

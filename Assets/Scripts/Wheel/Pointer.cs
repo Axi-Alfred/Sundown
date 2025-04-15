@@ -14,22 +14,10 @@ public class Pointer : MonoBehaviour
     [SerializeField] private Image playerSprite;
     private bool wheelHasSpinned;
 
-    private bool playersHaveBeenAssigned;
     // Start is called before the first frame update
     void Start()
     {
         GetComponent<BoxCollider2D>().enabled = false;
-
-        StartCoroutine(TestStart());
-    }
-
-    IEnumerator TestStart()
-    {
-        yield return new WaitUntil(() =>
-        PlayerData.playersArray != null && PlayerData.playersArray.All(p => p != null));
-
-        StartCoroutine(GameManager1.RoundsLoop());
-        playersHaveBeenAssigned = true;
     }
 
     // Update is called once per frame
@@ -37,7 +25,7 @@ public class Pointer : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
 
-        if (playersHaveBeenAssigned)
+        if (PlayerData.playersHaveBeenAssigned)
         {
             playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.GetPlayerName();
             roundText.text = "Round " + GameManager1.currentRound;
