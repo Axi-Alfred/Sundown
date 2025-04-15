@@ -12,6 +12,8 @@ public class LetterTile : MonoBehaviour
     public string correctLetter;
     public string letter; // ← Add this if needed for GameManager
     public RectTransform letterTextTransform;
+    public Transform contentTransform; // används för flip
+    public Transform bounceTarget;     // används för bounce (hela knappen)
 
 
     public bool isCorrect;
@@ -79,26 +81,40 @@ public class LetterTile : MonoBehaviour
     {
         float duration = 0.08f;
         float elapsed = 0f;
-        Vector3 originalScale = transform.localScale;
+        Vector3 originalScale = contentTransform.localScale;
 
-        // 🔁 Flip out (scale X → 0)
         while (elapsed < duration)
         {
             float progress = elapsed / duration;
             float scaleX = Mathf.Lerp(1f, 0f, progress);
-            transform.localScale = new Vector3(scaleX, 1f, 1f);
+            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
+
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // ⚡ Swap text
         letterText.text = correctLetter;
+        StartCoroutine(Bounce());
 
-        // ✅ Color based on correctness
-        // ✅ Color based on correctness
+
+        // 🟢 Fördröj färgsättning tills efter flip-back är klar
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float progress = elapsed / duration;
+            float scaleX = Mathf.Lerp(0f, 1f, progress);
+            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        GetComponent<Button>().interactable = false;
+
         if (isCorrect)
         {
             GetComponent<Image>().color = isItRight.Instance.victoryGreen;
+            StartCoroutine(Bounce()); // 🟢 studsa på rätt bokstav
             isItRight.Instance.OnCorrectLetterTapped(this);
         }
         else
@@ -108,19 +124,8 @@ public class LetterTile : MonoBehaviour
         }
 
 
-        // 🔁 Flip back (scale X → 1)
-        elapsed = 0f;
-        while (elapsed < duration)
-        {
-            float progress = elapsed / duration;
-            float scaleX = Mathf.Lerp(0f, 1f, progress);
-            transform.localScale = new Vector3(scaleX, 1f, 1f);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        GetComponent<Button>().interactable = false;
     }
+
     private IEnumerator AnimateShake()
     {
         Vector3 originalPos = transform.localPosition;
@@ -163,16 +168,16 @@ public class LetterTile : MonoBehaviour
             yield return null;
         }
     }
-    IEnumerator Bounce()
+    public IEnumerator Bounce()
     {
-        Vector3 originalScale = transform.localScale;
+        Vector3 originalScale = bounceTarget.localScale;
         Vector3 target = originalScale * 1.2f;
         float t = 0f;
 
         while (t < 0.1f)
         {
             t += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(originalScale, target, t / 0.1f);
+            bounceTarget.localScale = Vector3.Lerp(originalScale, target, t / 0.1f);
             yield return null;
         }
 
@@ -180,23 +185,41 @@ public class LetterTile : MonoBehaviour
         while (t < 0.1f)
         {
             t += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(target, originalScale, t / 0.1f);
+            bounceTarget.localScale = Vector3.Lerp(target, originalScale, t / 0.1f);
             yield return null;
         }
+        bounceTarget.localScale = Vector3.one;
     }
     public void ResetTile()
     {
         hasBeenPressed = false;
         StopAllCoroutines(); // cancel fades/shakes/etc.
 
-        // ⛔ Instantly set to fully white (no fade!)
         Image img = GetComponent<Image>();
         img.color = Color.white;
 
         GetComponent<Button>().interactable = true;
-        letterText.text = "";
-    }
 
+        // 🔁 Sätt tillbaka displayedLetter om den finns
+        letterText.text = displayedLetter ?? correctLetter ?? "?";
+    }
+    public void SetVictoryColor(Color green)
+    {
+        StopAllCoroutines();
+        GetComponent<Image>().color = green;
+
+        if (letterText == null)
+        {
+            Debug.LogError($"❌ letterText is NULL on tile {name}!");
+        }
+        else
+        {
+            letterText.text = correctLetter ?? "?";
+            Debug.Log($"✅ SetVictoryColor: {name} → '{letterText.text}'");
+        }
+
+        GetComponent<Button>().interactable = false;
+    }
 
 
 }
