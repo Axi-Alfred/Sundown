@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class FrontCamera : MonoBehaviour
@@ -15,14 +16,20 @@ public class FrontCamera : MonoBehaviour
     private WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
 
+    private float aspectRatio;
+    private float imageRotation = -90;
+    //Player specifics
+
+    private Player currentPlayer;
+
     private void Start()
     {
         cameraSystemObject.gameObject.SetActive(false);
-        playerSelectionObject.gameObject.SetActive(true);  
-    }
+        playerSelectionObject.gameObject.SetActive(true);
 
-    private float aspectRatio;
-    private void OnEnable()
+        StartCoroutine(WaitForCameraPermission());
+    }
+    private void InitializeCamera()
     {
         foreach (WebCamDevice i in WebCamTexture.devices)
         {
@@ -48,6 +55,7 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = cameraPreview.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
+        rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
     }
 
     private void AdjustTakenImageAspectRatio()
@@ -55,6 +63,7 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = capturedImageDisplay.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
+        rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
     }
 
     private IEnumerator TakePicture()
@@ -77,6 +86,16 @@ public class FrontCamera : MonoBehaviour
         retakeButton.SetActive(true);
     }
 
+    private IEnumerator WaitForCameraPermission()
+    {
+        if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+            Permission.RequestUserPermission(Permission.Camera);
+
+        yield return new WaitUntil(() => Permission.HasUserAuthorizedPermission(Permission.Camera));
+
+        InitializeCamera();
+    }
+
     public void TakePictureButton()
     {
         StartCoroutine(TakePicture());
@@ -97,4 +116,6 @@ public class FrontCamera : MonoBehaviour
         cameraSystemObject.gameObject.SetActive(true);
         playerSelectionObject.gameObject.SetActive(false);
     }
+
+
 }
