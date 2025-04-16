@@ -1021,6 +1021,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 0}
+  playerText: {fileID: 0}
+  roundText: {fileID: 0}
+  playerSprite: {fileID: 0}
 --- !u!1 &250066512
 GameObject:
   m_ObjectHideFlags: 0
@@ -2136,7 +2139,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -363.1, y: 99.3}
+  m_AnchoredPosition: {x: -363.1, y: 99.299805}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &604977332
