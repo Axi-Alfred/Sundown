@@ -1,23 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Clown : MonoBehaviour
+
+public class Clown : MonoBehaviour, IHittableByPie
 {
+    public float lifetime = 3f;
+
+    void Start()
+    {
+        Destroy(gameObject, lifetime);
+    }
+
     public void HitByPie()
     {
-        // Optional: play sound, animation, effects here
         Debug.Log("Clown got pied!");
         Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<Pie>())
+        if (collision.CompareTag("Player"))
         {
-            HitByPie();
-            Destroy(collision.gameObject); // Destroy the pie too
+            Debug.Log("Clown touched by player!");
+            Destroy(gameObject);
         }
     }
 }
+
+
+
+
 
 

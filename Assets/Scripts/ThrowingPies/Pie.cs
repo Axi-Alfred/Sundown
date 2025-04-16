@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Pie : MonoBehaviour
@@ -16,15 +17,17 @@ public class Pie : MonoBehaviour
         // Move straight up (Y-axis)
         transform.position += new Vector3(0f, speed * Time.deltaTime, 0f);
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<Clown>())
+        IHittableByPie target = collision.GetComponent<IHittableByPie>();
+        if (target != null)
         {
-            collision.GetComponent<Clown>().HitByPie();
+            target.HitByPie();
             Destroy(gameObject);
         }
     }
+
+
     void OnBecameInvisible()
     {
         Destroy(gameObject);

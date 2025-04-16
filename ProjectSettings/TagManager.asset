@@ -11,6 +11,8 @@ TagManager:
   - Block
   - Shape
   - Pie
+  - Wall
+  - Clown
   layers:
   - Default
   - TransparentFX
