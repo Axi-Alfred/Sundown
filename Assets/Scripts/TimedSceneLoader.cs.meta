@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/MainMenu/GameSetupMenu.cs.meta
-guid: d48d6b6339b4c4dbea9f7f83cebbd636
-========
-guid: badbb2b74f25b5d4d880655e944d9e99
->>>>>>>> Alfred:Assets/Scripts/SceneTimer.cs.meta
+guid: 99c3e1a49ca635541adb90a77b480aaa
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

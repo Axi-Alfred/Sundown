@@ -16,11 +16,11 @@ public class BalloonGameManager : MonoBehaviour
     {
         if (hiddenScore >= scoreNeededToWin)
         {
-            Debug.Log("🎉 You Win! 🎉");
+            Debug.Log("You Win!");
         }
         else
         {
-            Debug.Log("💥 You Lose! 💥");
+            Debug.Log("You Lose!");
         }
 
         // Stop spawning balloons after the game ends
