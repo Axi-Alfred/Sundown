@@ -9,8 +9,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
-        transform.position += new Vector3(moveInput * moveSpeed * Time.deltaTime, 0f, 0f);
+        Vector3 currentPos = transform.position;
+
+        // Move only on the X axis
+        transform.position = new Vector3(
+            currentPos.x + moveInput * moveSpeed * Time.deltaTime,
+            currentPos.y,
+            currentPos.z
+        );
     }
 }
+
 
 

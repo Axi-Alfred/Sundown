@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Clown : MonoBehaviour
 {
     public void HitByPie()
     {
-        // Play animation or sound here if you want
+        // Optional: play sound, animation, effects here
+        Debug.Log("Clown got pied!");
         Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Pie"))
+        if (collision.GetComponent<Pie>())
         {
             HitByPie();
-            Destroy(collision.gameObject); // Remove the pie
+            Destroy(collision.gameObject); // Destroy the pie too
         }
     }
 }
+
 

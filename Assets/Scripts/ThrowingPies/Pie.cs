@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class Pie : MonoBehaviour
 {
-    private float direction;
     private float speed;
 
-    public void Launch(float dir, float spd)
+    public void Launch(float spd)
     {
-        direction = dir;
         speed = spd;
     }
 
     void Update()
     {
-        transform.position += new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
+        // Move straight up (Y-axis)
+        transform.position += new Vector3(0f, speed * Time.deltaTime, 0f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,5 +25,11 @@ public class Pie : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+
 }
+
 
