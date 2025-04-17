@@ -9,11 +9,12 @@ TagManager:
   - Game2
   - Game3
   - Block
+  - Shape
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Foreground
   - Water
   - UI
   - 
