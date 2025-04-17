@@ -39,11 +39,12 @@ public class ClownRunner : MonoBehaviour, IHittableByPie
     }
     void LateUpdate()
     {
-        float vertSize = Camera.main.orthographicSize;
-        float horzSize = vertSize * Camera.main.aspect;
+        float verticalSize = Camera.main.orthographicSize;
+        float horizontalSize = verticalSize * Camera.main.aspect; // Å© USE THIS
+
 
         Vector3 pos = transform.position;
-        pos.x = Mathf.Clamp(pos.x, -horzSize + 0.5f, horzSize - 0.5f);
+        pos.x = Mathf.Clamp(pos.x, -horizontalSize + 0.5f, horizontalSize - 0.5f);
         transform.position = pos;
     }
 

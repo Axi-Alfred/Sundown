@@ -63,8 +63,9 @@ public class ClownSpawner : MonoBehaviour
 
     Vector2 GetCameraBounds()
     {
-        float vertSize = Camera.main.orthographicSize;
-        float horzSize = vertSize * Camera.main.aspect;
-        return new Vector2(horzSize, vertSize);
+        float verticalSize = Camera.main.orthographicSize;
+        float horizontalSize = verticalSize * Camera.main.aspect; // ← USE THIS
+
+        return new Vector2(horizontalSize, verticalSize);
     }
 }

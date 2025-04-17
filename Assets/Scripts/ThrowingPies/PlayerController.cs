@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         float verticalSize = Camera.main.orthographicSize;
-        float horizontalSize = verticalSize * Screen.width / Screen.height;
+        float horizontalSize = verticalSize * Camera.main.aspect; // Å© USE THIS
 
         Vector3 pos = transform.position;
 
