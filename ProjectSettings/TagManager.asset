@@ -10,6 +10,8 @@ TagManager:
   - Game3
   - Block
   - Shape
+  - Block
+  - Draggable
   layers:
   - Default
   - TransparentFX
