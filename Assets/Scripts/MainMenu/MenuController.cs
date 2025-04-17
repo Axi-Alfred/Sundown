@@ -7,10 +7,30 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject creditsPanel; // Panel showing credits
     [SerializeField] private GameObject playPanel;
-    
+
+    private void Update()
+    {
+        if (creditsPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseCredits();
+            }
+        }
+
+        if (playPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClosePlay();   
+            }
+        }
+    }
+
     public void ConfirmGame()
     {
-        //SceneManager.LoadScene("Scene 1"); // Ersätt Scene 1 med den första scenen
+        StartCoroutine(PlayerData.AssignPlayers());
+        SceneManager.LoadScene("Wheel"); // Ersätt Scene 1 med den första scenen
     }
 
     public void ShowPlay()

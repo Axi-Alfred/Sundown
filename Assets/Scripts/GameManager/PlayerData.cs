@@ -7,7 +7,7 @@ public class PlayerData : MonoBehaviour
 {
     public static bool playersHaveBeenAssigned;
 
-    [SerializeField] private int numberOfPlayers;
+    private static int numberOfPlayers;
 
     public static IconDatabase iconDatabase;
 
@@ -17,13 +17,24 @@ public class PlayerData : MonoBehaviour
 
     public static Player[] playersArray;
 
-    private int maxNumberOfPlayer = 4;
-    private int minNumberOfPlayer = 1;
+    private static int maxNumberOfPlayer = 4;
+    private static int minNumberOfPlayer = 1;
 
 
 
     // Start is called before the first frame update
     void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public static IEnumerator AssignPlayers()
     {
         iconDatabase = Resources.Load<IconDatabase>("GlobalIcons");
 
@@ -34,25 +45,9 @@ public class PlayerData : MonoBehaviour
 
         for (int i = 0; i < playersArray.Length; i++)
         {
-            playersArray[i] = new Player("Player " + (i+1), i, iconDatabase.iconsArray[i]);
+            playersArray[i] = new Player("Player " + (i + 1), i, iconDatabase.iconsArray[i]);
         }
 
-        StartCoroutine(CheckIfPlayersHaveBeenAssigned());
-
-        /* foreach (Player player in playersArray)
-        {
-            print(player);
-        } */
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    IEnumerator CheckIfPlayersHaveBeenAssigned()
-    {
         yield return new WaitUntil(() => PlayerData.playersArray != null && PlayerData.playersArray.All(p => p != null));
 
         playersHaveBeenAssigned = true;

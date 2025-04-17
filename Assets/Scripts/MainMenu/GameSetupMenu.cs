@@ -17,7 +17,25 @@ public class GameSetupMenu : MonoBehaviour
     public void OnConfirmSettings()
     {
         numberOfPlayers = playerDropdown.value + 1; // Justera beroende på dropdownens startvärde
-        numberOfRounds = roundDropdown.value + 1;
+
+        switch (roundDropdown.value)
+        {
+            case 0:
+                numberOfRounds = 4;
+                break;
+
+            case 1:
+                numberOfRounds = 6;
+                break;
+
+            case 2:
+                numberOfRounds = 8;
+                break;
+
+            case 3:
+                numberOfRounds = 10;
+                break;
+        }
 
         Debug.Log("Antal spelare: " + numberOfPlayers);
         Debug.Log("Antal rundor: " + numberOfRounds);

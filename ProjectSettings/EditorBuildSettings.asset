@@ -5,10 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/HuvudMenu.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
+    guid: a455d9a7cf9a55c4eb00cd77d602dbb0
+  - enabled: 1
     path: Assets/Scenes/Wheel.unity
     guid: adafaeff19436914c940f03613f9d1c4
   - enabled: 0
@@ -29,7 +29,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/X 6DontGetHit.unity
     guid: 609917efaa1b7014fb404aab20b67a52
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 9SmackedPig.unity
     guid: 91e92532ba916be4890779ba2600a336
   m_configObjects: {}
