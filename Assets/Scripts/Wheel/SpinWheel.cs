@@ -37,7 +37,7 @@ public class SpinWheel : MonoBehaviour
 
             if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold)
             {
-                wheelVelocity = 0;
+                rb2D.angularVelocity = 0;
                 hasSpinned = true;
                 isSpinning = false;
                 hasReachedMotionThreshold = false;
