@@ -9,19 +9,20 @@ TagManager:
   - Game2
   - Game3
   - Block
-  - GyroGameBlock
-  - GyroGameGround
-  - Root
+  - Shape
+  - Pie
+  - Wall
+  - Clown
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Foreground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Background
+  - Clown
+  - Foreground
   - 
   - 
   - 

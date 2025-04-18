@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/X 2Gyro.unity
     guid: 64f751268b67ec74396884dd30e2ed85
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/X 3IsItRight.unity
     guid: 6240caf1fe1a536448d150708ea0569a
   - enabled: 0
