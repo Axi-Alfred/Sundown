@@ -7,11 +7,11 @@ public class PlayerData : MonoBehaviour
 {
     public static bool playersHaveBeenAssigned;
 
-    private static int numberOfPlayers;
+    public static int numberOfPlayers;
 
     public static IconDatabase iconDatabase;
 
-    public static int numberOfRounds = 5;
+    public static int numberOfRounds;
 
     public static Player currentPlayerTurn;
 
@@ -25,7 +25,7 @@ public class PlayerData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+      
     }
 
     // Update is called once per frame

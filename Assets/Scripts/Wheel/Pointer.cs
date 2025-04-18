@@ -18,6 +18,7 @@ public class Pointer : MonoBehaviour
     void Start()
     {
         GetComponent<BoxCollider2D>().enabled = false;
+        text.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -25,16 +26,14 @@ public class Pointer : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
 
-        if (PlayerData.playersHaveBeenAssigned)
-        {
-            playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.GetPlayerName();
-            roundText.text = "Round " + GameManager1.currentRound;
-            playerSprite.sprite = PlayerData.currentPlayerTurn.GetPlayerIcon();
-        }
+        playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.GetPlayerName();
+        roundText.text = "Round " + GameManager1.currentRound;
+        playerSprite.sprite = PlayerData.currentPlayerTurn.GetPlayerIcon();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!text.gameObject.activeSelf) text.gameObject.SetActive(true);
         switch (other.tag)
         {
             case "Game1":

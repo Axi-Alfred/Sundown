@@ -30,6 +30,7 @@ public class MenuController : MonoBehaviour
     public void ConfirmGame()
     {
         StartCoroutine(PlayerData.AssignPlayers());
+        StartCoroutine(GameManager1.RoundsLoop());
         SceneManager.LoadScene("Wheel"); // Ersätt Scene 1 med den första scenen
     }
 

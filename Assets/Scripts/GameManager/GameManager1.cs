@@ -47,7 +47,7 @@ public class GameManager1
     {
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            Debug.Log("round " + currentRound);
+            Debug.Log("Round " + currentRound);
             yield return PlayerTurnLoop();
         }
 

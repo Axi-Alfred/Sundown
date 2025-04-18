@@ -40,6 +40,9 @@ public class GameSetupMenu : MonoBehaviour
         Debug.Log("Antal spelare: " + numberOfPlayers);
         Debug.Log("Antal rundor: " + numberOfRounds);
 
+        PlayerData.numberOfPlayers = numberOfPlayers;
+        PlayerData.numberOfRounds = numberOfRounds;
+
         // Visa nästa panel
         playerSetupPanel.SetActive(true);
         gameObject.SetActive(false); // Stänger nuvarande panel
