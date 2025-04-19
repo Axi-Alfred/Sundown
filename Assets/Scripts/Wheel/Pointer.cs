@@ -51,7 +51,7 @@ public class Pointer : MonoBehaviour
 
             case "Game3":
                 nextGameText.text = "Game3 will begin now";
-                StartCoroutine(Timer("X 6DontGetHit"));
+                StartCoroutine(Timer("X 5PopTheBalloon"));
                 break;
         }
     }

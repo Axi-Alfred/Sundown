@@ -23,13 +23,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/X 4OddOneOut.unity
     guid: d06da606ee72f97499b895fdf8b2595f
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/X 5PopTheBalloon.unity
     guid: 9b2b9ccba0b95a04284a37c2d84909db
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/X 6DontGetHit.unity
     guid: 609917efaa1b7014fb404aab20b67a52
   - enabled: 0
     path: Assets/Scenes/X 9SmackedPig.unity
     guid: 91e92532ba916be4890779ba2600a336
+  - enabled: 1
+    path: Assets/Scenes/LeaderBoard.unity
+    guid: 709d98dcb1cf6554482f771d5039bb7c
   m_configObjects: {}
