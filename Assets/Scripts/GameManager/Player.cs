@@ -4,74 +4,38 @@ using UnityEngine;
 
 public class Player
 {
-    private string playerName;
-    private int playerId;
-    private int playerScore;
+    public int PlayerId { get; private set; } //Tjena det e Sadra som har skrivit de här, om någon ser det här och undrar vad det är för något fråga gärna så kan jag förklara :D
+    public int PlayerScore { get; private set; } = 0;
+    public bool HasPlayed { get; set; }
+    public int CurrentIconInt { get; private set; }
 
-    private bool hasPlayed;
+    private string playerName;
+    public string PlayerName {  get { return playerName; } set { playerName = value; }}
 
     private Sprite playerIcon;
+    public Sprite PlayerIcon { get { return playerIcon; } private set { playerIcon = value; }}
 
-    private int currentIconInt;
 
-    
-    
     public Player(string name, int iD, Sprite icon)
     {
         playerName = name;
-        playerId = iD;
+        PlayerId = iD;
         playerIcon = icon;
-        currentIconInt = iD;
+        CurrentIconInt = iD;
     }
-
-    public string GetPlayerName()
-    {
-        return playerName;
-    }
-
-    public void SetPlayerName(string newName)
-    {
-        playerName = newName;
-    }
-
-    public void SetPlayerImage(Sprite image)
-    {
-        playerIcon = image;
-    }
-
     public void ChangePlayerIcon()
     {
-        playerIcon = PlayerData.iconDatabase.iconsArray[++currentIconInt % PlayerData.iconDatabase.iconsArray.Length];
-    }
-
-    public Sprite GetPlayerIcon()
-    {
-        return playerIcon;  
+        playerIcon = PlayerData.iconDatabase.iconsArray[++CurrentIconInt % PlayerData.iconDatabase.iconsArray.Length];
     }
 
     public void AddScore(int score)
     {
-        playerScore += score;
-    }
-
-    public int GetPlayerScore()
-    {
-        return playerScore;
-    }
-
-    public bool HasPlayed()
-    {
-        return hasPlayed;
-    }
-
-    public void SetHasPlayed(bool hasPlayed)
-    {
-        this.hasPlayed = hasPlayed;
+        PlayerScore += score;
     }
 
     override
     public string ToString()
     {
-        return "Player name: " + playerName + ", " + "Player iD: " + playerId;
+        return "Player name: " + PlayerName + ", " + "Player iD: " + PlayerId;
     }
 }

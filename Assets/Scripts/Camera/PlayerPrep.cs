@@ -28,7 +28,7 @@ public class PlayerPrep : MonoBehaviour
     {
         if (player != null)
         {
-            image.sprite = player.GetPlayerIcon();
+            image.sprite = player.PlayerIcon;
         }
     }
 
@@ -39,8 +39,8 @@ public class PlayerPrep : MonoBehaviour
 
     public void ChangeName()
     {
-        player.SetPlayerName(inputField.text);
-        Debug.Log(player.GetPlayerName());
+        player.PlayerName = inputField.text;
+        Debug.Log(player.PlayerName);
     }
 
     IEnumerator First()
@@ -48,7 +48,7 @@ public class PlayerPrep : MonoBehaviour
         yield return new WaitUntil(() => PlayerData.playersHaveBeenAssigned == true);
 
         player = PlayerData.playersArray[currentPlayerIndex]; //TEMP
-        inputField.text = player.GetPlayerName();
+        inputField.text = player.PlayerName;
     }
 
     public Player CurrentPlayer()

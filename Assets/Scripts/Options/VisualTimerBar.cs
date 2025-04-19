@@ -45,7 +45,7 @@ public class VisualTimerBar : MonoBehaviour
         else if (!sceneLoaded)
         {
             sceneLoaded = true;
-            SceneManager.LoadScene("Wheel");
+            GameManager1.EndRound();
         }
     }
 }

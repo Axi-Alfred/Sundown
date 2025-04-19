@@ -70,7 +70,7 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.Log("Game Over");
             // Game logic here
-            Time.timeScale = 0; // Freeze game
+            gameObject.SetActive(false);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager1
 {
@@ -27,17 +28,19 @@ public class GameManager1
 
         foreach (Player i in tempPlayers)
         {
-            i.SetHasPlayed(false);
+            i.HasPlayed = false;
         }
 
         for (int i = 0; i < tempPlayers.Count; i++)
         {
             PlayerData.currentPlayerTurn = tempPlayers[i];
-            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.GetPlayerName());
+            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
 
-            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed());
+            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
 
-            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.GetPlayerName());
+            yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Wheel");
+
+            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.PlayerName);
         }
 
         yield break;
@@ -52,7 +55,12 @@ public class GameManager1
         }
 
         Debug.Log("All rounds finished!");
+        SceneManager.LoadScene("LeaderBoard");
     }
 
-
+    public static void EndRound()
+    {
+        PlayerData.currentPlayerTurn.HasPlayed = true;
+        SceneManager.LoadScene("Wheel");
+    }
 }

@@ -21,7 +21,7 @@ public abstract class SortingPlayers
     {
         List<Player> playersCopy = players.ToList();
 
-        playersCopy.Sort((a, b) => b.GetPlayerScore().CompareTo(a.GetPlayerScore()));
+        playersCopy.Sort((a, b) => b.PlayerScore.CompareTo(a.PlayerScore));
 
         return playersCopy;
     }

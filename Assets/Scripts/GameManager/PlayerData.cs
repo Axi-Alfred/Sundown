@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public class PlayerData
 {
     public static bool playersHaveBeenAssigned;
 
@@ -20,19 +20,6 @@ public class PlayerData : MonoBehaviour
     private static int maxNumberOfPlayer = 4;
     private static int minNumberOfPlayer = 1;
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-      
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public static IEnumerator AssignPlayers()
     {
