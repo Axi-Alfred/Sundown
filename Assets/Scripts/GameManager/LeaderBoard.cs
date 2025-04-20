@@ -7,16 +7,16 @@ using UnityEngine.SceneManagement;
 public class LeaderBoard : MonoBehaviour
 {
     List<Player> playersList;
-    [SerializeField] private GameObject entryPrefab;
+    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < transform.childCount; i++)
+        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        while (transform.childCount > 0)
         {
-            Destroy(transform.GetChild(i));
+            Destroy(transform.GetChild(0).gameObject);
         }
-        playersList = SortByScore(PlayerData.playersArray);
         InitializeLeaderBoard();
     }
 
@@ -28,6 +28,8 @@ public class LeaderBoard : MonoBehaviour
 
     private void InitializeLeaderBoard()
     {
+        playersList = SortByScore(PlayerData.playersArray);
+
         GameObject currentEntry;
 
         foreach (var player in playersList)

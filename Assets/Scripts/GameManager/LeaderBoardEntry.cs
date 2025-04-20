@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 public class LeaderBoardEntry : MonoBehaviour
 {
+    //Det här är scriptet i prefaben som spawnar en gång per spelare i leaderboarden
     public Player Player { get; set; }
 
     [SerializeField] private TMP_Text playerName;
