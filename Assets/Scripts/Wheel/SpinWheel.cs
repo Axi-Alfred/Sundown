@@ -49,6 +49,8 @@ public class SpinWheel : MonoBehaviour
             SpinTheWheel();
         }
 
+        MouseSpinTheWheel();
+
         pointer.WheelHasSpinned(hasSpinned);
 
     }
@@ -76,6 +78,34 @@ public class SpinWheel : MonoBehaviour
 
         }
         else if (touch.phase == TouchPhase.Ended)
+        {
+            isDragging = false;
+        }
+    }
+
+    private void MouseSpinTheWheel()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            isDragging = true;
+            lastTouchPos = Input.mousePosition;
+        }
+
+        else if (Input.GetMouseButton(0) && isDragging)
+        {
+            Vector2 currentMousePos = Input.mousePosition;
+            Vector2 delta = currentMousePos - lastTouchPos;
+            float spinForce = delta.x * spinSpeed;
+
+            if (Mathf.Abs(spinForce) > 0.1f)
+            {
+                rb2D.AddTorque(spinForce);
+                isSpinning = true;
+            }
+
+            lastTouchPos = currentMousePos;
+        }
+        else if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
         }

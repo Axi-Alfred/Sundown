@@ -11,26 +11,29 @@ public class FrontCamera : MonoBehaviour
     [SerializeField] private GameObject takeButton;
     [SerializeField] private GameObject retakeButton;
     [SerializeField] private GameObject cameraSystemObject;
-    [SerializeField] private GameObject playerSelectionObject;
+
+    [SerializeField] private Image faceTemplate;
+    [SerializeField] private Sprite tempFilter;
+    
 
     private WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
 
     private float aspectRatio;
     private float imageRotation = -90;
+
     //Player specifics
 
     private Player currentPlayer;
 
     private void Start()
     {
-        cameraSystemObject.gameObject.SetActive(false);
-        playerSelectionObject.gameObject.SetActive(true);
-
         StartCoroutine(WaitForCameraPermission());
     }
     private void InitializeCamera()
     {
+        faceTemplate.gameObject.SetActive(true);
+
         foreach (WebCamDevice i in WebCamTexture.devices)
         {
             if (i.isFrontFacing)
@@ -55,7 +58,7 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = cameraPreview.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
-        rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
+        //rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
     }
 
     private void AdjustTakenImageAspectRatio()
@@ -63,7 +66,7 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = capturedImageDisplay.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
-        rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
+        //rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
     }
 
     private IEnumerator TakePicture()
@@ -81,7 +84,9 @@ public class FrontCamera : MonoBehaviour
 
         AdjustTakenImageAspectRatio();
 
+        faceTemplate.gameObject.SetActive(false);
         cameraPreview.gameObject.SetActive(false);
+        capturedImageDisplay.sprite = MergeImages(new Vector2().normalized);
         takeButton.SetActive(false);
         retakeButton.SetActive(true);
     }
@@ -105,16 +110,49 @@ public class FrontCamera : MonoBehaviour
     {
         cameraPreview.gameObject.SetActive(true);
 
+        faceTemplate.gameObject.SetActive(true);
         capturedImageDisplay.sprite = null;
         capturedImageDisplay.gameObject.SetActive(false);
         retakeButton.SetActive(false);
         takeButton.SetActive(true);
     }
 
-    public void OpenCamera()
+    private Sprite MergeImages(Vector2 position)
     {
-        cameraSystemObject.gameObject.SetActive(true);
-        playerSelectionObject.gameObject.SetActive(false);
+        Texture2D imageTexture = capturedImageDisplay.sprite.texture;
+        Texture2D filterTexture = tempFilter.texture;
+
+        int width = imageTexture.width;
+        int height = imageTexture.height;
+
+        Texture2D resultTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+        resultTexture.SetPixels(imageTexture.GetPixels());
+
+        Color[] filterPixels = filterTexture.GetPixels();
+        int filterWidth = filterTexture.width;
+        int filterHeight = filterTexture.height;
+
+        for (int y = 0; y < filterHeight; y++)
+        {
+            for (int x = 0; x < filterWidth; x++)
+            {
+                int targetX = (int)position.x + x;
+                int targetY = (int)position.y + y;
+
+                if (targetX < 0 || targetX >= width || targetY < 0 || targetY >= height) continue;
+
+                Color imageColor = resultTexture.GetPixel(targetX, targetY);
+                Color filterColor = filterPixels[y * filterWidth + x];
+                Color finalColor = Color.Lerp(imageColor, filterColor, filterColor.a);
+                resultTexture.SetPixel(targetX, targetY, finalColor);
+            }
+        }
+
+        resultTexture.Apply();
+
+        Sprite result = Sprite.Create(resultTexture, new Rect(0, 0, resultTexture.width, resultTexture.height), new Vector2(0.5f, 0.5f));
+        return result;
     }
 
 
