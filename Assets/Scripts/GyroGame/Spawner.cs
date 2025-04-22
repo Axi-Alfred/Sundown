@@ -6,26 +6,54 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject spawningBlocks;
-    [SerializeField] private int timeBetweenSpawn;
+    [SerializeField] private float timeBetweenSpawn;
+    [SerializeField] private float spawnerOffsetFromTop;
+    [SerializeField] private int spawnCountMax;
+
+    private int spawnCount;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.Translate(ReturnSpawnPositionX(), transform.position.y, 0);
-        Instantiate(spawningBlocks, transform.position, Quaternion.identity);
+        StartCoroutine(SpawnLoop());
+
+        print(Screen.height);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+
     }
 
-    private int ReturnSpawnPositionX()
+    private Vector2 ReturnSpawnPosition()
     {
-        return Random.Range(-5, 5);
+        return new Vector2(Random.Range(-4.5f, 4.5f), CalculateSpawnerY());
     }
 
-    
+    private IEnumerator SpawnLoop()
+    {
+        while (spawnCount < spawnCountMax)
+        {
+            transform.position = ReturnSpawnPosition();
+            Instantiate(spawningBlocks, transform.position, Quaternion.identity);
+            spawnCount++;
+
+            yield return new WaitForSeconds(timeBetweenSpawn);
+        }
+    }
+
+    private float CalculateSpawnerY()
+    {
+        Camera cam = Camera.main;
+        int screenResX = Screen.width;
+        int screenResY = Screen.height;
+        Vector3 topOfScreenDisplayPos = new Vector3(screenResX - 1f, screenResY - 1f, 0);
+        Vector3 topOfScreenWorldPos = cam.ScreenToWorldPoint(topOfScreenDisplayPos);
+        return topOfScreenWorldPos.y - spawnerOffsetFromTop;
+
+    }
+
 }

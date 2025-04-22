@@ -10,6 +10,9 @@ TagManager:
   - Game3
   - Block
   - Shape
+  - Pie
+  - Wall
+  - Clown
   layers:
   - Default
   - TransparentFX
@@ -17,9 +20,9 @@ TagManager:
   - Foreground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Background
+  - Clown
+  - Foreground
   - 
   - 
   - 
