@@ -31,3 +31,4 @@ public class DifficultyManagerScript : MonoBehaviour
         return baseFallSpeed * currentMultiplier;
     }
 }
+

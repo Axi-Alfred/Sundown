@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Sprite.meta
+guid: 17d8cff77a2331040ac733536b1c8602
+========
 guid: 08547364b213b104a93694276ca9b9b8
+>>>>>>>> main:Assets/Scripts/BalloonGame.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
