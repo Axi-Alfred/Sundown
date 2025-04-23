@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7775270780789312732}
   m_Layer: 3
   m_Name: Viking
-  m_TagString: Untagged
+  m_TagString: Viking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -493,3 +493,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7bbaa96eaa52704cb5f4e4496a9fc3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationSpeed: 180

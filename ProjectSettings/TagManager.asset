@@ -13,6 +13,9 @@ TagManager:
   - Pie
   - Wall
   - Clown
+  - Helmet
+  - Viking
+  - Axe
   layers:
   - Default
   - TransparentFX

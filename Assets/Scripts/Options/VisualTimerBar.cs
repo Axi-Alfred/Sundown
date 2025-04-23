@@ -1,51 +1,75 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using TMPro;
 
 public class VisualTimerBar : MonoBehaviour
 {
     [Header("Timer Settings")]
-    public float duration = 10f;         // Countdown time in seconds
-    public float startDelay = 3f;        // Delay before timer starts
+    public float duration = 10f;
 
     [Header("References")]
-    public Image fillBar;                // UI Fill image
+    public Image fillBar;
+    public TextMeshProUGUI countdownText;
+    public GameObject endPanel;
 
     private float timeLeft;
-    private float delayLeft;
     private bool timerStarted = false;
-    private bool sceneLoaded = false;
+    private bool sceneEnded = false;
 
-    void OnEnable()
+    // Call this method from another script to start the countdown
+    public void Begin()
     {
-        delayLeft = startDelay;
-        timeLeft = duration;
-        fillBar.fillAmount = 1f;
+        StartCoroutine(CountdownRoutine());
     }
 
     void Update()
     {
-        // Wait during delay phase
-        if (!timerStarted)
-        {
-            delayLeft -= Time.deltaTime;
-            if (delayLeft <= 0f)
-                timerStarted = true;
+        if (!timerStarted || sceneEnded) return;
 
-            return; // Don’t start timer yet
-        }
+        timeLeft -= Time.deltaTime;
+        float t = Mathf.Clamp01(timeLeft / duration);
+        fillBar.fillAmount = t;
 
-        // Timer running
-        if (timeLeft > 0f)
+        if (timeLeft <= 0f && !sceneEnded)
         {
-            timeLeft -= Time.deltaTime;
-            float t = Mathf.Clamp01(timeLeft / duration);
-            fillBar.fillAmount = t;
+            sceneEnded = true;
+            ShowEndPanel();
         }
-        else if (!sceneLoaded)
+    }
+
+    private System.Collections.IEnumerator CountdownRoutine()
+    {
+        // Freeze the game during countdown
+        Time.timeScale = 0f;
+
+        countdownText.gameObject.SetActive(true);
+        countdownText.text = "3"; yield return WaitForRealSeconds(1f);
+        countdownText.text = "2"; yield return WaitForRealSeconds(1f);
+        countdownText.text = "1"; yield return WaitForRealSeconds(1f);
+        countdownText.text = "Start!"; yield return WaitForRealSeconds(1f);
+
+        countdownText.gameObject.SetActive(false);
+
+        // Resume game
+        Time.timeScale = 1f;
+        timeLeft = duration;
+        timerStarted = true;
+    }
+
+    private System.Collections.IEnumerator WaitForRealSeconds(float time)
+    {
+        float start = Time.realtimeSinceStartup;
+        while (Time.realtimeSinceStartup < start + time)
         {
-            sceneLoaded = true;
-            GameManager1.EndRound();
+            yield return null;
         }
+    }
+
+    private void ShowEndPanel()
+    {
+        if (endPanel != null)
+            endPanel.SetActive(true);
+
+        GameManager1.EndRound();
     }
 }

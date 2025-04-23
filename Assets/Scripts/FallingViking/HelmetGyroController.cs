@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GyroHelmetController : MonoBehaviour
+public class HelmetGyroController : MonoBehaviour
 {
-    public float tiltSpeed = 5f;
+    public float speed = 5f;
     private bool gyroEnabled;
     private Gyroscope gyro;
 
@@ -26,10 +26,11 @@ public class GyroHelmetController : MonoBehaviour
     {
         if (!gyroEnabled) return;
 
-        // Get the tilt along the x-axis of the phone
-        float tilt = Input.gyro.gravity.x;
+        float tilt = gyro.gravity.x;
+        Vector3 movement = new Vector3(tilt * speed, 0, 0);
+        transform.Translate(movement * Time.deltaTime);
 
-        // Move the helmet left/right based on tilt
-        transform.Translate(Vector3.right * tilt * tiltSpeed * Time.deltaTime);
+        float clampedX = Mathf.Clamp(transform.position.x, -7f, 7f);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
     }
 }
