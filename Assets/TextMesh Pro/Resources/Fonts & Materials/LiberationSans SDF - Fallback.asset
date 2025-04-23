@@ -217,6 +217,7 @@ MonoBehaviour:
     m_StrikethroughThickness: 6.298828
     m_TabWidth: 24
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_GlyphTable:
   - m_Index: 3
     m_Metrics:
@@ -466,6 +467,10 @@ MonoBehaviour:
     m_Unicode: 7433
     m_GlyphIndex: 1321
     m_Scale: 1
+=======
+  m_GlyphTable: []
+  m_CharacterTable: []
+>>>>>>> Stashed changes
 =======
   m_GlyphTable: []
   m_CharacterTable: []
