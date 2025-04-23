@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
 
 public class FrontCamera : MonoBehaviour
 {
-    [SerializeField] private RawImage cameraPreview;   
+    [SerializeField] private RawImage cameraPreview;
     [SerializeField] private Image capturedImageDisplay;
     [SerializeField] private GameObject takeButton;
     [SerializeField] private GameObject retakeButton;
     [SerializeField] private GameObject cameraSystemObject;
 
+    [SerializeField] private Filter[] filtersArray; 
     [SerializeField] private Image faceTemplate;
     [SerializeField] private Sprite tempFilter;
-    
+    [SerializeField] private float filterScale = 0.75f;
+
+    [SerializeField] private TMP_Text playerName;
+
 
     private WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
@@ -58,35 +64,45 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = cameraPreview.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
-        //rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
+        rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
     }
 
-    private void AdjustTakenImageAspectRatio()
+    private void AdjustTakenImageAspectRatio(Texture2D picTexture)
     {
+        float newAspectRatio = (float)picTexture.width / (float)picTexture.height;
         RectTransform rectTransform = capturedImageDisplay.rectTransform;
-        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
-        rectTransform.localScale = new Vector3(-1, 1, 1);
-        //rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
+        rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * newAspectRatio);
     }
 
     private IEnumerator TakePicture()
     {
         capturedImageDisplay.gameObject.SetActive(true);
 
+        //Filter initiation
+        Filter currentFilter = filtersArray[Random.Range(0, filtersArray.Length)];
+        tempFilter = currentFilter.filterSprite;
+        playerName.gameObject.SetActive(true);
+        playerName.text = "Your name is " + currentFilter.filterName;
+
+
         yield return new WaitForEndOfFrame();
 
         Color[] pixels = webcamTexture.GetPixels();
         Texture2D picTexture = new Texture2D(webcamTexture.width, webcamTexture.height);
         picTexture.SetPixels(pixels);
-        Sprite picSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f));
-        capturedImageDisplay.sprite = picSprite;
         picTexture.Apply();
 
-        AdjustTakenImageAspectRatio();
+        picTexture = RotateTexture(picTexture, clockwise: true);
+        picTexture = FlipTextureVertically(picTexture);
+
+        Sprite rotatedSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f));
+        capturedImageDisplay.sprite = rotatedSprite;
+
+        AdjustTakenImageAspectRatio(picTexture);
+        capturedImageDisplay.sprite = MergeImages(picTexture);
 
         faceTemplate.gameObject.SetActive(false);
         cameraPreview.gameObject.SetActive(false);
-        capturedImageDisplay.sprite = MergeImages(new Vector2().normalized);
         takeButton.SetActive(false);
         retakeButton.SetActive(true);
     }
@@ -114,46 +130,130 @@ public class FrontCamera : MonoBehaviour
         capturedImageDisplay.sprite = null;
         capturedImageDisplay.gameObject.SetActive(false);
         retakeButton.SetActive(false);
+        playerName.gameObject.SetActive(false); 
         takeButton.SetActive(true);
     }
 
-    private Sprite MergeImages(Vector2 position)
+    private Sprite MergeImages(Texture2D baseTexture)
     {
-        Texture2D imageTexture = capturedImageDisplay.sprite.texture;
         Texture2D filterTexture = tempFilter.texture;
 
-        int width = imageTexture.width;
-        int height = imageTexture.height;
+        int textureWidth = baseTexture.width;
+        int textureHeight = baseTexture.height;
 
-        Texture2D resultTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        RectTransform capturedRect = capturedImageDisplay.rectTransform;
+        RectTransform faceRect = faceTemplate.rectTransform;
 
-        resultTexture.SetPixels(imageTexture.GetPixels());
+        float relativeWidth = faceRect.rect.width / capturedRect.rect.width;
+        float relativeHeight = faceRect.rect.height / capturedRect.rect.height;
 
-        Color[] filterPixels = filterTexture.GetPixels();
-        int filterWidth = filterTexture.width;
-        int filterHeight = filterTexture.height;
+        int filterWidth = Mathf.RoundToInt(textureWidth * relativeWidth * filterScale);
+        int filterHeight = Mathf.RoundToInt(textureHeight * relativeHeight * filterScale);
+
+        Texture2D scaledFilter = ScaleTexture(filterTexture, filterWidth, filterHeight);
+        Color[] filterPixels = scaledFilter.GetPixels();
+
+        int startX = (textureWidth - filterWidth) / 2;
+        int startY = (textureHeight - filterHeight) / 2;
+
+        Texture2D result = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
+        result.SetPixels(baseTexture.GetPixels());
 
         for (int y = 0; y < filterHeight; y++)
         {
             for (int x = 0; x < filterWidth; x++)
             {
-                int targetX = (int)position.x + x;
-                int targetY = (int)position.y + y;
+                int targetX = startX + x;
+                int targetY = startY + y;
 
-                if (targetX < 0 || targetX >= width || targetY < 0 || targetY >= height) continue;
+                if (targetX < 0 || targetX >= textureWidth || targetY < 0 || targetY >= textureHeight) continue;
 
-                Color imageColor = resultTexture.GetPixel(targetX, targetY);
+                Color baseColor = result.GetPixel(targetX, targetY);
                 Color filterColor = filterPixels[y * filterWidth + x];
-                Color finalColor = Color.Lerp(imageColor, filterColor, filterColor.a);
-                resultTexture.SetPixel(targetX, targetY, finalColor);
+                Color finalColor = Color.Lerp(baseColor, filterColor, filterColor.a);
+
+                result.SetPixel(targetX, targetY, finalColor);
             }
         }
 
-        resultTexture.Apply();
+        result.Apply();
 
-        Sprite result = Sprite.Create(resultTexture, new Rect(0, 0, resultTexture.width, resultTexture.height), new Vector2(0.5f, 0.5f));
-        return result;
+        return Sprite.Create(result, new Rect(0, 0, textureWidth, textureHeight), new Vector2(0.5f, 0.5f));
     }
 
+    private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
+    {
+        RenderTexture rt = RenderTexture.GetTemporary(targetWidth, targetHeight);
+        RenderTexture.active = rt;
+        Graphics.Blit(source, rt);
+        Texture2D result = new Texture2D(targetWidth, targetHeight, TextureFormat.RGBA32, false);
+        result.ReadPixels(new Rect(0, 0, targetWidth, targetHeight), 0, 0);
+        result.Apply();
+        RenderTexture.ReleaseTemporary(rt);
+        return result;
 
+    }
+
+    public static Texture2D RotateTexture(Texture2D original, bool clockwise)
+    {
+        int width = original.width;
+        int height = original.height;
+        Texture2D rotated = new Texture2D(height, width); 
+
+        for (int i = 0; i < width; ++i)
+        {
+            for (int j = 0; j < height; ++j)
+            {
+                if (clockwise)
+                    rotated.SetPixel(j, width - i - 1, original.GetPixel(i, j));
+                else
+                    rotated.SetPixel(height - j - 1, i, original.GetPixel(i, j));
+            }
+        }
+
+        rotated.Apply();
+        return rotated;
+    }
+
+    public static Texture2D FlipTextureVertically(Texture2D original)
+    {
+        int width = original.width;
+        int height = original.height;
+
+        Texture2D flipped = new Texture2D(width, height, original.format, false);
+
+        for (int y = 0; y < height; y++)
+        {
+            flipped.SetPixels(0, y, width, 1, original.GetPixels(0, height - y - 1, width, 1));
+        }
+
+        flipped.Apply();
+        return flipped;
+    }
+
+    //Ignore this method totally, its old and doesnt work, only here for veckoredovisning :)
+    private Sprite Merge()
+    {
+        int width = tempFilter.texture.width;
+        int height = tempFilter.texture.height;
+        Texture2D tempBackgroundTexture = new Texture2D(width, height);
+
+        Color[] filterPixels = tempFilter.texture.GetPixels();
+        Color[] newPixels = new Color[width * height]; 
+
+        for (int i = 0; i < filterPixels.Length; i++)
+        {
+
+            if (filterPixels[i].a > 0)
+            {
+                newPixels[i] = filterPixels[i];
+            }
+        }
+
+        tempBackgroundTexture.SetPixels(newPixels);
+        tempBackgroundTexture.Apply();
+
+        return Sprite.Create(tempBackgroundTexture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
+
+    }
 }
