@@ -10,8 +10,12 @@ TagManager:
   - Game3
   - Block
   - Shape
-  - Block
-  - Draggable
+  - Pie
+  - Wall
+  - Clown
+  - Helmet
+  - Viking
+  - Axe
   layers:
   - Default
   - TransparentFX
@@ -19,9 +23,9 @@ TagManager:
   - Foreground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Background
+  - Clown
+  - Foreground
   - 
   - 
   - 
