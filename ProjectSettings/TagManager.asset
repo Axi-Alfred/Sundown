@@ -16,6 +16,8 @@ TagManager:
   - Helmet
   - Viking
   - Axe
+  - Ball
+  - Hole
   layers:
   - Default
   - TransparentFX
