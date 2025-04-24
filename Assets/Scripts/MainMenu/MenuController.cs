@@ -7,6 +7,7 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject creditsPanel; // Panel showing credits
     [SerializeField] private GameObject playPanel;
+    [SerializeField] private GameObject settingsPanel;
 
     private void Update()
     {
@@ -23,6 +24,14 @@ public class MenuController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 ClosePlay();   
+            }
+        }
+
+        if (settingsPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ClosePlay();
             }
         }
     }
@@ -42,6 +51,16 @@ public class MenuController : MonoBehaviour
     public void ClosePlay()
     {
         playPanel.SetActive(false);
+    }
+
+    public void ShowSettings()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
     }
 
     public void QuitGame()
