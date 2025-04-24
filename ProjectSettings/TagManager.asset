@@ -18,6 +18,7 @@ TagManager:
   - Axe
   - Ball
   - Hole
+  - RandomGame
   layers:
   - Default
   - TransparentFX

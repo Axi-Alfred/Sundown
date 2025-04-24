@@ -53,6 +53,10 @@ public class Pointer : MonoBehaviour
                 nextGameText.text = "Game3 will begin now";
                 StartCoroutine(Timer("X 5PopTheBalloon"));
                 break;
+            case "RandomGame":
+                nextGameText.text = "Random game will now begin";
+                StartCoroutine(Timer(Random.Range(4, 9)));
+                break;
         }
     }
 
@@ -66,5 +70,12 @@ public class Pointer : MonoBehaviour
         yield return new WaitForSeconds(gameStartTimer);
 
         SceneManager.LoadScene(levelName);
+    }
+
+    IEnumerator Timer(int sceneIndex)
+    {
+        yield return new WaitForSeconds(gameStartTimer);
+
+        SceneManager.LoadScene(sceneIndex);
     }
 }
