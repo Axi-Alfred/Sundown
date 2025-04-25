@@ -1,23 +1,35 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class BalloonSpawner : MonoBehaviour
 {
     public GameObject balloonPrefab;
-    public float spawnInterval = 0.5f;
-    public float minSpeed = 1f, maxSpeed = 3f;
-    public float minScale = 0.5f, maxScale = 1.5f;
 
+    [Header("Balloon Sprites")]
+    public Sprite[] coloredSprites; // Red, green, blue, yellow
+    public Sprite blackSprite;      // Naughty balloon 😈
+
+    [Header("Spawn Settings")]
+    public float spawnInterval = 0.5f;
+    public float minScale = 0.5f, maxScale = 1.5f;
     public float spawnWidth = 5f;
-    public float spawnYPosition = -6f; // Spawn off-screen below
+    private float spawnYPosition;
+
+    [Range(0f, 1f)]
+    public float blackBalloonChance = 0.1f;
 
     void Start()
     {
+        // Calculate spawn Y-position based on camera
+        Camera cam = Camera.main;
+        spawnYPosition = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f)).y;
+
         StartCoroutine(SpawnRoutine());
     }
 
     IEnumerator SpawnRoutine()
     {
+        yield return new WaitForSeconds(0.5f);
         while (true)
         {
             SpawnBalloon();
@@ -32,10 +44,24 @@ public class BalloonSpawner : MonoBehaviour
 
         GameObject balloon = Instantiate(balloonPrefab, spawnPosition, Quaternion.identity);
 
+        // Set random scale
         float scale = Random.Range(minScale, maxScale);
         balloon.transform.localScale = Vector3.one * scale;
 
-        float verticalSpeed = Random.Range(minSpeed, maxSpeed);
-        balloon.GetComponent<Balloon>().verticalSpeed = verticalSpeed;
+        // Sprite + behavior setup
+        SpriteRenderer sr = balloon.GetComponent<SpriteRenderer>();
+        Balloon balloonScript = balloon.GetComponent<Balloon>();
+
+        if (Random.value < blackBalloonChance)
+        {
+            sr.sprite = blackSprite;
+            balloonScript.isNegative = true;
+        }
+        else
+        {
+            int index = Random.Range(0, coloredSprites.Length);
+            sr.sprite = coloredSprites[index];
+            balloonScript.isNegative = false;
+        }
     }
 }

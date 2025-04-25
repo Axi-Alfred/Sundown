@@ -2,47 +2,43 @@ using UnityEngine;
 
 public class Balloon : MonoBehaviour
 {
-    public float verticalSpeed;
-    public float horizontalAmplitude = 0.5f;
-    public float horizontalFrequency = 1f;
+    public float moveSpeed = 3f;
+    public float wobbleIntensity = 2f;
+    public float rotationSpeed = 100f;
 
-    public GameObject popEffect;
-    public AudioClip popSound;
+    public bool isNegative = false;
 
-    private float initialX;
+    private Vector2 direction;
+    private float wobbleOffset;
 
     void Start()
     {
-        initialX = transform.position.x;
-        horizontalFrequency = Random.Range(0.5f, 1.5f);
-        horizontalAmplitude = Random.Range(0.3f, 0.8f);
+        float angle = Random.Range(0f, 360f); // Full chaos
+        float radians = angle * Mathf.Deg2Rad;
+        direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
+
+        wobbleOffset = Random.Range(0f, Mathf.PI * 2f);
+        rotationSpeed = Random.Range(-180f, 180f);
     }
 
     void Update()
     {
-        transform.Translate(Vector2.up * verticalSpeed * Time.deltaTime);
+        float wobble = Mathf.Sin(Time.time * 5f + wobbleOffset) * wobbleIntensity;
+        Vector3 movement = (direction + new Vector2(wobble, 0)) * moveSpeed * Time.deltaTime;
+        transform.Translate(movement);
 
-        float newX = initialX + Mathf.Sin(Time.time * horizontalFrequency) * horizontalAmplitude;
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+        transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
 
-        if (transform.position.y > 6f)
+        // Destroy if off-screen
+        if (!IsVisible())
+        {
             Destroy(gameObject);
+        }
     }
 
-    void OnMouseDown()
+    bool IsVisible()
     {
-        PopBalloon();
-    }
-
-    void PopBalloon()
-    {
-        if (popEffect != null)
-            Instantiate(popEffect, transform.position, Quaternion.identity);
-
-        if (popSound != null)
-            AudioSource.PlayClipAtPoint(popSound, Camera.main.transform.position);
-
-        FindObjectOfType<BalloonGameManager>().BalloonPopped();
-        Destroy(gameObject);
+        Vector3 screenPoint = Camera.main.WorldToViewportPoint(transform.position);
+        return screenPoint.x >= -0.1f && screenPoint.x <= 1.1f && screenPoint.y >= -0.1f && screenPoint.y <= 1.1f;
     }
 }

@@ -18,6 +18,10 @@ TagManager:
   - Axe
   - Ball
   - Hole
+  - Draggable
+  - Root
+  - GyroGameGround
+  - GyroGameBlock
   layers:
   - Default
   - TransparentFX
@@ -27,7 +31,7 @@ TagManager:
   - UI
   - Background
   - Clown
-  - Foreground
+  - 
   - 
   - 
   - 
@@ -54,4 +58,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 4096221823
     locked: 0

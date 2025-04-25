@@ -57,7 +57,7 @@ public class VisualTimerBar : MonoBehaviour
 
     private System.Collections.IEnumerator SequenceBeforeTimer()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.4f);
 
         if (Time.timeScale > 0f)
         {
@@ -109,6 +109,7 @@ public class VisualTimerBar : MonoBehaviour
             endPanel.SetActive(true);
             if (endText != null)
                 endText.text = "Time's up!";
+            GameManager1.EndRound();
         }
     }
 

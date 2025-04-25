@@ -3,6 +3,9 @@
 public class OddTapGameManager : MonoBehaviour
 {
     public GameObject shapePrefab;
+    public Sprite[] normalShapeSprites;
+    public Sprite[] oddShapeSprites;
+
     public int totalRounds = 3;
     private int currentRound = 0;
 
@@ -41,20 +44,20 @@ public class OddTapGameManager : MonoBehaviour
             if (i == oddIndex)
             {
                 shape.name = $"Shape_{i}_ODD";
-                sr.color = Color.red;
+                sr.sprite = oddShapeSprites[Random.Range(0, oddShapeSprites.Length)];
                 shape.transform.localScale *= 1.5f;
                 shapeScript.SetOdd(true);
                 currentOddShape = shape;
 
-                Debug.Log($"🎯 ODD: {shape.name} | Color: {sr.color} | IsOdd: {shapeScript.isOdd}");
+                Debug.Log($"🎯 ODD: {shape.name} | Sprite: {sr.sprite.name} | IsOdd: {shapeScript.isOdd}");
             }
             else
             {
                 shape.name = $"Shape_{i}_NORMAL";
-                sr.color = Color.blue;
+                sr.sprite = normalShapeSprites[Random.Range(0, normalShapeSprites.Length)];
                 shapeScript.SetOdd(false);
 
-                Debug.Log($"🔵 NORMAL: {shape.name} | Color: {sr.color} | IsOdd: {shapeScript.isOdd}");
+                Debug.Log($"🔵 NORMAL: {shape.name} | Sprite: {sr.sprite.name} | IsOdd: {shapeScript.isOdd}");
             }
         }
 
