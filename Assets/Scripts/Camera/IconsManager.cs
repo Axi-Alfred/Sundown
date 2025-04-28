@@ -30,7 +30,9 @@ public class IconsManager : MonoBehaviour
 
     private int countdownNumber = 5;
     [SerializeField] private TMP_Text countdownNumberText;
-    [SerializeField] private GameObject countdownNumberObject;  
+    [SerializeField] private GameObject countdownNumberObject;
+
+    [SerializeField] private GameObject playersListPanel;
 
     private string[] playerNumbersStrings = new string[4] {"one", "two", "three", "four"};
 
@@ -43,6 +45,9 @@ public class IconsManager : MonoBehaviour
 
         frontCamera = GetComponent<FrontCamera>();    
         animator = GetComponent<Animator>();
+
+
+        playersListPanel.SetActive(false);
 
 
         //Create a random order of filters handed out so no two players can get the same filter per round
@@ -115,7 +120,7 @@ public class IconsManager : MonoBehaviour
 
     public void ShowPlayersList()
     {
-
+        playersListPanel.SetActive(true);
     }
 
     public void NextPlayer()
