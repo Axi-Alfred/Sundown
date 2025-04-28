@@ -8,6 +8,10 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject creditsPanel; // Panel showing credits
     [SerializeField] private GameObject playPanel;
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject wheelSettingsPanel;
+
+    public string mainMenuSceneName = "HuvudMenu";
 
     private void Update()
     {
@@ -31,7 +35,23 @@ public class MenuController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ClosePlay();
+                CloseSettings();
+            }
+        }
+
+        if (optionsPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseOptions();
+            }
+        }
+
+        if (wheelSettingsPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseWheelSettings();
             }
         }
     }
@@ -51,6 +71,26 @@ public class MenuController : MonoBehaviour
     public void ClosePlay()
     {
         playPanel.SetActive(false);
+    }
+
+    public void ShowOptions()
+    {
+        optionsPanel.SetActive(true);
+    }
+
+    public void CloseOptions()
+    {
+        optionsPanel.SetActive(false);
+    }
+
+    public void ShowWheelSettings()
+    {
+        wheelSettingsPanel.SetActive(true);
+    }
+
+    public void CloseWheelSettings()
+    {
+        wheelSettingsPanel.SetActive(false);
     }
 
     public void ShowSettings()
@@ -76,5 +116,10 @@ public class MenuController : MonoBehaviour
     public void CloseCredits()
     {
         creditsPanel.SetActive(false);
+    }
+
+    public void ReturnToMenu()
+    {
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }
