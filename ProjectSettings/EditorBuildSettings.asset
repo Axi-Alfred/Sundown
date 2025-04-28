@@ -35,7 +35,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LeaderBoard.unity
     guid: 709d98dcb1cf6554482f771d5039bb7c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 11FallngGods - Done.unity
     guid: dd788de0ff3d28e4fbe78f5d793f2afe
+  - enabled: 1
+    path: Assets/Scenes/JuggleMania.unity
+    guid: f184e9b6cdfe1c642bb556267d9ed76c
   m_configObjects: {}
