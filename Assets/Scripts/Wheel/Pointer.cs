@@ -55,7 +55,7 @@ public class Pointer : MonoBehaviour
                 break;
             case "RandomGame":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 9)));
+                StartCoroutine(Timer(Random.Range(4, 9))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
                 break;
         }
     }
