@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class SpinWheel : MonoBehaviour
 {
-    [SerializeField] private float spinSpeed;
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
+    [SerializeField] private float torqueMultiplier = 50f;
     [SerializeField] private Pointer pointer;
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
+    private Vector2 wheelCenter;
     private bool isDragging;
     private bool isSpinning;
     private bool hasSpinned; //has already bombaclat spinned and is currently stationary
@@ -20,6 +21,9 @@ public class SpinWheel : MonoBehaviour
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        wheelCenter = Camera.main.WorldToScreenPoint(transform.position);
+        float wheelRotation = UnityEngine.Random.Range(1, 90);
+        transform.localRotation = Quaternion.Euler(0, 0, wheelRotation);
     }
 
     // Update is called once per frame
@@ -46,18 +50,17 @@ public class SpinWheel : MonoBehaviour
 
         if (Input.touchCount > 0 && !isSpinning && !hasSpinned)
         {
-            SpinTheWheel();
+            SpinTheWheel(Input.GetTouch(0));
         }
-
-        MouseSpinTheWheel();
 
         pointer.WheelHasSpinned(hasSpinned);
 
     }
 
-    private void SpinTheWheel()
+    private void SpinTheWheel(Touch touch)
     {
-        Touch touch = Input.GetTouch(0);
+        if (hasSpinned || isSpinning) return;
+
 
         if (touch.phase == TouchPhase.Began)
         {
@@ -66,49 +69,29 @@ public class SpinWheel : MonoBehaviour
         }
         else if (touch.phase == TouchPhase.Moved && isDragging)
         {
-            Vector2 delta = touch.position - lastTouchPos;
-            float spinForce = delta.x * spinSpeed;
-            if (Mathf.Abs(spinForce) > 0.1)
-            {
-                rb2D.AddTorque(spinForce);
-                isSpinning = true;
-            }
+            Vector2 currentTouchPos = touch.position;
 
-            lastTouchPos = touch.position;
+            Vector2 from = lastTouchPos - wheelCenter;
+            Vector2 to = currentTouchPos - wheelCenter;
 
+            float angle = Vector2.SignedAngle(from, to);
+
+            rb2D.AddTorque(-angle * -torqueMultiplier);
+
+            lastTouchPos = currentTouchPos;
+            isSpinning = true;
         }
-        else if (touch.phase == TouchPhase.Ended)
+        else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
         {
             isDragging = false;
         }
     }
 
-    private void MouseSpinTheWheel()
+
+    public void SpinWithButton()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            isDragging = true;
-            lastTouchPos = Input.mousePosition;
-        }
-
-        else if (Input.GetMouseButton(0) && isDragging)
-        {
-            Vector2 currentMousePos = Input.mousePosition;
-            Vector2 delta = currentMousePos - lastTouchPos;
-            float spinForce = delta.x * spinSpeed;
-
-            if (Mathf.Abs(spinForce) > 0.1f)
-            {
-                rb2D.AddTorque(spinForce);
-                isSpinning = true;
-            }
-
-            lastTouchPos = currentMousePos;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            isDragging = false;
-        }
+        int randomSpinForce = UnityEngine.Random.Range(500, 1000);
+        rb2D.AddTorque(-randomSpinForce);
     }
 
     public void ResetWheel()

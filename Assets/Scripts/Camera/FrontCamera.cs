@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,18 +9,16 @@ using UnityEngine.UI;
 
 public class FrontCamera : MonoBehaviour
 {
+    [Header("Display")]
     [SerializeField] private RawImage cameraPreview;
     [SerializeField] private Image capturedImageDisplay;
-    [SerializeField] private GameObject takeButton;
-    [SerializeField] private GameObject retakeButton;
     [SerializeField] private GameObject cameraSystemObject;
 
-    [SerializeField] private Filter[] filtersArray; 
     [SerializeField] private Image faceTemplate;
-    [SerializeField] private Sprite tempFilter;
     [SerializeField] private float filterScale = 0.75f;
 
-    [SerializeField] private TMP_Text playerName;
+    private Sprite tempFilterSprite;
+    private IconsManager iconsManager;
 
 
     private WebCamTexture webcamTexture;
@@ -28,19 +27,17 @@ public class FrontCamera : MonoBehaviour
     private float aspectRatio;
     private float imageRotation = -90;
 
-    //Player specifics
-
-    private Player currentPlayer;
-
     private void Start()
     {
-        StartCoroutine(WaitForCameraPermission());
+        iconsManager = GetComponent<IconsManager>();
+
+        StartCoroutine(WaitForCameraPermission()); //Before initializing you need to first check permission using this coroutine
     }
     private void InitializeCamera()
     {
         faceTemplate.gameObject.SetActive(true);
 
-        foreach (WebCamDevice i in WebCamTexture.devices)
+        foreach (var i in WebCamTexture.devices)
         {
             if (i.isFrontFacing)
             {
@@ -74,16 +71,12 @@ public class FrontCamera : MonoBehaviour
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * newAspectRatio);
     }
 
-    private IEnumerator TakePicture()
+    public IEnumerator TakePicture()
     {
         capturedImageDisplay.gameObject.SetActive(true);
 
         //Filter initiation
-        Filter currentFilter = filtersArray[Random.Range(0, filtersArray.Length)];
-        tempFilter = currentFilter.filterSprite;
-        playerName.gameObject.SetActive(true);
-        playerName.text = "Your name is " + currentFilter.filterName;
-
+        tempFilterSprite = iconsManager.currentFilter.filterSprite;
 
         yield return new WaitForEndOfFrame();
 
@@ -99,12 +92,16 @@ public class FrontCamera : MonoBehaviour
         capturedImageDisplay.sprite = rotatedSprite;
 
         AdjustTakenImageAspectRatio(picTexture);
+
+        //Could potentially play some extra animation after the pic is taken before the filter is applied
+
         capturedImageDisplay.sprite = MergeImages(picTexture);
+
+        iconsManager.currentPlayer.PlayerIcon = capturedImageDisplay.sprite;
+        iconsManager.currentPlayer.PlayerName = iconsManager.currentFilter.name;
 
         faceTemplate.gameObject.SetActive(false);
         cameraPreview.gameObject.SetActive(false);
-        takeButton.SetActive(false);
-        retakeButton.SetActive(true);
     }
 
     private IEnumerator WaitForCameraPermission()
@@ -117,11 +114,6 @@ public class FrontCamera : MonoBehaviour
         InitializeCamera();
     }
 
-    public void TakePictureButton()
-    {
-        StartCoroutine(TakePicture());
-    }
-
     public void RetakePictureButton()
     {
         cameraPreview.gameObject.SetActive(true);
@@ -129,14 +121,11 @@ public class FrontCamera : MonoBehaviour
         faceTemplate.gameObject.SetActive(true);
         capturedImageDisplay.sprite = null;
         capturedImageDisplay.gameObject.SetActive(false);
-        retakeButton.SetActive(false);
-        playerName.gameObject.SetActive(false); 
-        takeButton.SetActive(true);
     }
 
     private Sprite MergeImages(Texture2D baseTexture)
     {
-        Texture2D filterTexture = tempFilter.texture;
+        Texture2D filterTexture = tempFilterSprite.texture;
 
         int textureWidth = baseTexture.width;
         int textureHeight = baseTexture.height;
@@ -234,11 +223,11 @@ public class FrontCamera : MonoBehaviour
     //Ignore this method totally, its old and doesnt work, only here for veckoredovisning :)
     private Sprite Merge()
     {
-        int width = tempFilter.texture.width;
-        int height = tempFilter.texture.height;
+        int width = tempFilterSprite.texture.width;
+        int height = tempFilterSprite.texture.height;
         Texture2D tempBackgroundTexture = new Texture2D(width, height);
 
-        Color[] filterPixels = tempFilter.texture.GetPixels();
+        Color[] filterPixels = tempFilterSprite.texture.GetPixels();
         Color[] newPixels = new Color[width * height]; 
 
         for (int i = 0; i < filterPixels.Length; i++)

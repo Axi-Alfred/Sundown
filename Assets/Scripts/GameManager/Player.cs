@@ -13,7 +13,7 @@ public class Player
     public string PlayerName {  get { return playerName; } set { playerName = value; }}
 
     private Sprite playerIcon;
-    public Sprite PlayerIcon { get { return playerIcon; } private set { playerIcon = value; }}
+    public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; }}
 
 
     public Player(string name, int iD, Sprite icon)
@@ -23,7 +23,7 @@ public class Player
         playerIcon = icon;
         CurrentIconInt = iD;
     }
-    public void ChangePlayerIcon()
+    public void ChangePlayerIcon() //Potentially useless method :/
     {
         playerIcon = PlayerData.iconDatabase.iconsArray[++CurrentIconInt % PlayerData.iconDatabase.iconsArray.Length];
     }

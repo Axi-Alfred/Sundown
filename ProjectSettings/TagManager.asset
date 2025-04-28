@@ -22,6 +22,7 @@ TagManager:
   - Root
   - GyroGameGround
   - GyroGameBlock
+  - RandomGame
   layers:
   - Default
   - TransparentFX

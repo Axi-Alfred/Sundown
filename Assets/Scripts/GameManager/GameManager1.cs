@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager1
 {
-    private static List<Player> tempPlayers;
+    private static List<Player> tempPlayersList;
     public static int currentRound;
 
     // Start is called before the first frame update
@@ -23,17 +23,17 @@ public class GameManager1
 
     public static IEnumerator PlayerTurnLoop()
     {
-        tempPlayers = PlayerData.playersArray.ToList();
-        tempPlayers = tempPlayers.OrderBy(p => Random.value).ToList();
+        tempPlayersList = PlayerData.playersArray.ToList();
+        tempPlayersList = tempPlayersList.OrderBy(p => Random.value).ToList();
 
-        foreach (Player i in tempPlayers)
+        foreach (Player i in tempPlayersList)
         {
             i.HasPlayed = false;
         }
 
-        for (int i = 0; i < tempPlayers.Count; i++)
+        for (int i = 0; i < tempPlayersList.Count; i++)
         {
-            PlayerData.currentPlayerTurn = tempPlayers[i];
+            PlayerData.currentPlayerTurn = tempPlayersList[i];
             Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
 
             yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
