@@ -40,7 +40,7 @@ public class IconsManager : MonoBehaviour
     void Start()
     {
         //This code is temporary and used only for testing
-        PlayerData.numberOfPlayers = 4;
+        PlayerData.numberOfPlayers = 2;
         StartCoroutine(PlayerData.AssignPlayers());
 
         frontCamera = GetComponent<FrontCamera>();    

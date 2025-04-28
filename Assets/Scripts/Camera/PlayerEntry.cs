@@ -14,19 +14,23 @@ public class PlayerEntry : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Player = PlayerData.playersArray[0];
-        LoadEntry();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void LoadEntry()
     {
         playerName.text = Player.PlayerName;
         playerIcon.sprite = Player.PlayerIcon;
+    }
+
+    public void ShowPlayer()
+    {
+        PlayerPrep.instance.ShowPicture(Player);
     }
 }
