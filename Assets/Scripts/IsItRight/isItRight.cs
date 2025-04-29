@@ -9,6 +9,8 @@ public class isItRight : MonoBehaviour
 {
     [SerializeField] private int maxMistakes = 2;
     [SerializeField] private TMP_Text mistakeText;
+    [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
+    [SerializeField] private AudioPool audioPool;
     [SerializeField] private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
     };
@@ -25,6 +27,7 @@ public class isItRight : MonoBehaviour
     private List<int> flippableIndices;
 
 
+
     public static isItRight Instance;
     public readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f); // nice, strong green
     public GameObject letterTilePrefab;
@@ -37,6 +40,7 @@ public class isItRight : MonoBehaviour
 
     void Start()
     {
+        audioPool = FindObjectOfType<AudioPool>();
         currentMistakes = 0;
         UpdateMistakeUI();
 
@@ -157,6 +161,7 @@ public class isItRight : MonoBehaviour
     public void OnCorrectLetterTapped(LetterTile tile)
     {
         Debug.Log("✅ Correct letter tapped: " + tile.correctLetter);
+        audioPool.PlaySound(correct, 2f);
         fixedCount++;
 
         if (fixedCount >= totalToFix)
@@ -168,7 +173,7 @@ public class isItRight : MonoBehaviour
     public void OnWrongLetterTapped(LetterTile tile)
     {
         if (gameOver) return;
-
+        audioPool.PlaySound(incorrect, 2f);
         currentMistakes++;
         UpdateMistakeUI();
 
@@ -189,8 +194,8 @@ public class isItRight : MonoBehaviour
 
     private IEnumerator PlayVictorySequence()
     {
+        audioPool.PlaySound(posAll, 2f);
         float delay = 0.05f;
-
         foreach (LetterTile tile in allTiles)
         {
             tile.SetVictoryColor(victoryGreen);
@@ -206,8 +211,8 @@ public class isItRight : MonoBehaviour
     }
     private IEnumerator PlayLoseSequence()
     {
+        audioPool.PlaySound(negAll, 2f);
         float flashDelay = 0.08f;
-
         foreach (var tile in allTiles)
         {
             tile.GetComponent<Button>().interactable = false;
