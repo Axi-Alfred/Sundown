@@ -7532,6 +7532,9 @@ MonoBehaviour:
   creditsPanel: {fileID: 768630209}
   playPanel: {fileID: 1530265418}
   settingsPanel: {fileID: 465465475}
+  optionsPanel: {fileID: 0}
+  wheelSettingsPanel: {fileID: 0}
+  mainMenuSceneName: HuvudMenu
 --- !u!4 &1983119294
 Transform:
   m_ObjectHideFlags: 0
