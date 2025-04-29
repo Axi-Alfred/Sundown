@@ -9,8 +9,6 @@ public class PlayerData
 
     public static int numberOfPlayers;
 
-    public static IconDatabase iconDatabase;
-
     public static int numberOfRounds;
 
     public static Player currentPlayerTurn;
@@ -23,8 +21,6 @@ public class PlayerData
 
     public static IEnumerator AssignPlayers()
     {
-        iconDatabase = Resources.Load<IconDatabase>("GlobalIcons");
-
         if (numberOfPlayers > maxNumberOfPlayer) numberOfPlayers = maxNumberOfPlayer;
         if (numberOfPlayers < minNumberOfPlayer) numberOfPlayers += minNumberOfPlayer;
 
@@ -32,7 +28,7 @@ public class PlayerData
 
         for (int i = 0; i < playersArray.Length; i++)
         {
-            playersArray[i] = new Player("Player " + (i + 1), i, iconDatabase.iconsArray[i]);
+            playersArray[i] = new Player("Player " + (i + 1), i);
         }
 
         yield return new WaitUntil(() => PlayerData.playersArray != null && PlayerData.playersArray.All(p => p != null));

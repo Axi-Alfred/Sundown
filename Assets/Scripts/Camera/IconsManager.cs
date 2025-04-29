@@ -33,16 +33,13 @@ public class IconsManager : MonoBehaviour
     [SerializeField] private GameObject countdownNumberObject;
 
     [SerializeField] private GameObject playersListPanel;
+    [SerializeField] private GameObject InitialPopup;
 
     private string[] playerNumbersStrings = new string[4] {"one", "two", "three", "four"};
 
     // Start is called before the first frame update
     void Start()
     {
-        //This code is temporary and used only for testing
-        PlayerData.numberOfPlayers = 2;
-        StartCoroutine(PlayerData.AssignPlayers());
-
         frontCamera = GetComponent<FrontCamera>();    
         animator = GetComponent<Animator>();
 
@@ -67,6 +64,12 @@ public class IconsManager : MonoBehaviour
 
     public IEnumerator TakePlayerPictureLoop()
     {
+        InitialPopup.SetActive(true);
+
+        yield return new WaitForSeconds(3.5f);
+
+        InitialPopup.SetActive(false);
+
         for (int i = 0; i < PlayerData.playersArray.Length; i++)
         {
             hasTakenPic = false;
