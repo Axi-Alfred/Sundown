@@ -18,6 +18,8 @@ TagManager:
   - Axe
   - Ball
   - Hole
+  - Draggable
+  - Target
   layers:
   - Default
   - TransparentFX

@@ -5,8 +5,7 @@ using UnityEngine;
 public class MovingTargetsDunk : MonoBehaviour
 {
     public float speed = 2f;
-    public float range = 3f;
-
+    public float range = 2f;
     private Vector3 startPos;
 
     void Start()
