@@ -23,6 +23,8 @@ TagManager:
   - GyroGameGround
   - GyroGameBlock
   - RandomGame
+  - Clown
+  - Safe
   layers:
   - Default
   - TransparentFX
