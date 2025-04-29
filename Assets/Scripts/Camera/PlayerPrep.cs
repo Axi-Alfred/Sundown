@@ -1,65 +1,87 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerPrep : MonoBehaviour
 {
-    public Player player;
+    public static PlayerPrep instance;
 
-    [SerializeField] private Image image;
-
-    [SerializeField] private TMP_InputField inputField;
-
-    [SerializeField] private int currentPlayerIndex;
-
-    private static int instanceCount;
+    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry av spelare
+    [SerializeField] private GameObject iconContainer;
 
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
-        StartCoroutine(First());
+        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        while (transform.childCount > 0)
+        {
+            Destroy(transform.GetChild(0).gameObject);
+        }
+        InitializePlayersList();
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player != null)
+        if (iconContainer.activeSelf)
         {
-            image.sprite = player.PlayerIcon;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                iconContainer.SetActive(false);
+            }
         }
     }
 
-    public void ChangeIcon()
+    private void InitializePlayersList()
     {
-        player.ChangePlayerIcon();
+        GameObject currentEntry;
+
+        foreach (var player in PlayerData.playersArray)
+        {
+            currentEntry = null;
+            currentEntry = Instantiate(entryPrefab);
+            currentEntry.transform.SetParent(gameObject.transform);
+            currentEntry.GetComponent<PlayerEntry>().Player = player;
+            currentEntry.GetComponent<PlayerEntry>().LoadEntry();
+        }
     }
 
-    public void ChangeName()
+    public void ShowPicture(Player player)
     {
-        player.PlayerName = inputField.text;
-        Debug.Log(player.PlayerName);
+        iconContainer.SetActive(true);
+        Image image = iconContainer.GetComponent<Image>();
+        image.sprite = player.PlayerIcon;
+        float imgWidth = image.sprite.rect.width;
+        float imgHeight = image.sprite.rect.height;
+        RectTransform rt = image.GetComponent<RectTransform>();
+        float aspectRatio = imgWidth / imgHeight;
+        float newHeight = rt.sizeDelta.y;
+        float newWidth = newHeight * aspectRatio;
+        rt.sizeDelta = new Vector2(newWidth, newHeight);
+
     }
 
-    IEnumerator First()
+    public void StartGame()
     {
-        yield return new WaitUntil(() => PlayerData.playersHaveBeenAssigned == true);
-
-        player = PlayerData.playersArray[currentPlayerIndex]; //TEMP
-        inputField.text = player.PlayerName;
-    }
-
-    public Player CurrentPlayer()
-    {
-        return player;
-    }
-
-    private void OnEnable()
-    {
-        instanceCount++;
-        Debug.Log(instanceCount);
+        SceneManager.LoadScene("Wheel");
     }
 }
 
