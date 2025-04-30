@@ -15,6 +15,29 @@ public class SwipeThrow : MonoBehaviour
     private bool isSwipe;
     private bool hasBallInAir = false;
 
+    public Sprite[] ballSprites; // assign in Inspector
+    private Sprite nextBallSprite;
+    private Coroutine fadeCoroutine;
+
+    void Start()
+    {
+        if (ballSprites.Length > 0)
+        {
+            List<Sprite> validSprites = new List<Sprite>(ballSprites);
+            validSprites.RemoveAll(sprite => sprite == null);
+
+            if (validSprites.Count > 0)
+                nextBallSprite = validSprites[Random.Range(0, validSprites.Count)];
+
+            if (ballPlaceholder != null)
+            {
+                SpriteRenderer sr = ballPlaceholder.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                    sr.sprite = nextBallSprite;
+            }
+        }
+    }
+
     void Update()
     {
         if (hasBallInAir) return;
@@ -64,6 +87,10 @@ public class SwipeThrow : MonoBehaviour
     {
         Vector3 spawnPos = new Vector3(spawnPoint.position.x, spawnPoint.position.y, 0f);
         GameObject ball = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
+        // Set the correct sprite
+        SpriteRenderer sr = ball.GetComponent<SpriteRenderer>();
+        if (sr != null && nextBallSprite != null)
+            sr.sprite = nextBallSprite;
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
         Vector2 force = new Vector2(swipe.x, swipe.y) * forceMultiplier;
         rb.AddForce(force, ForceMode2D.Impulse);
@@ -72,7 +99,12 @@ public class SwipeThrow : MonoBehaviour
 
         // Hide placeholder
         if (ballPlaceholder != null)
-            ballPlaceholder.SetActive(false);
+        {
+            if (fadeCoroutine != null)
+                StopCoroutine(fadeCoroutine);
+
+            fadeCoroutine = StartCoroutine(FadePlaceholder(false));
+        }
 
         var tracker = ball.AddComponent<BallLifeTracker>();
         tracker.throwController = this;
@@ -83,9 +115,76 @@ public class SwipeThrow : MonoBehaviour
     {
         hasBallInAir = false;
 
-        // Show placeholder again
-        if (ballPlaceholder != null)
-            ballPlaceholder.SetActive(true);
+        // Pick new sprite for the next ball
+        if (ballSprites.Length > 0)
+        {
+            List<Sprite> validSprites = new List<Sprite>(ballSprites);
+            validSprites.RemoveAll(sprite => sprite == null);
+
+            if (validSprites.Count > 0)
+            {
+                nextBallSprite = validSprites[Random.Range(0, validSprites.Count)];
+
+                if (ballPlaceholder != null)
+                {
+                    SpriteRenderer sr = ballPlaceholder.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                    {
+                        sr.sprite = nextBallSprite;
+                        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f); // start invisible
+
+                        if (fadeCoroutine != null)
+                            StopCoroutine(fadeCoroutine);
+
+                        fadeCoroutine = StartCoroutine(FadePlaceholder(true));
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No valid sprites to assign to placeholder.");
+            }
+        }
+    }
+    IEnumerator FadePlaceholder(bool fadeIn, float duration = 0.2f)
+    {
+        if (ballPlaceholder == null) yield break;
+
+        SpriteRenderer sr = ballPlaceholder.GetComponent<SpriteRenderer>();
+        if (sr == null) yield break;
+
+        if (fadeIn && sr.sprite == null)
+        {
+            Debug.LogWarning("Tried to fade in placeholder with null sprite.");
+            yield break;
+        }
+
+        float startAlpha = fadeIn ? 0f : 1f;
+        float endAlpha = fadeIn ? 1f : 0f;
+        float elapsed = 0f;
+
+        Color color = sr.color;
+        sr.color = new Color(color.r, color.g, color.b, startAlpha);
+
+        ballPlaceholder.SetActive(true);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            float newAlpha = Mathf.Lerp(startAlpha, endAlpha, t);
+            sr.color = new Color(color.r, color.g, color.b, newAlpha);
+            yield return null;
+        }
+
+        sr.color = new Color(color.r, color.g, color.b, endAlpha);
+
+        if (!fadeIn)
+            ballPlaceholder.SetActive(false);
     }
 }
+
+
+
+
 
