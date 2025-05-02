@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    [NonSerialized] public Animator animator;
+    public static Animator animator;
+    private static string nextSceneToLoad;
 
     // Start is called before the first frame update
     private void Awake()
@@ -25,8 +27,14 @@ public class SceneTransition : MonoBehaviour
         
     }
 
-    public void FadeOut()
+    public static void FadeOut(string scene)
     {
+        nextSceneToLoad = scene;
         animator.SetTrigger("FadeOut");
+    }
+
+    public void LoadSceneAfterTransition()
+    {
+        SceneManager.LoadScene(nextSceneToLoad);
     }
 }
