@@ -58,9 +58,9 @@ public class GameManager1
         SceneManager.LoadScene("LeaderBoard");
     }
 
-    public static void EndRound()
+    public static void EndTurn()
     {
         PlayerData.currentPlayerTurn.HasPlayed = true;
-        SceneManager.LoadScene("Wheel");
+        SceneTransition.FadeOut("Wheel");
     }
 }

@@ -33,6 +33,7 @@ public class SceneTransition : MonoBehaviour
         animator.SetTrigger("FadeOut");
     }
 
+    //I själva animationen finns det en event i slutet som anropar på nedstående metoden.
     public void LoadSceneAfterTransition()
     {
         SceneManager.LoadScene(nextSceneToLoad);
