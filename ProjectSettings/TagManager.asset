@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Clown
   - Safe
+  - Block
+  - Ground
   layers:
   - Default
   - TransparentFX

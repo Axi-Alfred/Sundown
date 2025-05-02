@@ -1,76 +1,101 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float moveSpeed = 8f;
+    [Header("Rörelseinställningar")]
+    public float moveSpeed = 15f;
     public float xBoundary = 17.8f;
 
+    [Header("Optimering")]
+    public bool showDebugGizmos = true;
+    public float inputSmoothing = 0.2f;
+
     private Rigidbody2D rb;
+    private bool isDragging = false; // Saknad deklaration
+    private Vector2 touchStartPosition; // Saknad deklaration
+
+    void Awake()
+    {
+        // Hämta Rigidbody2D tidigare i livscykeln
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        
-        // Automatically set boundaries based on camera view
-        float screenWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
-        xBoundary = screenWidth - 1f; // 1f padding
+        // Dubbla säkerhet - se till att rb är tilldelad
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;
     }
 
     void Update()
     {
-        // Draw left boundary
-        Debug.DrawLine(
-            new Vector3(-xBoundary, -10),  // Start point (left bottom)
-            new Vector3(-xBoundary, 10),   // End point (left top)
-            Color.red                      // Color: RED
-        );
-
-        // Draw right boundary
-        Debug.DrawLine(
-            new Vector3(xBoundary, -10),   // Start point (right bottom)
-            new Vector3(xBoundary, 10),    // End point (right top)
-            Color.red                      // Color: RED
-        );
+        HanteraInput();
     }
 
     private void FixedUpdate()
     {
-        HandleTouchInput();
-        ClampPosition();
-    }
-
-    void HandleTouchInput()
-    {
-        if (!Input.GetMouseButton(0))
+        // Omedelbart stopp när ingen input registreras
+        if (!isDragging)
         {
             rb.velocity = Vector2.zero;
             return;
         }
 
-        Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        rb.velocity = touchPosition.x < 0 ?
-            Vector2.left * moveSpeed :
-            Vector2.right * moveSpeed;
+        BegränsaPosition();
     }
 
-    void ClampPosition()
+    void HanteraInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            touchStartPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            isDragging = true;
+        }
+        else if (Input.GetMouseButton(0) && isDragging)
+        {
+            Vector2 currentPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // Applicera input-jämning om aktiverad
+            if (inputSmoothing > 0)
+            {
+                currentPos = Vector2.Lerp(touchStartPosition, currentPos, 1f + inputSmoothing);
+            }
+
+            float dragDistance = currentPos.x - touchStartPosition.x;
+            // Direkt hastighetskontroll baserad på fingerposition
+            rb.velocity = new Vector2(Mathf.Clamp(dragDistance * 8f, -moveSpeed, moveSpeed), 0);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            isDragging = false;
+            rb.velocity = Vector2.zero; // Omedelbart stopp
+        }
+    }
+
+    void BegränsaPosition()
     {
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, -xBoundary, xBoundary);
         transform.position = pos;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnDrawGizmos()
     {
-        if (collision.gameObject.CompareTag("Block"))
+        if (!showDebugGizmos) return;
+
+        // Säkerställ att rb finns innan vi använder den
+        Rigidbody2D currentRb = rb != null ? rb : GetComponent<Rigidbody2D>();
+        if (currentRb == null) return;
+
+        // Visa hastighet
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + (Vector3)currentRb.velocity);
+
+        // Visa dragriktning
+        if (isDragging && Input.mousePresent) // Extra säkerhetskontroll
         {
-            Debug.Log("Game Over");
-            // Game logic here
-            Time.timeScale = 0; // Freeze game
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(touchStartPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition));
         }
     }
 }
