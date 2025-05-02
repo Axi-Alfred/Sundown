@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Collections;
+using DG.Tweening;
 
 public class isItRight : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class isItRight : MonoBehaviour
         audioPool = FindObjectOfType<AudioPool>();
         currentMistakes = 0;
         UpdateMistakeUI();
-
+        StartMistakeTextFloat();
         LoadNextWord();
     }
     void LoadNextWord()
@@ -178,6 +179,7 @@ public class isItRight : MonoBehaviour
         UpdateMistakeUI();
 
         Debug.Log($"❌ Mistake {currentMistakes}/{maxMistakes}");
+        ShakeMistakeText();
 
         if (currentMistakes >= maxMistakes)
         {
@@ -185,10 +187,35 @@ public class isItRight : MonoBehaviour
         }
 
     }
+    public void StartMistakeTextFloat()
+    {
+        Vector3 originalPos = mistakeText.transform.localPosition;
+
+        Sequence floatSeq = DOTween.Sequence();
+
+        floatSeq.Append(
+            mistakeText.transform.DOLocalMove(originalPos + new Vector3(10f, 10f, 0f), 1f)
+        );
+        floatSeq.Append(
+            mistakeText.transform.DOLocalMove(originalPos + new Vector3(-10f, -10f, 0f), 1f)
+        );
+        floatSeq.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+    }
 
     private void UpdateMistakeUI()
     {
         mistakeText.text = $"Mistakes: {currentMistakes}/{maxMistakes}";
+    }
+    public void ShakeMistakeText()
+    {
+        mistakeText.transform.DOShakePosition(
+            duration: 0.4f,
+            strength: new Vector3(10f, 0f, 0f), // shake only sideways
+            vibrato: 10,
+            randomness: 90,
+            snapping: false,
+            fadeOut: true
+        );
     }
 
 
