@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -81,7 +82,18 @@ public class PlayerPrep : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Wheel");
+        IconsDOTween();
+        SceneTransition.FadeOut("Wheel");
+    }
+
+    public void IconsDOTween()
+    {
+        RectTransform rt = GetComponent<RectTransform>();
+        Sequence drop = DOTween.Sequence();
+
+        Vector2 startPos = rt.anchoredPosition;
+
+        drop.Append(rt.DOAnchorPosY(startPos.y + 25f, 0.1f).SetEase(Ease.OutQuad)).Append(rt.DOAnchorPosY(startPos.y - 1500, 0.5f).SetEase(Ease.InQuad));
     }
 }
 

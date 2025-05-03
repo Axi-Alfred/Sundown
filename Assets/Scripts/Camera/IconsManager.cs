@@ -43,7 +43,6 @@ public class IconsManager : MonoBehaviour
         frontCamera = GetComponent<FrontCamera>();    
         animator = GetComponent<Animator>();
 
-
         playersListPanel.SetActive(false);
 
 
@@ -66,7 +65,7 @@ public class IconsManager : MonoBehaviour
     {
         InitialPopup.SetActive(true);
 
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(4f);
 
         InitialPopup.SetActive(false);
 
@@ -124,6 +123,10 @@ public class IconsManager : MonoBehaviour
     public void ShowPlayersList()
     {
         playersListPanel.SetActive(true);
+        frontCamera.cameraPreview = null;
+        frontCamera.webcamTexture.Stop();
+        frontCamera.webcamTexture = null;
+
     }
 
     public void NextPlayer()

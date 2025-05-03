@@ -39,12 +39,14 @@ public class SpinWheel : MonoBehaviour
                 hasReachedMotionThreshold = true;
             }
 
+            //The wheel has/will come to a stop 
             if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold)
             {
                 rb2D.angularVelocity = 0;
                 hasSpinned = true;
                 isSpinning = false;
                 hasReachedMotionThreshold = false;
+                Handheld.Vibrate();
             }
         }
 
