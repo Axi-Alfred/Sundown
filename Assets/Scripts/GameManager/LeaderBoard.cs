@@ -9,6 +9,12 @@ public class LeaderBoard : MonoBehaviour
     List<Player> playersList;
     [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
 
+    private void Awake()
+    {
+        //ONLY TEMPORARY FOR PLAY TESTING, WILL BE REMOVED SOON!!!
+        PlayerData.numberOfPlayers = 4;
+        StartCoroutine(PlayerData.AssignPlayers());
+    }
     // Start is called before the first frame update
     void Start()
     {

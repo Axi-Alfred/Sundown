@@ -16,9 +16,15 @@ public class PlayerPrep : MonoBehaviour
     [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry av spelare
     [SerializeField] private GameObject iconContainer;
 
+    private GameObject[] entriesArray;
+
+    [Header("DOTweens")]
+    [SerializeField] private float delayBetweenEntries = 0.1f;
+
     // Start is called before the first frame update
     void Start()
     {
+        entriesArray = new GameObject[PlayerData.playersArray.Length];
         //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         while (transform.childCount > 0)
         {
@@ -54,6 +60,7 @@ public class PlayerPrep : MonoBehaviour
     private void InitializePlayersList()
     {
         GameObject currentEntry;
+        int i = 0;
 
         foreach (var player in PlayerData.playersArray)
         {
@@ -62,6 +69,9 @@ public class PlayerPrep : MonoBehaviour
             currentEntry.transform.SetParent(gameObject.transform);
             currentEntry.GetComponent<PlayerEntry>().Player = player;
             currentEntry.GetComponent<PlayerEntry>().LoadEntry();
+
+            entriesArray[i] = currentEntry;
+            i++;
         }
     }
 
@@ -82,18 +92,30 @@ public class PlayerPrep : MonoBehaviour
 
     public void StartGame()
     {
-        IconsDOTween();
+        StartCoroutine(StartGameCoroutine());
+    }
+
+    private IEnumerator StartGameCoroutine()
+    {
+        yield return StartCoroutine(IconsDOTween());
         SceneTransition.FadeOut("Wheel");
     }
 
-    public void IconsDOTween()
+    public IEnumerator IconsDOTween()
     {
-        RectTransform rt = GetComponent<RectTransform>();
-        Sequence drop = DOTween.Sequence();
+        float longestTweenDuration = 0.4f;
 
-        Vector2 startPos = rt.anchoredPosition;
+        for (int i = 0; i < entriesArray.Length; i++)
+        {
+            GameObject entryObject = entriesArray[i];
+            RectTransform rt = entryObject.GetComponent<RectTransform>();
+            Vector3 originalScale = rt.localScale;
 
-        drop.Append(rt.DOAnchorPosY(startPos.y + 25f, 0.1f).SetEase(Ease.OutQuad)).Append(rt.DOAnchorPosY(startPos.y - 1500, 0.5f).SetEase(Ease.InQuad));
+            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale * 0.1f, 0.25f).SetEase(Ease.InQuad)).OnComplete(() => entryObject.GetComponent<PlayerEntry>().HideEntry());
+        }
+
+        float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;
+        yield return new WaitForSeconds(totalDuration-0.25f);
     }
 }
 

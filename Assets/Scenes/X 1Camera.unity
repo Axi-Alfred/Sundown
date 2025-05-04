@@ -2123,6 +2123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryPrefab: {fileID: 619826986618598420, guid: 801a62c44d0ef53438ebb9c5bdbd4c31, type: 3}
   iconContainer: {fileID: 1697959568}
+  delayBetweenEntries: 0.1
 --- !u!1 &1692086644
 GameObject:
   m_ObjectHideFlags: 0
@@ -2917,7 +2918,8 @@ MonoBehaviour:
   capturedImageDisplay: {fileID: 233014205}
   cameraSystemObject: {fileID: 386776906}
   faceTemplate: {fileID: 1862652545}
-  filterScale: 1
+  filterScale: 0.95
+  webcamTexture: {fileID: 0}
 --- !u!4 &2098080830
 Transform:
   m_ObjectHideFlags: 0

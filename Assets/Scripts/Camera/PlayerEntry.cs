@@ -29,8 +29,14 @@ public class PlayerEntry : MonoBehaviour
         playerIcon.sprite = Player.PlayerIcon;
     }
 
-    public void ShowPlayer()
+    public void ShowPlayerPicture()
     {
         PlayerPrep.instance.ShowPicture(Player);
+    }
+
+    public void HideEntry()
+    {
+        playerName.enabled = false;
+        playerIcon.enabled = false; 
     }
 }
