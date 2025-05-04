@@ -156,7 +156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 200}
+  m_AnchoredPosition: {x: 0, y: -500}
   m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &81882684
@@ -2123,6 +2123,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entryPrefab: {fileID: 619826986618598420, guid: 801a62c44d0ef53438ebb9c5bdbd4c31, type: 3}
   iconContainer: {fileID: 1697959568}
+  playersText: {fileID: 81882684}
+  startGameButton: {fileID: 1232657152}
   delayBetweenEntries: 0.1
 --- !u!1 &1692086644
 GameObject:

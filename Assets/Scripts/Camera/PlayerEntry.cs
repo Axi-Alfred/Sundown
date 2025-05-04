@@ -39,4 +39,10 @@ public class PlayerEntry : MonoBehaviour
         playerName.enabled = false;
         playerIcon.enabled = false; 
     }
+
+    public void ShowEntry()
+    {
+        playerName.enabled = true;
+        playerIcon.enabled = true;
+    }
 }
