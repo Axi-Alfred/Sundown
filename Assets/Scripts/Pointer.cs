@@ -40,19 +40,65 @@ public class Pointer : MonoBehaviour
         switch (other.tag)
         {
             case "Game1":
-                nextGameText.text = "Game1 will begin now";
+                nextGameText.text = "Is It Right? will begin now";
                 StartCoroutine(Timer("X 3IsItRight"));
                 break;
 
             case "Game2":
-                nextGameText.text = "Game2 will begin now";
-                StartCoroutine(Timer("X 6DontGetHit"));
+                nextGameText.text = "Odd One Out will begin now";
+                StartCoroutine(Timer("X 4OddOneOut - Done"));
                 break;
 
             case "Game3":
-                nextGameText.text = "Game3 will begin now";
+                nextGameText.text = "Pop The Balloon will begin now";
                 StartCoroutine(Timer("X 5PopTheBalloon"));
                 break;
+
+            case "Game4":
+                nextGameText.text = "Juggle Mania will begin now";
+                StartCoroutine(Timer("X 7JuggleMania"));
+                break;
+
+            case "Game5":
+                nextGameText.text = "Throwing Pies will begin now";
+                StartCoroutine(Timer("X 8ThrowingPies"));
+                break;
+
+            case "Game6":
+                nextGameText.text = "Smacked Pig will begin now";
+                StartCoroutine(Timer("X 9SmackedPig"));
+                break;
+
+            case "Game7":
+                nextGameText.text = "Cotton Candy will begin now";
+                StartCoroutine(Timer("X 10CottonCandy"));
+                break;
+
+            case "Game8":
+                nextGameText.text = "Falling Gods will begin now";
+                StartCoroutine(Timer("X 11FallingGods"));
+                break;
+
+            case "Game9":
+                nextGameText.text = "Clown Elope will begin now";
+                StartCoroutine(Timer("X 12ClownElope"));
+                break;
+
+            case "Game10":
+                nextGameText.text = "Dunk Tank will begin now";
+                StartCoroutine(Timer("X 13DunkTank"));
+                break;
+
+            case "Game11":
+                nextGameText.text = "Ball Toss will begin now";
+                StartCoroutine(Timer("X 14BallToss_Scene"));
+                break;
+
+            case "Game12":
+                nextGameText.text = "Catch Hop will begin now";
+                StartCoroutine(Timer("X 15CatchHop_Main"));
+                break;
+
             case "RandomGame":
                 nextGameText.text = "Random game will now begin";
                 StartCoroutine(Timer(Random.Range(4, 9))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
@@ -65,17 +111,10 @@ public class Pointer : MonoBehaviour
         wheelHasSpinned = spinning;
     }
 
-    IEnumerator Timer(string levelName)
+    IEnumerator Timer(object level)
     {
         yield return new WaitForSeconds(gameStartTimer);
 
-        SceneManager.LoadScene(levelName);
-    }
-
-    IEnumerator Timer(int sceneIndex)
-    {
-        yield return new WaitForSeconds(gameStartTimer);
-
-        SceneManager.LoadScene(sceneIndex);
+        SceneTransition.FadeOut(level);
     }
 }

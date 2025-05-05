@@ -17,7 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/X 1Camera.unity
     guid: 1237a644d042e55449276070b8b4479a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 2JuggleMania.unity
     guid: 62b60ea71d17bf5478c7261054316c96
   - enabled: 1
@@ -29,7 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/X 5PopTheBalloon - Done - LastPrio.unity
     guid: 9b2b9ccba0b95a04284a37c2d84909db
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 6DontGetHit - Done.unity
     guid: 609917efaa1b7014fb404aab20b67a52
   - enabled: 1
