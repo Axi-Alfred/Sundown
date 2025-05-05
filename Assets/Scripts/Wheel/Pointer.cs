@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -55,7 +55,7 @@ public class Pointer : MonoBehaviour
                 break;
             case "RandomGame":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 9))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
+                StartCoroutine(Timer(Random.Range(4, 9))); //De hÃ¤r siffrorna kommer Ã¤ndras beroende pÃ¥ vilka scener vi har med och vad de har fÃ¶r index
                 break;
         }
     }

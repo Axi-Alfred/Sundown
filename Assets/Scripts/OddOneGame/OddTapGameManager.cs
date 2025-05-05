@@ -1,90 +1,122 @@
-﻿using UnityEngine;
+﻿//using UnityEngine;
+//using UnityEngine.SceneManagement;
+//using UnityEngine.UI;
+//using System.Collections;
 
-public class OddTapGameManager : MonoBehaviour
-{
-    public GameObject shapePrefab;
-    public Sprite[] normalShapeSprites;
-    public Sprite[] oddShapeSprites;
+//public class OddPieGameManager : MonoBehaviour
+//{
+//    [Header("Pie Setup")]
+//    public GameObject piePrefab;
+//    public Sprite[] pieSpritesNormal;
+//    public Sprite[] pieSpritesOdd;
 
-    public int totalRounds = 3;
-    private int currentRound = 0;
+//    [Header("Game Settings")]
+//    public int totalRounds = 3;
+//    public int piesPerRound = 5;
+//    public float spacing = 2f;
 
-    public int shapesPerRound = 5;
-    public float spacing = 2f;
+//    [Header("Feedback")]
+//    public Sprite[] feedbackSpritesCorrect;
+//    public Sprite[] feedbackSpritesWrong;
+//    public Image feedbackImage;
+//    public float feedbackDisplayTime = 1.5f;
 
-    private GameObject currentOddShape;
+//    private int currentRound = 0;
+//    private GameObject currentOddPie;
 
-    void Start()
-    {
-        StartNextRound();
-    }
+//    void Start()
+//    {
+//        StartNextRound();
+//    }
 
-    void StartNextRound()
-    {
-        ClearShapes();
+//    void StartNextRound()
+//    {
+//        ClearPies();
 
-        currentRound++;
-        if (currentRound > totalRounds)
-        {
-            Debug.Log("🎉 You Win All Rounds!");
-            return;
-        }
+//        currentRound++;
 
-        int oddIndex = Random.Range(0, shapesPerRound);
+//        if (currentRound > totalRounds)
+//        {
+//            Debug.Log("🎉 You Win All Rounds!");
 
-        for (int i = 0; i < shapesPerRound; i++)
-        {
-            Vector3 pos = new Vector3((i - shapesPerRound / 2f) * spacing, 0f, 0f);
-            GameObject shape = Instantiate(shapePrefab, pos, Quaternion.identity);
-            shape.tag = "Shape";
+//            // ✅ Award 1 point after all rounds completed
+//            ScoreManager.Instance.AddScore(1);
 
-            SpriteRenderer sr = shape.GetComponent<SpriteRenderer>();
-            Shape shapeScript = shape.GetComponent<Shape>();
+//            // Return to Wheel
+//            SceneManager.LoadScene("Wheel");
+//            return;
+//        }
 
-            if (i == oddIndex)
-            {
-                shape.name = $"Shape_{i}_ODD";
-                sr.sprite = oddShapeSprites[Random.Range(0, oddShapeSprites.Length)];
-                shape.transform.localScale *= 1.5f;
-                shapeScript.SetOdd(true);
-                currentOddShape = shape;
+//        int oddIndex = Random.Range(0, piesPerRound);
 
-                Debug.Log($"🎯 ODD: {shape.name} | Sprite: {sr.sprite.name} | IsOdd: {shapeScript.isOdd}");
-            }
-            else
-            {
-                shape.name = $"Shape_{i}_NORMAL";
-                sr.sprite = normalShapeSprites[Random.Range(0, normalShapeSprites.Length)];
-                shapeScript.SetOdd(false);
+//        for (int i = 0; i < piesPerRound; i++)
+//        {
+//            Vector3 pos = new Vector3((i - piesPerRound / 2f) * spacing, 0f, 0f);
+//            GameObject pie = Instantiate(piePrefab, pos, Quaternion.identity);
+//            pie.tag = "Pie";
 
-                Debug.Log($"🔵 NORMAL: {shape.name} | Sprite: {sr.sprite.name} | IsOdd: {shapeScript.isOdd}");
-            }
-        }
+//            SpriteRenderer sr = pie.GetComponent<SpriteRenderer>();
+//            Pie pieScript = pie.GetComponent<Pie>();
 
-        Debug.Log($"▶️ Round {currentRound} started. Find the odd one!");
-    }
+//            if (i == oddIndex)
+//            {
+//                sr.sprite = pieSpritesOdd[Random.Range(0, pieSpritesOdd.Length)];
+//                pieScript.SetOdd(true);
+//                currentOddPie = pie;
+//            }
+//            else
+//            {
+//                sr.sprite = pieSpritesNormal[Random.Range(0, pieSpritesNormal.Length)];
+//                pieScript.SetOdd(false);
+//            }
+//        }
 
-    public void HandleShapeTapped(bool wasOdd)
-    {
-        if (wasOdd)
-        {
-            Debug.Log("✅ Correct! You found the odd one!");
-            StartNextRound();
-        }
-        else
-        {
-            Debug.Log("❌ Nope! That’s not the odd one. Game Over.");
-            ClearShapes();
-        }
-    }
+//        Debug.Log($"▶️ Round {currentRound} started. Find the WRONG pie!");
+//    }
 
-    void ClearShapes()
-    {
-        GameObject[] allShapes = GameObject.FindGameObjectsWithTag("Shape");
+//    public void HandlePieTapped(bool wasOdd)
+//    {
+//        ShowFeedback(wasOdd);
+//        StartCoroutine(ContinueAfterDelay(wasOdd));
+//    }
 
-        foreach (GameObject shape in allShapes)
-        {
-            Destroy(shape);
-        }
-    }
-}
+//    void ShowFeedback(bool wasCorrect)
+//    {
+//        Sprite[] selectedArray = wasCorrect ? feedbackSpritesWrong : feedbackSpritesCorrect;
+
+//        if (selectedArray.Length == 0)
+//        {
+//            Debug.LogWarning("⚠️ No feedback images assigned!");
+//            return;
+//        }
+
+//        Sprite randomSprite = selectedArray[Random.Range(0, selectedArray.Length)];
+//        feedbackImage.sprite = randomSprite;
+//        feedbackImage.gameObject.SetActive(true);
+//    }
+
+//    IEnumerator ContinueAfterDelay(bool wasCorrect)
+//    {
+//        yield return new WaitForSeconds(feedbackDisplayTime);
+//        feedbackImage.gameObject.SetActive(false);
+
+//        if (wasCorrect)
+//        {
+//            StartNextRound();
+//        }
+//        else
+//        {
+//            Debug.Log("❌ Wrong pie tapped. Game Over.");
+//            SceneManager.LoadScene("Wheel");
+//        }
+//    }
+
+//    void ClearPies()
+//    {
+//        GameObject[] allPies = GameObject.FindGameObjectsWithTag("Pie");
+//        foreach (GameObject pie in allPies)
+//        {
+//            Destroy(pie);
+//        }
+//    }
+//}

@@ -1,15 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class JugglingObject : MonoBehaviour
+public class JugglingObject : MonoBehaviour, IPointerDownHandler
 {
     public bool isKnife = false;
     public SpotController currentSpot;
-    public bool isCaught = false; // IMPORTANT for fall detection
+    public bool isCaught = false;
     public bool isReadyToJump = false;
     public bool isReadyToInteract = false;
-
-
 
     public void OnTapped()
     {
@@ -19,7 +18,7 @@ public class JugglingObject : MonoBehaviour
         if (isKnife)
         {
             Handheld.Vibrate();
-            ScreenShakeManager.Instance.Shake(); // NEW: Screen shake on Knife tap
+            ScreenShakeManager.Instance.Shake();
             currentSpot.KillSpot();
             Destroy(gameObject);
         }
@@ -30,10 +29,12 @@ public class JugglingObject : MonoBehaviour
                 isCaught = true;
                 isReadyToJump = false;
                 JumpToNewSpot();
+
+                // ✅ Register juggle on successful bounce
+                JuggleGameManager.Instance.RegisterJuggle();
             }
         }
     }
-
 
     public void JumpToNewSpot()
     {
@@ -41,17 +42,13 @@ public class JugglingObject : MonoBehaviour
         if (availableSpots.Count == 0)
             return;
 
-        // Choose a random other spot
         SpotController targetSpot = availableSpots[Random.Range(0, availableSpots.Count)];
 
-        // Clear current spot
         currentSpot.currentObject = null;
 
-        // Assign new spot
         currentSpot = targetSpot;
         currentSpot.currentObject = this;
 
-        // Launch arc movement toward the new spot
         StartCoroutine(JumpArc(targetSpot.transform.position, 7f, 0.9f));
     }
 
@@ -76,15 +73,17 @@ public class JugglingObject : MonoBehaviour
 
         transform.position = targetPosition;
 
-        // NEW: When arc finished, object is now ready to be tapped
-        transform.position = targetPosition;
         isReadyToJump = true;
-        isReadyToInteract = true; // <<< NEW! Now safe to tap it
-
+        isReadyToInteract = true;
     }
 
     public void LaunchToSpot(Vector3 targetPosition, float arcHeight, float jumpDuration)
     {
         StartCoroutine(JumpArc(targetPosition, arcHeight, jumpDuration));
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        OnTapped();
     }
 }
