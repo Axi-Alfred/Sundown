@@ -19,7 +19,7 @@ public class WheelDotween : MonoBehaviour
 
     private void Awake()
     {
-        //playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
         playerName.text = PlayerData.currentPlayerTurn.PlayerName;
         spinWheel.enabled = false;
         texts.gameObject.SetActive(false);  
