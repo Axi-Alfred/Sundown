@@ -427,8 +427,8 @@ MonoBehaviour:
   cottonCandyObject: {fileID: 816073349568275113, guid: 864005c9a04d6a642b0cbcbe2b7b5d53, type: 3}
   detectionRadius: 1.5
   spawnThreshold: 360
-  scalePerSpin: 0.05
-  winScale: 1.2
+  scalePerSpin: 0.2
+  winScale: 0.6
 --- !u!82 &1024300273
 AudioSource:
   m_ObjectHideFlags: 0
@@ -781,8 +781,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1185480565
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.740566, b: 0.94149256, a: 1}
