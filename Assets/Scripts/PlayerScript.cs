@@ -69,8 +69,8 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Block"))
         {
             Debug.Log("Game Over");
-            // Game logic here
-            Time.timeScale = 0; // Freeze game
+            
+            GameManager1.EndTurn();
         }
     }
 }
