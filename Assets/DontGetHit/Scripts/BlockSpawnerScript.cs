@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 public class BlockSpawnerScript : MonoBehaviour
 {
@@ -29,7 +27,7 @@ public class BlockSpawnerScript : MonoBehaviour
             SpawnWave();
             timer = 0;
 
-            // Increase difficulty
+            // Ökar svårighetsgraden
             currentSpawnRate = baseSpawnRate / DifficultyManagerScript.Instance.CurrentMultiplier;
             currentBlocksPerWave = Mathf.Clamp(
                 Mathf.FloorToInt(DifficultyManagerScript.Instance.CurrentMultiplier / 0.5f),
@@ -39,13 +37,14 @@ public class BlockSpawnerScript : MonoBehaviour
         }
     }
 
+    // Skapar en ny våg av block
     void SpawnWave()
     {
         List<float> usedPositions = new List<float>();
         int safetyCounter = 0;
 
-        // Always check against the player's initial position
-        usedPositions.Add(0f); // Player's starting X position
+        // Undvik att spawna block för nära spelaren
+        usedPositions.Add(0f); // Spelarens startposition
 
         for (int i = 0; i < currentBlocksPerWave; i++)
         {
@@ -60,7 +59,7 @@ public class BlockSpawnerScript : MonoBehaviour
                     transform.position.x + widthOffset
                 );
 
-                // Check spacing against ALL existing positions (including player)
+                // Kontrollera avstånd till andra block och spelaren
                 foreach (float pos in usedPositions)
                 {
                     if (Mathf.Abs(xPos - pos) < minBlockSpacing)

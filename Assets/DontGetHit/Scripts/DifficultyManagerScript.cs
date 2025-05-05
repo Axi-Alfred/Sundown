@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DifficultyManagerScript : MonoBehaviour
 {
     public static DifficultyManagerScript Instance;
 
-    [Header("Block Density")]
-    public float blocksPerMinute = 30f; // Overall difficulty curve
+    [Header("Blocktäthet")]
+    public float blocksPerMinute = 30f; // Svårighetskurva
 
-    [Header("Difficulty Settings")]
-    public float baseFallSpeed = 5f;
-    public float speedIncreaseRate = 0.1f;
+    [Header("Svårighetsinställningar")]
+    public float baseFallSpeed = 5f; // Basfallhastighet
+    public float speedIncreaseRate = 0.1f; // Hastighetsökning över tid
     [SerializeField] private float currentMultiplier = 1f;
     public float CurrentMultiplier => currentMultiplier;
 
@@ -26,9 +24,9 @@ public class DifficultyManagerScript : MonoBehaviour
         currentMultiplier += speedIncreaseRate * Time.deltaTime;
     }
 
+    // Returnerar nuvarande fallhastighet
     public float GetCurrentSpeed()
     {
         return baseFallSpeed * currentMultiplier;
     }
 }
-
