@@ -56,6 +56,7 @@ public class SpinWheel : MonoBehaviour
         }
 
         pointer.WheelHasSpinned(hasSpinned);
+        print(hasSpinned);
 
     }
 
