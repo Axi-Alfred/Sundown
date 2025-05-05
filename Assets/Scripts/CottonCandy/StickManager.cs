@@ -1,23 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StickManager : MonoBehaviour
 {
+    [SerializeField] private AudioClip machineHum, crowdSounds;
     public Transform stickTip; // Pink circle
     public Transform candyMachineCenter; // Center of white circle
-    public float detectionRadius = 1.5f; // how close the stick tip has to be to start rotating.
+    public float detectionRadius = 2f; // how close the stick tip has to be to start rotating.
     public GameObject cottonCandyPrefab;
 
     private Vector2 lastDirection; // last direction from stick tip Å® center.
     private float rotationAccumulation = 0f; // keeps track of how much you've rotated.
     private float spawnThreshold = 360f; // spawn candy after 360 degrees of rotation.
-
+    private float victoryRotation;
+    private float autoSpinAngle;
+    private AudioSource machineSource;
+    private AudioSource crowdSource;
     private Camera mainCam;
 
     void Start()
     {
         mainCam = Camera.main;
+
+        // Create and configure both sources
+        machineSource = gameObject.AddComponent<AudioSource>();
+        machineSource.clip = machineHum;
+        machineSource.loop = true;
+        machineSource.volume = 0.8f; // louder
+        machineSource.Play();
+
+        crowdSource = gameObject.AddComponent<AudioSource>();
+        crowdSource.clip = crowdSounds;
+        crowdSource.loop = true;
+        crowdSource.volume = 0.6f; // quieter
+        crowdSource.Play();
     }
 
     void Update() // Chooses input method depending on platform: mouse or touch.
@@ -29,6 +48,7 @@ public class StickManager : MonoBehaviour
 #else
         HandleMouseInput(); // fallback
 #endif
+        automaticSpinner();
     }
 
     void HandleMouseInput()
@@ -68,10 +88,15 @@ public class StickManager : MonoBehaviour
                 rotationAccumulation += Mathf.Abs(angle);
             }
 
-            if (rotationAccumulation >= spawnThreshold)
+            while (rotationAccumulation >= spawnThreshold)
             {
                 SpawnCottonCandy();
-                rotationAccumulation = 0f;
+                rotationAccumulation -= spawnThreshold;
+            }
+
+            if (rotationAccumulation > 600f)
+            {
+                Debug.Log("You win!");
             }
 
             lastDirection = currentDirection;
@@ -81,6 +106,8 @@ public class StickManager : MonoBehaviour
             rotationAccumulation = 0f;
             lastDirection = Vector2.zero;
         }
+        Debug.DrawLine(stickTip.position, candyMachineCenter.position, Color.magenta);
+
     }
 
     void SpawnCottonCandy()
@@ -97,6 +124,17 @@ public class StickManager : MonoBehaviour
         // Optional: Random rotation or scale for variation
         cottonPiece.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
         cottonPiece.transform.localScale = Vector3.one * Random.Range(0.9f, 1.1f);
+    }
+    void automaticSpinner()
+    {
+        if (Input.GetKey(KeyCode.F))
+        {
+            float speed = 180f; // degrees per second
+            transform.RotateAround(candyMachineCenter.position, Vector3.forward, speed * Time.deltaTime);
+
+            // Optional: make the stick face the center
+            transform.up = candyMachineCenter.position - stickTip.position;
+        }
     }
 
 }
