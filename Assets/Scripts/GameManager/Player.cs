@@ -16,16 +16,11 @@ public class Player
     public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; }}
 
 
-    public Player(string name, int iD, Sprite icon)
+    public Player(string name, int iD)
     {
         playerName = name;
         PlayerId = iD;
-        playerIcon = icon;
         CurrentIconInt = iD;
-    }
-    public void ChangePlayerIcon() //Potentially useless method :/
-    {
-        playerIcon = PlayerData.iconDatabase.iconsArray[++CurrentIconInt % PlayerData.iconDatabase.iconsArray.Length];
     }
 
     public void AddScore(int score)
