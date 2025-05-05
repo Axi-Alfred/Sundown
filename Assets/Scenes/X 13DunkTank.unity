@@ -155,7 +155,7 @@ MonoBehaviour:
   poofPrefab: {fileID: 221061278414857363, guid: 5838be4075fe5431094d48604b168ccb, type: 3}
   ballPlaceholder: {fileID: 1887803160}
   spawnPoint: {fileID: 1623176233}
-  forceMultiplier: 0.05
+  forceMultiplier: 0.02
   ballSprites:
   - {fileID: 21300000, guid: f38b8b1d9f9ac48839bfec3779e2ddb3, type: 3}
   - {fileID: 21300000, guid: 7f642e5529cf04128b4d9e6002839597, type: 3}
