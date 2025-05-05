@@ -15,7 +15,7 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
-        if (creditsPanel.activeSelf)
+        if (creditsPanel != null && creditsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -23,7 +23,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (playPanel.activeSelf)
+        if (playPanel != null && playPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -31,7 +31,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (settingsPanel.activeSelf)
+        if (settingsPanel != null && settingsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -39,7 +39,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (optionsPanel.activeSelf)
+        if (optionsPanel != null && optionsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -47,7 +47,7 @@ public class MenuController : MonoBehaviour
             }
         }
 
-        if (wheelSettingsPanel.activeSelf)
+        if (wheelSettingsPanel != null && wheelSettingsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
