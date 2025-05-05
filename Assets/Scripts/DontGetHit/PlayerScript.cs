@@ -11,31 +11,27 @@ public class PlayerScript : MonoBehaviour
     public float inputSmoothing = 0.2f;
 
     private Rigidbody2D rb;
-    private bool isDragging = false; // Saknad deklaration
-    private Vector2 touchStartPosition; // Saknad deklaration
+    private bool isDragging = false;
+    private Vector2 touchStartPosition;
 
     void Awake()
     {
-        // Hämta Rigidbody2D tidigare i livscykeln
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Start()
     {
-        // Dubbla säkerhet - se till att rb är tilldelad
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-
         rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;
     }
 
     void Update()
     {
-        HanteraInput();
+        HanteraTouchInput();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        // Omedelbart stopp när ingen input registreras
         if (!isDragging)
         {
             rb.velocity = Vector2.zero;
@@ -45,33 +41,49 @@ public class PlayerScript : MonoBehaviour
         BegränsaPosition();
     }
 
-    void HanteraInput()
+    // 🔹 Touchstyrning för mobiltelefon
+    void HanteraTouchInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount > 0)
         {
-            touchStartPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            isDragging = true;
-        }
-        else if (Input.GetMouseButton(0) && isDragging)
-        {
-            Vector2 currentPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            // Applicera input-jämning om aktiverad
-            if (inputSmoothing > 0)
-            {
-                currentPos = Vector2.Lerp(touchStartPosition, currentPos, 1f + inputSmoothing);
-            }
+            Touch touch = Input.GetTouch(0);
+            Vector2 worldTouchPos = Camera.main.ScreenToWorldPoint(touch.position);
 
-            float dragDistance = currentPos.x - touchStartPosition.x;
-            // Direkt hastighetskontroll baserad på fingerposition
-            rb.velocity = new Vector2(Mathf.Clamp(dragDistance * 8f, -moveSpeed, moveSpeed), 0);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    touchStartPosition = worldTouchPos;
+                    isDragging = true;
+                    break;
+
+                case TouchPhase.Moved:
+                    if (isDragging)
+                    {
+                        // Mjuk övergång (smoothing)
+                        if (inputSmoothing > 0)
+                        {
+                            worldTouchPos = Vector2.Lerp(touchStartPosition, worldTouchPos, 1f + inputSmoothing);
+                        }
+
+                        float dragDistance = worldTouchPos.x - touchStartPosition.x;
+                        rb.velocity = new Vector2(Mathf.Clamp(dragDistance * 8f, -moveSpeed, moveSpeed), 0);
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                case TouchPhase.Canceled:
+                    isDragging = false;
+                    rb.velocity = Vector2.zero;
+                    break;
+            }
         }
-        else if (Input.GetMouseButtonUp(0))
+        else
         {
             isDragging = false;
-            rb.velocity = Vector2.zero; // Omedelbart stopp
         }
     }
 
+    // 🔹 Hindra spelaren från att åka utanför skärmen
     void BegränsaPosition()
     {
         Vector3 pos = transform.position;
@@ -83,19 +95,10 @@ public class PlayerScript : MonoBehaviour
     {
         if (!showDebugGizmos) return;
 
-        // Säkerställ att rb finns innan vi använder den
         Rigidbody2D currentRb = rb != null ? rb : GetComponent<Rigidbody2D>();
         if (currentRb == null) return;
 
-        // Visa hastighet
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + (Vector3)currentRb.velocity);
-
-        // Visa dragriktning
-        if (isDragging && Input.mousePresent) // Extra säkerhetskontroll
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(touchStartPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        }
     }
 }
