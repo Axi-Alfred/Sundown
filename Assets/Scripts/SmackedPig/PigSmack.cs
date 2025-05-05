@@ -26,7 +26,7 @@ public class PigSmack : MonoBehaviour, IPointerDownHandler
             PlayerData.currentPlayerTurn.AddScore(1);
 
             // ✅ End the round
-            GameManager1.EndRound();
+            GameManager1.EndTurn();
         }
     }
 }

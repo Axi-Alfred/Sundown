@@ -38,6 +38,6 @@ public class FallingVikingGameManager : MonoBehaviour
 
         Debug.Log("🛡️ You win! Enough vikings caught.");
         PlayerData.currentPlayerTurn.AddScore(1);
-        GameManager1.EndRound();
+        GameManager1.EndTurn();
     }
 }

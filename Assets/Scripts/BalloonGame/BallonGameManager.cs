@@ -26,6 +26,6 @@ public class BalloonGameManager : MonoBehaviour
         BalloonSpawner spawner = FindObjectOfType<BalloonSpawner>();
         if (spawner) spawner.StopAllCoroutines();
 
-        GameManager1.EndRound();
+        GameManager1.EndTurn();
     }
 }
