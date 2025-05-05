@@ -26,6 +26,7 @@ public class ClownElopeManager : MonoBehaviour
             Time.timeScale = 0;
 
             // Scenbyte function här nere
+            GameManager1.EndTurn();
             // SceneManager.LoadScene("GameOverScene");
         }
 
