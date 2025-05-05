@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class SwipeThrow : MonoBehaviour
 {
-    public GameObject ballPrefab;
-    public GameObject poofPrefab;
-    public GameObject ballPlaceholder;
-    public Transform spawnPoint;
-    public float forceMultiplier = 0.05f;
+    public GameObject ballPrefab; //Prefab for the ball
+    public GameObject poofPrefab; //Prefab for the poof particle effect
+    public GameObject ballPlaceholder; //Placeholder for the ball
+    public Transform spawnPoint; //Startposition och spawn för bollen
+    public float forceMultiplier = 0.05f; //Controls the force of the swipe throw
 
+    //For storing the position where the touch starts and ends
     private Vector2 startTouchPos;
     private Vector2 endTouchPos;
-    private bool isSwipe;
-    private bool hasBallInAir = false;
 
-    public Sprite[] ballSprites; // assign in Inspector
-    private Sprite nextBallSprite;
-    private Coroutine fadeCoroutine;
+    private bool isSwipe; //Flag to detect if a swipe is in progress
+    private bool hasBallInAir = false; // Prevents multiple balls in the air at the same time
 
+    public Sprite[] ballSprites; // Array of possible sprites for the ball
+    private Sprite nextBallSprite; // The sprite assigned to the next ball to be thrown
+    private Coroutine fadeCoroutine; // Track and stop any ongoing fade animation
+
+    // Sprite detector
     void Start()
     {
+        // Randomly pick a sprite for the first ball
         if (ballSprites.Length > 0)
         {
             List<Sprite> validSprites = new List<Sprite>(ballSprites);
-            validSprites.RemoveAll(sprite => sprite == null);
+            validSprites.RemoveAll(sprite => sprite == null); // Avoid nulls
 
             if (validSprites.Count > 0)
                 nextBallSprite = validSprites[Random.Range(0, validSprites.Count)];
 
+            // Update placholder with the chosen sprite
             if (ballPlaceholder != null)
             {
                 SpriteRenderer sr = ballPlaceholder.GetComponent<SpriteRenderer>();
@@ -38,10 +43,13 @@ public class SwipeThrow : MonoBehaviour
         }
     }
 
+    // Input types
     void Update()
     {
+        // Don't allow new swipe if a ball is already in the air
         if (hasBallInAir) return;
 
+        // Touch input (mobile)
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -57,6 +65,7 @@ public class SwipeThrow : MonoBehaviour
                 endTouchPos = touch.position;
                 Vector2 swipe = endTouchPos - startTouchPos;
 
+                // Only count as a valid swipe if it moves upward
                 if (swipe.y > 50)
                 {
                     ThrowBall(swipe);
@@ -67,6 +76,8 @@ public class SwipeThrow : MonoBehaviour
         }
 
 #if UNITY_EDITOR
+
+        // Mouse input (for editor testing)
         if (Input.GetMouseButtonDown(0))
             startTouchPos = Input.mousePosition;
 
@@ -85,19 +96,23 @@ public class SwipeThrow : MonoBehaviour
 
     void ThrowBall(Vector2 swipe)
     {
+        // Instantiate the ball at the spawn point
         Vector3 spawnPos = new Vector3(spawnPoint.position.x, spawnPoint.position.y, 0f);
         GameObject ball = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
-        // Set the correct sprite
+
+        // Set the correct sprite on the new ball
         SpriteRenderer sr = ball.GetComponent<SpriteRenderer>();
         if (sr != null && nextBallSprite != null)
             sr.sprite = nextBallSprite;
+
+        // Apply force to the ball 
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
         Vector2 force = new Vector2(swipe.x, swipe.y) * forceMultiplier;
         rb.AddForce(force, ForceMode2D.Impulse);
 
         hasBallInAir = true;
 
-        // Hide placeholder
+        // Hide placeholder while the ball is in the air
         if (ballPlaceholder != null)
         {
             if (fadeCoroutine != null)
@@ -106,11 +121,13 @@ public class SwipeThrow : MonoBehaviour
             fadeCoroutine = StartCoroutine(FadePlaceholder(false));
         }
 
+        // Attach the BallLifeTracker script when the ball is destroyed
         var tracker = ball.AddComponent<BallLifeTracker>();
         tracker.throwController = this;
         tracker.poofPrefab = poofPrefab;
     }
 
+    // Called from BallLifeTracker when the ball is destroyed
     public void BallDestroyed()
     {
         hasBallInAir = false;
@@ -131,12 +148,12 @@ public class SwipeThrow : MonoBehaviour
                     if (sr != null)
                     {
                         sr.sprite = nextBallSprite;
-                        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f); // start invisible
+                        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f); // Start invisible
 
                         if (fadeCoroutine != null)
                             StopCoroutine(fadeCoroutine);
 
-                        fadeCoroutine = StartCoroutine(FadePlaceholder(true));
+                        fadeCoroutine = StartCoroutine(FadePlaceholder(true)); // Fade back in
                     }
                 }
             }
@@ -146,6 +163,8 @@ public class SwipeThrow : MonoBehaviour
             }
         }
     }
+
+    // Coroutine to fade the placeholder in or out smoothly
     IEnumerator FadePlaceholder(bool fadeIn, float duration = 0.2f)
     {
         if (ballPlaceholder == null) yield break;
@@ -153,6 +172,7 @@ public class SwipeThrow : MonoBehaviour
         SpriteRenderer sr = ballPlaceholder.GetComponent<SpriteRenderer>();
         if (sr == null) yield break;
 
+        // Prevent fading in a null sprite
         if (fadeIn && sr.sprite == null)
         {
             Debug.LogWarning("Tried to fade in placeholder with null sprite.");
@@ -166,8 +186,9 @@ public class SwipeThrow : MonoBehaviour
         Color color = sr.color;
         sr.color = new Color(color.r, color.g, color.b, startAlpha);
 
-        ballPlaceholder.SetActive(true);
+        ballPlaceholder.SetActive(true); // Ensure it's active 
 
+        // Animate the fade
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
@@ -179,6 +200,7 @@ public class SwipeThrow : MonoBehaviour
 
         sr.color = new Color(color.r, color.g, color.b, endAlpha);
 
+        // Fully hide if fading out
         if (!fadeIn)
             ballPlaceholder.SetActive(false);
     }
