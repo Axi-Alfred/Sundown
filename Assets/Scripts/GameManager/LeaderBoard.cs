@@ -13,6 +13,7 @@ public class LeaderBoard : MonoBehaviour
     [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
     [SerializeField] private GameObject panel;
     [SerializeField] private TMP_Text introText;
+    [SerializeField] private GameObject returnToMenuButton;
 
     [SerializeField] private Transform entrySpawnPoint;
 
@@ -21,17 +22,22 @@ public class LeaderBoard : MonoBehaviour
         //ONLY TEMPORARY FOR PLAY TESTING, WILL BE REMOVED SOON!!!
         PlayerData.numberOfPlayers = 4;
         StartCoroutine(PlayerData.AssignPlayers());
+        PlayerData.playersArray[2].AddScore(2);
+        PlayerData.playersArray[0].AddScore(1);
+        PlayerData.playersArray[1].AddScore(6);
+
     }
     // Start is called before the first frame update
     void Start()
     {
         //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        returnToMenuButton.SetActive(false);
+        entriesObjectsList.Clear();
         while (transform.childCount > 0)
         {
             Destroy(transform.GetChild(0).gameObject);
         }
         StartCoroutine(IntroDOTween());
-        InitializeLeaderBoard();
     }
 
     // Update is called once per frame
@@ -45,7 +51,6 @@ public class LeaderBoard : MonoBehaviour
         List<Player> playersList = SortByScore(PlayerData.playersArray);
 
         GameObject currentEntry;
-        int i = 1;
 
         foreach (var player in playersList)
         {
@@ -53,34 +58,31 @@ public class LeaderBoard : MonoBehaviour
             currentEntry = Instantiate(entryPrefab);
             currentEntry.transform.SetParent(entrySpawnPoint);
             currentEntry.GetComponent<LeaderBoardEntry>().Player = player;
-            currentEntry.GetComponent<LeaderBoardEntry>().Position = i;
             currentEntry.GetComponent<LeaderBoardEntry>().LoadEntry();
             entriesObjectsList.Add(currentEntry);
-            i++;
+            currentEntry.transform.localScale = Vector3.zero;
         }
-
-        entriesObjectsList[0].GetComponent<LeaderBoardEntry>().GiveCrown();
     }
 
     public static List<Player> SortByScore(Player[] players)
     {
         List<Player> playersCopy = players.ToList();
 
-        playersCopy.Sort((a, b) => b.PlayerScore.CompareTo(a.PlayerScore));
+        playersCopy.Sort((a, b) => a.PlayerScore.CompareTo(b.PlayerScore));
 
         return playersCopy;
     }
 
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene("HuvudMenu");
+        SceneTransition.FadeOut("HuvudMeny");
     }
 
     private IEnumerator IntroDOTween()
     {
         introText.enabled = false;
 
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
 
         RectTransform textRT = introText.gameObject.GetComponent<RectTransform>();
         textRT.localScale = Vector3.one * 0.2f;
@@ -94,5 +96,57 @@ public class LeaderBoard : MonoBehaviour
 
         yield return textSequence.WaitForCompletion();
 
+        InitializeLeaderBoard();
+        StartCoroutine(AnimateEntriesSequentially());
+    }
+
+    private IEnumerator AnimateEntriesSequentially()
+    {
+        float delayBetweenEntries = 0.3f;
+        float entryAnimDuration = 0.6f;
+        float lastEntryAnimDuration = 1.0f; 
+
+        VerticalLayoutGroup layoutGroup = entrySpawnPoint.GetComponent<VerticalLayoutGroup>();
+        bool hasLayoutGroup = layoutGroup != null;
+
+        for (int i = 0; i < entriesObjectsList.Count; i++)
+        {
+            GameObject entryObject = entriesObjectsList[i];
+            RectTransform rt = entryObject.GetComponent<RectTransform>();
+
+            Canvas.ForceUpdateCanvases();
+            if (hasLayoutGroup) LayoutRebuilder.ForceRebuildLayoutImmediate(entrySpawnPoint as RectTransform);
+            Vector2 finalPosition = rt.anchoredPosition;
+
+            rt.anchoredPosition = new Vector2(finalPosition.x, finalPosition.y + 100f);
+
+            Sequence entrySequence = DOTween.Sequence();
+
+            if (i == entriesObjectsList.Count - 1) 
+            {
+                entrySequence.Append(rt.DOScale(Vector3.one * 1.5f, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBack));
+                entrySequence.Append(rt.DOScale(Vector3.one, lastEntryAnimDuration * 0.4f).SetEase(Ease.InOutQuad));
+                entrySequence.AppendInterval(0.7f);
+                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));
+            }
+            else
+            {
+                entrySequence.Append(rt.DOScale(Vector3.one * 1.2f, entryAnimDuration * 0.4f).SetEase(Ease.OutBack));
+                entrySequence.Append(rt.DOScale(Vector3.one, entryAnimDuration * 0.2f).SetEase(Ease.InOutQuad));
+                entrySequence.AppendInterval(0.5f);
+                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, entryAnimDuration * 0.4f).SetEase(Ease.OutBounce));
+                //For the future add confetti
+            }
+
+            yield return entrySequence.WaitForCompletion();
+
+            yield return new WaitForSeconds(delayBetweenEntries);
+        }
+
+        entriesObjectsList[entriesObjectsList.Count-1].GetComponent<LeaderBoardEntry>().GiveCrown();
+
+        yield return new WaitForSeconds(1.5f);
+
+        returnToMenuButton.SetActive(true);
     }
 }

@@ -9,7 +9,6 @@ public class LeaderBoardEntry : MonoBehaviour
     public Player Player { get; set; }
     public int Position {  get; set; }
 
-    [SerializeField] private TMP_Text playerPosition;
     [SerializeField] private TMP_Text playerName;
     [SerializeField] private TMP_Text playerScore;
     [SerializeField] private Image playerIcon;
@@ -30,7 +29,6 @@ public class LeaderBoardEntry : MonoBehaviour
 
     public void LoadEntry()
     {
-        playerPosition.text = Position.ToString() + ".";
         playerName.text = Player.PlayerName;
         playerScore.text = Player.PlayerScore.ToString();
         playerIcon.sprite = Player.PlayerIcon;
