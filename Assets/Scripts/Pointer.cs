@@ -80,33 +80,33 @@ public class Pointer : MonoBehaviour
                 break;
 
             case "Game9":
-                nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11)));
+                nextGameText.text = "Catch Hop will begin now";
+                StartCoroutine(Timer(12));
                 break;
 
             case "Game10":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11)));
+                StartCoroutine(Timer(Random.Range(4, 12)));
                 break;
 
             case "Game11":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11)));
+                StartCoroutine(Timer(Random.Range(4, 12)));
                 break;
 
             case "Game12":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11)));
+                StartCoroutine(Timer(Random.Range(4, 12)));
                 break;
 
             case "Game13":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11)));
+                StartCoroutine(Timer(Random.Range(4, 12)));
                 break;
 
             case "RandomGame":
                 nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 11))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
+                StartCoroutine(Timer(Random.Range(4, 12))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
                 break;
         }
     }

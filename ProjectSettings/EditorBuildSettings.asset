@@ -44,10 +44,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/X 15CatchHop_Main.unity
     guid: 53bcbfd63f339c3449c8f24789feec05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 3IsItRight - Check.unity
     guid: 6240caf1fe1a536448d150708ea0569a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 10CottonCandy - Done.unity
     guid: 6ab9a3c82278c1b488bc6352b6e6b3a7
   m_configObjects: {}

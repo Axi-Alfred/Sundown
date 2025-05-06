@@ -1,58 +1,36 @@
-<<<<<<< HEAD:Assets/Scripts/CatchHop/UndoOffScreen.cs
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class DestroyOffScreen : MonoBehaviour
-{
-    public float offScreenX = 15f; // Justera detta tillräckligt långt till höger
-    public float offScreenY = -10f; // Justera detta om clowner faller ner också
-
-    void Update()
-    {
-        // Om clownen är för långt åt höger eller för långt ner → förstör
-        if (transform.position.x > offScreenX || transform.position.y < offScreenY)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-}
-=======
 using UnityEngine;
 
 public class UndoOffScreen : MonoBehaviour
 {
-    public float högerGräns = 15f;       // X-position där objekt förstörs (långt till höger)
-    public float nedreGräns = -10f;      // Y-position där objekt förstörs (långt ner)
+    [Header("Destroy Boundaries")]
+    public float rightLimit = 15f;
+    public float bottomLimit = -10f;
 
-    private static int antalKraschadeClowner = 0; // Statisk räknare som gäller för alla clowner
-    private static int maxKrascher = 20;          // Max antal clowner som får krascha
+    [Header("Clown Crash Settings")]
+    private static int crashedClowns = 0;
+    public static int maxCrashes = 20;
 
     void Update()
     {
-        // Kontrollera om objektet har lämnat skärmen
-        bool ärUtanförHöger = transform.position.x > högerGräns;
-        bool ärUtanförNedre = transform.position.y < nedreGräns;
+        bool isOffRight = transform.position.x > rightLimit;
+        bool isOffBottom = transform.position.y < bottomLimit;
 
-        if (ärUtanförHöger || ärUtanförNedre)
+        if (isOffRight || isOffBottom)
         {
-            // Om detta objekt är en clown, öka räknaren
             if (gameObject.CompareTag("Clown"))
             {
-                antalKraschadeClowner = antalKraschadeClowner + 1;
+                crashedClowns++;
+                Debug.Log($"💥 Clown crashed! Total: {crashedClowns}");
 
-                // Om tillräckligt många clowner kraschat, stoppa spelet
-                if (antalKraschadeClowner >= maxKrascher)
+                if (crashedClowns >= maxCrashes)
                 {
-                    Debug.Log("Spelet är slut – 20 clowner har kraschat.");
-                    Time.timeScale = 0f; // Stoppa spelet
+                    Debug.Log("🛑 Game over — too many clowns crashed.");
+                    Time.timeScale = 0f; // Freeze the game
+                    GameManager1.EndTurn(); // Or load GameOver scene
                 }
             }
 
-            // Förstör objektet oavsett vad det är
             Destroy(gameObject);
         }
     }
 }
->>>>>>> Ermias:Assets/CatchHop/Scripts/UndoOffScreen.cs
