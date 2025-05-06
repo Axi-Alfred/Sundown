@@ -21,9 +21,10 @@ public class isItRight : MonoBehaviour
     private int currentWordIndex = 0;
     private int totalToFix = 0;
     private int fixedCount = 0;
+    private int RightWords = 0;
 
-    private List<LetterTile> allTiles = new();
-    private List<LetterTile> spawnedTiles = new();
+    private List<NewLetter> allTiles = new();
+    private List<NewLetter> spawnedTiles = new();
     private List<int> flippedIndices;
     private List<int> flippableIndices;
 
@@ -49,11 +50,14 @@ public class isItRight : MonoBehaviour
     }
     void LoadNextWord()
     {
+        if(RightWords == 3)
+        {
+            PlayerData.currentPlayerTurn.AddScore(1);
+            GameManager1.EndTurn();
+        }
         if (currentWordIndex >= wordList.Count)
         {
             Debug.Log("🎉 All words complete!");
-            PlayerData.currentPlayerTurn.AddScore(1);
-            GameManager1.EndTurn();
             return;
         }
 
@@ -84,7 +88,7 @@ public class isItRight : MonoBehaviour
     private void CleanupOldTiles()
     {
         allTiles.Clear();
-        foreach (LetterTile tile in spawnedTiles)
+        foreach (NewLetter tile in spawnedTiles)
         {
             Destroy(tile.gameObject);
         }
@@ -109,7 +113,7 @@ public class isItRight : MonoBehaviour
             string correct = word[i].ToString();
             bool isFlippable = !nonFlippableLetters.Contains(correct);
             bool startsCorrect = !isFlippable || rand.NextDouble() < 0.4f;
-            string shown = startsCorrect ? correct : LetterTile.FlipLetter(correct);
+            string shown = startsCorrect ? correct : NewLetter.FlipLetter(correct);
             bool isCorrect = isFlippable && !startsCorrect;
 
             if (isCorrect)
@@ -122,7 +126,7 @@ public class isItRight : MonoBehaviour
                 flippableIndices.Add(i);
 
             GameObject go = Instantiate(letterTilePrefab, letterParent);
-            LetterTile tile = go.GetComponent<LetterTile>();
+            NewLetter tile = go.GetComponent<NewLetter>();
             tile.Setup(shown, correct, isCorrect, startsCorrect);
             go.GetComponent<Button>().onClick.AddListener(tile.OnClick);
 
@@ -162,7 +166,7 @@ public class isItRight : MonoBehaviour
         UpdateMistakeUI();
     }
 
-    public void OnCorrectLetterTapped(LetterTile tile)
+    public void OnCorrectLetterTapped(NewLetter tile)
     {
         Debug.Log("✅ Correct letter tapped: " + tile.correctLetter);
         audioPool.PlaySound(correct, 2f);
@@ -174,7 +178,7 @@ public class isItRight : MonoBehaviour
             WinGame();
         }
     }
-    public void OnWrongLetterTapped(LetterTile tile)
+    public void OnWrongLetterTapped(NewLetter tile)
     {
         if (gameOver) return;
         audioPool.PlaySound(incorrect, 2f);
@@ -224,9 +228,10 @@ public class isItRight : MonoBehaviour
 
     private IEnumerator PlayVictorySequence()
     {
+        RightWords++;
         audioPool.PlaySound(posAll, 2f);
         float delay = 0.05f;
-        foreach (LetterTile tile in allTiles)
+        foreach (NewLetter tile in allTiles)
         {
             tile.SetVictoryColor(victoryGreen);
             tile.StartCoroutine(tile.Bounce()); // 🟢 studsa i ordning
