@@ -427,7 +427,7 @@ MonoBehaviour:
   cottonCandyObject: {fileID: 816073349568275113, guid: 864005c9a04d6a642b0cbcbe2b7b5d53, type: 3}
   detectionRadius: 1.5
   spawnThreshold: 360
-  scalePerSpin: 0.2
+  scalePerSpin: 0.1
   winScale: 0.6
 --- !u!82 &1024300273
 AudioSource:
