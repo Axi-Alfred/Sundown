@@ -4,23 +4,34 @@ public class DifficultyManagerScript : MonoBehaviour
 {
     public static DifficultyManagerScript Instance;
 
-    [Header("Blocktäthet")]
-    public float blocksPerMinute = 30f; // Svårighetskurva
-
     [Header("Svårighetsinställningar")]
-    public float baseFallSpeed = 5f; // Basfallhastighet
-    public float speedIncreaseRate = 0.1f; // Hastighetsökning över tid
-    [SerializeField] private float currentMultiplier = 1f;
-    public float CurrentMultiplier => currentMultiplier;
+    public float baseFallSpeed = 5f;
+    public float speedIncreaseRate = 0.1f;
+    public float blocksPerMinute = 30f;
+
+    private float currentMultiplier = 1f;
+
+    // Tillgängliggör currentMultiplier för andra klasser
+    public float GetCurrentMultiplier()
+    {
+        return currentMultiplier;
+    }
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Update()
     {
+        // Öka svårighetsgraden över tid
         currentMultiplier += speedIncreaseRate * Time.deltaTime;
     }
 

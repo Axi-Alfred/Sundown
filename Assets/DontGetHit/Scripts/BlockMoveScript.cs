@@ -3,30 +3,37 @@ using UnityEngine;
 public class BlockMoveScript : MonoBehaviour
 {
     private float deadZone = -11.88f;
-    private bool isDeadly = true; // Avgör om blocket kan skada spelaren
+    private bool isDeadly = true;
 
     void Update()
     {
+        // Hämta nuvarande hastighet
         float currentSpeed = DifficultyManagerScript.Instance.GetCurrentSpeed();
-        transform.position += Vector3.down * currentSpeed * Time.deltaTime;
+        
+        // Flytta blocket nedåt
+        transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y - currentSpeed * Time.deltaTime,
+            transform.position.z
+        );
 
-        // Förstör blocket om det hamnar under skärmen
+        // Förstör block under deadZone
         if (transform.position.y < deadZone)
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("Ground"))
+        if (other.CompareTag("Ground"))
         {
-            isDeadly = false; // Blocket kan inte längre skada spelaren
-            Destroy(gameObject); // Förstör blocket när det träffar marken
+            isDeadly = false;
+            Destroy(gameObject);
         }
     }
 
-    // Returnerar om blocket är farligt (kan skada spelaren)
+    // Returnerar om blocket är farligt
     public bool IsDeadly()
     {
         return isDeadly;

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -4565180403641549129}
   - component: {fileID: 8913100092063632143}
   m_Layer: 0
-  m_Name: Clown
+  m_Name: Clown1
   m_TagString: Clown
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 65c4182d81182384493d221d04ba4c33, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7637e9c17f4f6418bd1f69113a87c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  hastighet: 2
 --- !u!114 &8913100092063632143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,5 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc651552352d6944aa89799842542e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offScreenX: 15
-  offScreenY: -10
+  "h\xF6gerGr\xE4ns": 15
+  "nedreGr\xE4ns": -10

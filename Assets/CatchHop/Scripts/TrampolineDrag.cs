@@ -1,33 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrampolineDrag : MonoBehaviour
 {
-    private Vector3 touchOffset;
-
     void Update()
     {
-        // Kolla om vi är på mobil (touch)
+        // Hantera touch-input
         if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0);
-            HandleTouch(touch.position);
+            Touch pek = Input.GetTouch(0);
+            HanteraInput(pek.position);
         }
-        // Kolla om vi är i Unity Editor (mus)
+        // Hantera mus-input i editorn
         else if (Application.isEditor && Input.GetMouseButton(0))
         {
-            HandleTouch(Input.mousePosition);
+            HanteraInput(Input.mousePosition);
         }
     }
 
-    void HandleTouch(Vector2 screenPosition)
+    void HanteraInput(Vector2 skärmPosition)
     {
-        // Omvandla skärmens koordinater till världens position
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPosition);
-        worldPos.z = 0;
+        // Omvandla till spelvärldens position
+        Vector3 världsPosition = Camera.main.ScreenToWorldPoint(skärmPosition);
+        världsPosition.z = 0;
 
-        // Flytta trampolinen till den nya positionen (endast X-led)
-        transform.position = new Vector3(worldPos.x, transform.position.y, 0);
+        // Flytta trampolinen i X-led
+        transform.position = new Vector3(världsPosition.x, transform.position.y, 0);
     }
 }

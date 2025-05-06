@@ -13,30 +13,40 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody2D rb;
     private bool isDragging = false;
     private Vector2 touchStartPosition;
-    private bool isAlive = true; // Håller koll på om spelaren lever
+    private bool isAlive = true;
 
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
+    // Start kallas före första uppdateringen
     void Start()
     {
-        if (rb == null) rb = GetComponent<Rigidbody2D>();
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;
+        // Hämta Rigidbody2D-komponenten
+        rb = GetComponent<Rigidbody2D>();
+        
+        // Dubbelkolla om vi har Rigidbody2D
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        // Fryser spelarens rotation och Y-position
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
     }
 
+    // Uppdateras varje frame
     void Update()
     {
-        if (isAlive) // Endast hantera input om spelaren lever
+        // Hantera input endast om spelaren lever
+        if (isAlive == true)
         {
             HanteraTouchInput();
         }
     }
 
+    // Fast uppdatering för fysikberäkningar
     void FixedUpdate()
     {
-        if (!isDragging || !isAlive)
+        // Stanna direkt om vi inte drar eller är döda
+        if (isDragging == false || isAlive == false)
         {
             rb.velocity = Vector2.zero;
             return;
@@ -48,36 +58,55 @@ public class PlayerScript : MonoBehaviour
     // Hanterar touch-input för mobil
     void HanteraTouchInput()
     {
+        // Kolla om det finns touch-input
         if (Input.touchCount > 0)
         {
+            // Ta första touch-inputet
             Touch touch = Input.GetTouch(0);
-            Vector2 worldTouchPos = Camera.main.ScreenToWorldPoint(touch.position);
-
-            switch (touch.phase)
+            
+            // Områdeskontroll för touch
+            if (touch.phase == TouchPhase.Began)
             {
-                case TouchPhase.Began:
-                    touchStartPosition = worldTouchPos;
-                    isDragging = true;
-                    break;
-
-                case TouchPhase.Moved:
-                    if (isDragging)
+                touchStartPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                isDragging = true;
+            }
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                if (isDragging == true)
+                {
+                    Vector2 currentPos = Camera.main.ScreenToWorldPoint(touch.position);
+                    
+                    // Applicera input-jämning
+                    if (inputSmoothing > 0f)
                     {
-                        if (inputSmoothing > 0)
-                        {
-                            worldTouchPos = Vector2.Lerp(touchStartPosition, worldTouchPos, 1f + inputSmoothing);
-                        }
-
-                        float dragDistance = worldTouchPos.x - touchStartPosition.x;
-                        rb.velocity = new Vector2(Mathf.Clamp(dragDistance * 8f, -moveSpeed, moveSpeed), 0);
+                        currentPos.x = Mathf.Lerp(touchStartPosition.x, currentPos.x, 1f + inputSmoothing);
+                        currentPos.y = Mathf.Lerp(touchStartPosition.y, currentPos.y, 1f + inputSmoothing);
                     }
-                    break;
 
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    isDragging = false;
-                    rb.velocity = Vector2.zero;
-                    break;
+                    // Beräkna dragavstånd
+                    float dragDistance = currentPos.x - touchStartPosition.x;
+                    
+                    // Beräkna hastighet
+                    float calculatedSpeed = dragDistance * 8f;
+                    
+                    // Begränsa maxhastighet
+                    if (calculatedSpeed > moveSpeed)
+                    {
+                        calculatedSpeed = moveSpeed;
+                    }
+                    else if (calculatedSpeed < -moveSpeed)
+                    {
+                        calculatedSpeed = -moveSpeed;
+                    }
+
+                    // Sätt hastigheten
+                    rb.velocity = new Vector2(calculatedSpeed, 0f);
+                }
+            }
+            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                isDragging = false;
+                rb.velocity = Vector2.zero;
             }
         }
         else
@@ -86,49 +115,74 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    // Förhindrar att spelaren rör sig utanför skärmen
+    // Ser till att spelaren inte åker utanför skärmen
     void BegränsaPosition()
     {
-        Vector3 pos = transform.position;
-        pos.x = Mathf.Clamp(pos.x, -xBoundary, xBoundary);
-        transform.position = pos;
+        Vector3 newPosition = transform.position;
+        
+        // Kolla vänster gräns
+        if (newPosition.x < -xBoundary)
+        {
+            newPosition.x = -xBoundary;
+        }
+        
+        // Kolla höger gräns
+        if (newPosition.x > xBoundary)
+        {
+            newPosition.x = xBoundary;
+        }
+
+        transform.position = newPosition;
     }
 
-    // Kollisionshantering för knivar/block
-    private void OnTriggerEnter2D(Collider2D collision)
+    // Hanterar kollision med block
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("Block"))
+        // Kolla om det är ett block
+        if (other.tag == "Block")
         {
-            BlockMoveScript block = collision.GetComponent<BlockMoveScript>();
-            if (block != null && block.IsDeadly())
+            BlockMoveScript blockScript = other.GetComponent<BlockMoveScript>();
+            
+            if (blockScript != null)
             {
-                Dö();
+                // Kolla om blocket är farligt
+                bool ärBlocketFarligt = blockScript.IsDeadly();
+                
+                if (ärBlocketFarligt == true)
+                {
+                    SpelareDöd();
+                }
             }
         }
     }
 
     // Hanterar spelarens död
-    void Dö()
+    void SpelareDöd()
     {
-        if (!isAlive) return; // Redan död
-        
         isAlive = false;
         Debug.Log("Spelaren dog!");
-        // Här kan du lägga till fler effekter som:
-        // - Spela ljudeffekt
-        // - Visa game over-skärm
-        // - Vibrera telefonen
-        Time.timeScale = 0; // Pausa spelet
+        Time.timeScale = 0f;
     }
 
+    // Rita debug-information
     void OnDrawGizmos()
     {
-        if (!showDebugGizmos) return;
-
-        Rigidbody2D currentRb = rb != null ? rb : GetComponent<Rigidbody2D>();
-        if (currentRb == null) return;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)currentRb.velocity);
+        if (showDebugGizmos == true)
+        {
+            Rigidbody2D currentRb = rb;
+            
+            // Säkerhetskontroll
+            if (currentRb == null)
+            {
+                currentRb = GetComponent<Rigidbody2D>();
+            }
+            
+            if (currentRb != null)
+            {
+                Gizmos.color = Color.red;
+                Vector3 velocityLine = new Vector3(currentRb.velocity.x, currentRb.velocity.y, 0f);
+                Gizmos.DrawLine(transform.position, transform.position + velocityLine);
+            }
+        }
     }
 }

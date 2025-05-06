@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClownWalker : MonoBehaviour
 {
-    public float speed = 2f; // 👈 Gårhastighet (kan ändras i inspectorn)
+    public float hastighet = 2f; // Hur snabbt clownen rör sig
 
+    // Uppdateras varje frame
     void Update()
     {
-        // 👉 Flytta clownen åt höger varje frame
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        // Flytta clownen konstant åt höger
+        transform.Translate(Vector2.right * hastighet * Time.deltaTime);
     }
 }
