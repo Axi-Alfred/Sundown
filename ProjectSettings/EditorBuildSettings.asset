@@ -18,9 +18,6 @@ EditorBuildSettings:
     path: Assets/Scenes/X 1Camera.unity
     guid: 1237a644d042e55449276070b8b4479a
   - enabled: 1
-    path: Assets/Scenes/X 2JuggleMania.unity
-    guid: 62b60ea71d17bf5478c7261054316c96
-  - enabled: 1
     path: Assets/Scenes/X 3IsItRight - Check.unity
     guid: 6240caf1fe1a536448d150708ea0569a
   - enabled: 1
@@ -32,6 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DontGetHit/Scenes/DontGetHit.unity
     guid: 609917efaa1b7014fb404aab20b67a52
+    path: Assets/Scenes/X 7JuggleMania - Done.unity
+    guid: f184e9b6cdfe1c642bb556267d9ed76c
   - enabled: 1
     path: Assets/Scenes/X 9SmackedPig - Done - LastPrio.unity
     guid: 91e92532ba916be4890779ba2600a336
