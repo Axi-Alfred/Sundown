@@ -34,6 +34,7 @@ TagManager:
   - Game12
   - Game13
   - RandomGame
+  - Balloon
   layers:
   - Default
   - TransparentFX

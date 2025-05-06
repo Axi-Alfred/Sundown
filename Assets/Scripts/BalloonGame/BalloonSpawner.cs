@@ -13,36 +13,44 @@ public class BalloonSpawner : MonoBehaviour
     public float spawnInterval = 0.5f;
     public float minScale = 0.5f, maxScale = 1.5f;
     public float spawnWidth = 5f;
-    private float spawnYPosition;
+    public float spawnHeightOffset = -1f; // How far below screen to spawn
+    public int maxActiveBalloons = 30;
 
     [Range(0f, 1f)]
     public float blackBalloonChance = 0.1f;
 
+    private float spawnYPosition;
+
     void Start()
     {
-        // Calculate spawn Y-position based on camera
+        // Spawn balloons at the middle of the screen (Y-center)
         Camera cam = Camera.main;
-        spawnYPosition = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f)).y;
+        Vector3 middleOfScreen = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        spawnYPosition = middleOfScreen.y;
 
         StartCoroutine(SpawnRoutine());
     }
+
 
     IEnumerator SpawnRoutine()
     {
         yield return new WaitForSeconds(0.5f);
         while (true)
         {
-            SpawnBalloon();
+            if (GameObject.FindGameObjectsWithTag("Balloon").Length < maxActiveBalloons)
+                SpawnBalloon();
+
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
     void SpawnBalloon()
     {
-        float randomX = Random.Range(-spawnWidth / 2, spawnWidth / 2);
+        float randomX = Random.Range(-spawnWidth / 2f, spawnWidth / 2f);
         Vector3 spawnPosition = new Vector3(randomX, spawnYPosition, 0f);
 
         GameObject balloon = Instantiate(balloonPrefab, spawnPosition, Quaternion.identity);
+        balloon.tag = "Balloon"; // Ensure correct tag for tracking
 
         // Set random scale
         float scale = Random.Range(minScale, maxScale);

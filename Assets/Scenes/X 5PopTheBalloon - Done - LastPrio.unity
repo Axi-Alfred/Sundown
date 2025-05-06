@@ -378,7 +378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5290142635379212151, guid: ab308f762d2f83a4580cf9986d66b28d, type: 3}
       propertyPath: duration
-      value: 5
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -694,6 +694,8 @@ MonoBehaviour:
   minScale: 0.5
   maxScale: 1.5
   spawnWidth: 10
+  spawnHeightOffset: -5
+  maxActiveBalloons: 30
   blackBalloonChance: 0.1
 --- !u!4 &868607625
 Transform:
@@ -721,7 +723,7 @@ GameObject:
   - component: {fileID: 1324437575}
   - component: {fileID: 1324437574}
   m_Layer: 0
-  m_Name: BallonGameManager
+  m_Name: BalloonGameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -740,6 +742,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreNeededToWin: 20
+  gameDuration: 30
+  scoreText: {fileID: 0}
+  timerText: {fileID: 0}
 --- !u!4 &1324437575
 Transform:
   m_ObjectHideFlags: 0

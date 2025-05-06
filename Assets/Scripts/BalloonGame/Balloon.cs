@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Balloon : MonoBehaviour
 {
@@ -8,32 +8,56 @@ public class Balloon : MonoBehaviour
 
     public bool isNegative = false;
 
-    private Vector2 direction;
     private float wobbleOffset;
 
     void Start()
     {
-        float angle = Random.Range(0f, 360f); // Full chaos
-        float radians = angle * Mathf.Deg2Rad;
-        direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
-
         wobbleOffset = Random.Range(0f, Mathf.PI * 2f);
         rotationSpeed = Random.Range(-180f, 180f);
     }
 
     void Update()
     {
+        // Upward floating with wobble
         float wobble = Mathf.Sin(Time.time * 5f + wobbleOffset) * wobbleIntensity;
-        Vector3 movement = (direction + new Vector2(wobble, 0)) * moveSpeed * Time.deltaTime;
-        transform.Translate(movement);
-
+        Vector3 movement = new Vector3(wobble, 1f, 0f).normalized * moveSpeed * Time.deltaTime;
+        transform.Translate(movement, Space.World);
         transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
 
-        // Destroy if off-screen
+#if UNITY_ANDROID || UNITY_IOS
+        HandleTouchInput();
+#endif
+
         if (!IsVisible())
-        {
             Destroy(gameObject);
+    }
+
+    void OnMouseDown()
+    {
+        Pop(); // Works in editor and standalone
+    }
+
+    void HandleTouchInput()
+    {
+        if (Input.touchCount == 0) return;
+
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase != TouchPhase.Began) return;
+
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(touch.position);
+        Collider2D hit = Physics2D.OverlapPoint(worldPoint);
+
+        if (hit != null && hit.gameObject == gameObject)
+        {
+            Pop();
         }
+    }
+
+    void Pop()
+    {
+        Debug.Log(isNegative ? "💀 Negative balloon popped!" : "🎈 Balloon popped!");
+        BalloonGameManager.Instance.BalloonPopped(isNegative);
+        Destroy(gameObject);
     }
 
     bool IsVisible()
