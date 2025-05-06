@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 public class BlockSpawnerScript : MonoBehaviour
 {
@@ -10,71 +8,90 @@ public class BlockSpawnerScript : MonoBehaviour
     public float widthOffset = 10f;
     public float minBlockSpacing = 1.5f;
 
-    private float timer;
+    private float timer = 0f;
     private float currentSpawnRate;
     private int currentBlocksPerWave = 1;
 
+    // Start kallas före första uppdateringen
     void Start()
     {
         currentSpawnRate = baseSpawnRate;
-        SpawnWave();
+        SkapaBlockVåg();
     }
 
+    // Uppdateras varje frame
     void Update()
     {
         timer += Time.deltaTime;
 
         if (timer >= currentSpawnRate)
         {
-            SpawnWave();
-            timer = 0;
+            SkapaBlockVåg();
+            timer = 0f;
 
-            // Increase difficulty
-            currentSpawnRate = baseSpawnRate / DifficultyManagerScript.Instance.CurrentMultiplier;
-            currentBlocksPerWave = Mathf.Clamp(
-                Mathf.FloorToInt(DifficultyManagerScript.Instance.CurrentMultiplier / 0.5f),
-                1,
-                5
-            );
+            // Uppdatera svårighetsgraden
+            float nuvarandeMultiplier = DifficultyManagerScript.Instance.GetCurrentMultiplier();
+            currentSpawnRate = baseSpawnRate / nuvarandeMultiplier;
+
+            // Beräkna antal block per våg
+            int beräknatAntalBlock = Mathf.FloorToInt(nuvarandeMultiplier / 0.5f);
+
+            // Begränsa till 1-5 block
+            if (beräknatAntalBlock < 1)
+            {
+                currentBlocksPerWave = 1;
+            }
+            else if (beräknatAntalBlock > 5)
+            {
+                currentBlocksPerWave = 5;
+            }
+            else
+            {
+                currentBlocksPerWave = beräknatAntalBlock;
+            }
         }
     }
 
-    void SpawnWave()
+    // Skapar en våg med block
+    void SkapaBlockVåg()
     {
-        List<float> usedPositions = new List<float>();
-        int safetyCounter = 0;
+        List<float> användaPositioner = new List<float>();
+        int säkerhetsRäknare = 0;
 
-        // Always check against the player's initial position
-        usedPositions.Add(0f); // Player's starting X position
+        // Lägg till spelarens position
+        användaPositioner.Add(0f);
 
         for (int i = 0; i < currentBlocksPerWave; i++)
         {
-            bool validPosition;
-            float xPos;
+            bool giltigPosition = false;
+            float xPos = 0f;
 
-            do
+            while (giltigPosition == false && säkerhetsRäknare < 100)
             {
-                validPosition = true;
+                giltigPosition = true;
+
+                // Slumpa ny position
                 xPos = Random.Range(
                     transform.position.x - widthOffset,
                     transform.position.x + widthOffset
                 );
 
-                // Check spacing against ALL existing positions (including player)
-                foreach (float pos in usedPositions)
+                // Kolla avstånd till andra positioner
+                for (int j = 0; j < användaPositioner.Count; j++)
                 {
-                    if (Mathf.Abs(xPos - pos) < minBlockSpacing)
+                    float skillnad = Mathf.Abs(xPos - användaPositioner[j]);
+
+                    if (skillnad < minBlockSpacing)
                     {
-                        validPosition = false;
+                        giltigPosition = false;
                         break;
                     }
                 }
 
-                safetyCounter++;
+                säkerhetsRäknare++;
             }
-            while (!validPosition && safetyCounter < 100);
 
-            usedPositions.Add(xPos);
+            användaPositioner.Add(xPos);
             Instantiate(block, new Vector3(xPos, transform.position.y, 0), Quaternion.identity);
         }
     }

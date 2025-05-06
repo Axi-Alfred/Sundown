@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: knives_outlined_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 83
+        height: 405
+      alignment: 2
+      pivot: {x: 0.5, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 041fe605f4bbec344a56dda972513c23
+      internalID: 655018012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_1
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 0
+        width: 160
+        height: 352
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3d882236f225a149959a49c317cf598
+      internalID: 1349279403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_2
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 0
+        width: 117
+        height: 361
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9028d3a3f750c79429ac730d54c1256b
+      internalID: 1397878037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_3
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 0
+        width: 48
+        height: 346
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ef8e25a0f6a06144af90410caa1dde1
+      internalID: 1122403651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_4
+      rect:
+        serializedVersion: 2
+        x: 564
+        y: 0
+        width: 86
+        height: 343
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b102a72088fae14f942d068e9ed7eb4
+      internalID: -1358709746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_5
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 0
+        width: 49
+        height: 317
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c6ea4fc29f9c5a468f44cb6852b811c
+      internalID: 1146646074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_6
+      rect:
+        serializedVersion: 2
+        x: 777
+        y: 0
+        width: 79
+        height: 304
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21edcc68f7896ad4b84744480851a697
+      internalID: 1513755474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_7
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 0
+        width: 72
+        height: 298
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f6a85d558cf57c438a6832848fee233
+      internalID: -1560165614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_8
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 0
+        width: 38
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a772511dde54844a97609a0b3b0bc48
+      internalID: 743600915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: knives_outlined_9
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 0
+        width: 37
+        height: 189
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f29689868e05b104baa448fd72da5d99
+      internalID: -1632124045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +329,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      knives_outlined_0: 655018012
+      knives_outlined_1: 1349279403
+      knives_outlined_2: 1397878037
+      knives_outlined_3: 1122403651
+      knives_outlined_4: -1358709746
+      knives_outlined_5: 1146646074
+      knives_outlined_6: 1513755474
+      knives_outlined_7: -1560165614
+      knives_outlined_8: 743600915
+      knives_outlined_9: -1632124045
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
