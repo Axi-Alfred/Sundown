@@ -27,14 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/X 5PopTheBalloon - Done - LastPrio.unity
     guid: 9b2b9ccba0b95a04284a37c2d84909db
   - enabled: 1
-    path: Assets/DontGetHit/Scenes/DontGetHit.unity
-    guid: 609917efaa1b7014fb404aab20b67a52
-    path: Assets/Scenes/X 7JuggleMania - Done.unity
-    guid: f184e9b6cdfe1c642bb556267d9ed76c
-  - enabled: 1
     path: Assets/Scenes/X 9SmackedPig - Done - LastPrio.unity
     guid: 91e92532ba916be4890779ba2600a336
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/X 10CottonCandy - Done.unity
     guid: 6ab9a3c82278c1b488bc6352b6e6b3a7
   - enabled: 1
@@ -47,9 +42,9 @@ EditorBuildSettings:
     path: Assets/Scenes/X 13DunkTank.unity
     guid: 0dda9b37eddbd43ca854eb1f50a82414
   - enabled: 1
-    path: Assets/Scenes/X 14BallToss_Scene.unity
-    guid: 051b425cf8e178a47aeef9c1c3954dd0
-  - enabled: 1
+    path: Assets/Scenes/X 14DontGetHit.unity
+    guid: 80d49c0f53dc1df458fbc0c0c35a0a9f
+  - enabled: 0
     path: Assets/Scenes/X 15CatchHop_Main.unity
     guid: 53bcbfd63f339c3449c8f24789feec05
   m_configObjects: {}

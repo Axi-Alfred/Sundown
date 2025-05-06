@@ -5,7 +5,7 @@ public class FallingVikingGameManager : MonoBehaviour
 {
     public static FallingVikingGameManager Instance;
 
-    public int score = 0;
+    public int vikingsCaught = 0;
     public int scoreToWin = 10;
     public TextMeshProUGUI scoreText;
 
@@ -17,19 +17,34 @@ public class FallingVikingGameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void AddScore(int points)
+    void Update()
+    {
+        if (scoreText != null)
+            scoreText.text = $"Score: {vikingsCaught}";
+
+    }
+
+    public void OnVikingCaught()
     {
         if (gameEnded) return;
 
-        score += points;
+        vikingsCaught++;
 
         if (scoreText != null)
-            scoreText.text = "Score: " + score;
+            scoreText.text = $"Score: {vikingsCaught}";
 
-        if (score >= scoreToWin)
-        {
+        if (vikingsCaught >= scoreToWin)
             WinGame();
-        }
+    }
+
+    public void OnAxeCaught()
+    {
+        if (gameEnded) return;
+
+        vikingsCaught = Mathf.Max(0, vikingsCaught - 2); // No negative score
+
+        if (scoreText != null)
+            scoreText.text = $"Score: {vikingsCaught}";
     }
 
     private void WinGame()
@@ -40,4 +55,5 @@ public class FallingVikingGameManager : MonoBehaviour
         PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
+
 }
