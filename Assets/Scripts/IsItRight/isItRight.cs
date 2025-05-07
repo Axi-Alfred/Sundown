@@ -52,8 +52,11 @@ public class isItRight : MonoBehaviour
         if (currentWordIndex >= wordList.Count)
         {
             Debug.Log("🎉 All words complete!");
+            PlayerData.currentPlayerTurn.AddScore(1);
+            GameManager1.EndTurn();
             return;
         }
+
 
         string nextWord = wordList[currentWordIndex];
         Debug.Log("🔤 Starting word: " + nextWord);
@@ -253,6 +256,9 @@ public class isItRight : MonoBehaviour
         {
             tile.StartCoroutine(tile.FadeToColor(Color.gray));
         }
+
+        yield return new WaitForSeconds(0.4f);
+        
     }
 
     void WinGame()

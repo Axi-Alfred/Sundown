@@ -5,40 +5,52 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/HuvudMenu.unity
     guid: a455d9a7cf9a55c4eb00cd77d602dbb0
   - enabled: 1
-    path: Assets/Scenes/Wheel.unity
-    guid: adafaeff19436914c940f03613f9d1c4
-  - enabled: 0
-    path: Assets/Scenes/X 1Camera.unity
-    guid: 1237a644d042e55449276070b8b4479a
+    path: Assets/Scenes/LeaderBoard.unity
+    guid: 709d98dcb1cf6554482f771d5039bb7c
   - enabled: 1
     path: Assets/Scenes/Wheel.unity
     guid: adafaeff19436914c940f03613f9d1c4
-  - enabled: 0
-    path: Assets/Scenes/X 2Gyro.unity
-    guid: 64f751268b67ec74396884dd30e2ed85
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/X 1Camera.unity
+    guid: 1237a644d042e55449276070b8b4479a
+  - enabled: 1
+    path: Assets/Scenes/X 2JuggleMania.unity
+    guid: 62b60ea71d17bf5478c7261054316c96
+  - enabled: 1
     path: Assets/Scenes/X 3IsItRight - Check.unity
     guid: 6240caf1fe1a536448d150708ea0569a
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/X 4OddOneOut - Done.unity
     guid: d06da606ee72f97499b895fdf8b2595f
-  - enabled: 0
-    path: Assets/Scenes/X 5PopTheBalloon - Done.unity
+  - enabled: 1
+    path: Assets/Scenes/X 5PopTheBalloon - Done - LastPrio.unity
     guid: 9b2b9ccba0b95a04284a37c2d84909db
-  - enabled: 0
-    path: Assets/Scenes/X 6DontGetHit - Done.unity
+  - enabled: 1
+    path: Assets/DontGetHit/Scenes/DontGetHit.unity
     guid: 609917efaa1b7014fb404aab20b67a52
-  - enabled: 0
-    path: Assets/Scenes/X 9SmackedPig - Done.unity
+  - enabled: 1
+    path: Assets/Scenes/X 9SmackedPig - Done - LastPrio.unity
     guid: 91e92532ba916be4890779ba2600a336
-  - enabled: 0
-    path: Assets/Scenes/LeaderBoard.unity
-    guid: 709d98dcb1cf6554482f771d5039bb7c
-  - enabled: 0
+  - enabled: 1
+    path: Assets/Scenes/X 10CottonCandy - Done.unity
+    guid: 6ab9a3c82278c1b488bc6352b6e6b3a7
+  - enabled: 1
     path: Assets/Scenes/X 11FallngGods - Done.unity
     guid: dd788de0ff3d28e4fbe78f5d793f2afe
+  - enabled: 1
+    path: Assets/Scenes/X 12ClownElope - Done.unity
+    guid: 1f33a49b8fee5f845b118ae1545d115d
+  - enabled: 1
+    path: Assets/Scenes/X 13DunkTank.unity
+    guid: 0dda9b37eddbd43ca854eb1f50a82414
+  - enabled: 1
+    path: Assets/Scenes/X 14BallToss_Scene.unity
+    guid: 051b425cf8e178a47aeef9c1c3954dd0
+  - enabled: 1
+    path: Assets/Scenes/X 15CatchHop_Main.unity
+    guid: 53bcbfd63f339c3449c8f24789feec05
   m_configObjects: {}

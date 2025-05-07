@@ -20,6 +20,9 @@ TagManager:
   - Hole
   - Draggable
   - Target
+  - Safe
+  - Block
+  - Ground
   layers:
   - Default
   - TransparentFX

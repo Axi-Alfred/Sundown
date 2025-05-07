@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class FrontCamera : MonoBehaviour
 {
     [Header("Display")]
-    [SerializeField] private RawImage cameraPreview;
+    [SerializeField] public RawImage cameraPreview;
     [SerializeField] private Image capturedImageDisplay;
     [SerializeField] private GameObject cameraSystemObject;
 
@@ -21,7 +21,7 @@ public class FrontCamera : MonoBehaviour
     private IconsManager iconsManager;
 
 
-    private WebCamTexture webcamTexture;
+    public WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
 
     private float aspectRatio;

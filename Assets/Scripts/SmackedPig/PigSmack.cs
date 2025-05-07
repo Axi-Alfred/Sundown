@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PigSmack : MonoBehaviour, IPointerDownHandler
@@ -21,6 +21,12 @@ public class PigSmack : MonoBehaviour, IPointerDownHandler
         {
             hasBeenSmacked = true;
             spriteRenderer.sprite = smackedPig;
+
+            // ✅ Award point
+            PlayerData.currentPlayerTurn.AddScore(1);
+
+            // ✅ End the round
+            GameManager1.EndTurn();
         }
     }
 }

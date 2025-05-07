@@ -183,7 +183,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2350746425956892054}
         m_TargetAssemblyTypeName: PlayerEntry, Assembly-CSharp
-        m_MethodName: ShowPlayer
+        m_MethodName: ShowPlayerPicture
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

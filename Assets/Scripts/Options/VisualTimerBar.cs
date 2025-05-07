@@ -109,7 +109,7 @@ public class VisualTimerBar : MonoBehaviour
             endPanel.SetActive(true);
             if (endText != null)
                 endText.text = "Time's up!";
-            GameManager1.EndRound();
+            GameManager1.EndTurn();
         }
     }
 
