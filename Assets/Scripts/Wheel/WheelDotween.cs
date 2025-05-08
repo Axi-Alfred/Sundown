@@ -19,15 +19,12 @@ public class WheelDotween : MonoBehaviour
 
     private void Awake()
     {
-        
         spinWheel.enabled = false;
         texts.gameObject.SetActive(false);  
     }
     // Start is called before the first frame update
     void Start()
     {
-        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
-        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
         playersInstructionsObject.SetActive(true);
         StartCoroutine(SceneInitialization());
     }
@@ -35,7 +32,8 @@ public class WheelDotween : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
     }
 
     private IEnumerator SceneInitialization()
@@ -45,7 +43,7 @@ public class WheelDotween : MonoBehaviour
         playerName.gameObject.GetComponent<RectTransform>().DOAnchorPosX(0, 0.75f);
         spinText.gameObject.GetComponent<RectTransform>().DOAnchorPosX(0, 0.75f);
 
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(2f);
 
         playerName.gameObject.GetComponent<RectTransform>().DOAnchorPosX(-1250, 0.75f);
         spinText.gameObject.GetComponent<RectTransform>().DOAnchorPosX(1250, 0.75f);
