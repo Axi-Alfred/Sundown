@@ -40,18 +40,61 @@ public class WheelDotween : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
-        playerName.gameObject.GetComponent<RectTransform>().DOAnchorPosX(0, 0.75f);
-        spinText.gameObject.GetComponent<RectTransform>().DOAnchorPosX(0, 0.75f);
+        // Create sequence for entrance animations
+        Sequence entranceSequence = DOTween.Sequence();
 
-        yield return new WaitForSeconds(2f);
+        // Get RectTransform references
+        RectTransform playerNameRT = playerName.gameObject.GetComponent<RectTransform>();
+        RectTransform spinTextRT = spinText.gameObject.GetComponent<RectTransform>();
 
-        playerName.gameObject.GetComponent<RectTransform>().DOAnchorPosX(-1250, 0.75f);
-        spinText.gameObject.GetComponent<RectTransform>().DOAnchorPosX(1250, 0.75f);
+        // Starting scale slightly smaller
+        playerNameRT.localScale = Vector3.one * 0.8f;
+        spinTextRT.localScale = Vector3.one * 0.8f;
 
+        // ENTRANCE ANIMATIONS - both objects move in with overshoot
+        entranceSequence.Join(playerNameRT.DOAnchorPosX(30f, 0.6f).SetEase(Ease.OutQuint)); // Overshoot right
+        entranceSequence.Join(spinTextRT.DOAnchorPosX(-30f, 0.6f).SetEase(Ease.OutQuint)); // Overshoot left
+
+        // Scale up slightly bigger than final size
+        entranceSequence.Join(playerNameRT.DOScale(1.1f, 0.5f).SetEase(Ease.OutBack));
+        entranceSequence.Join(spinTextRT.DOScale(1.1f, 0.5f).SetEase(Ease.OutBack));
+
+        // Move back to exact position
+        entranceSequence.Append(playerNameRT.DOAnchorPosX(0f, 0.2f).SetEase(Ease.InOutQuad));
+        entranceSequence.Join(spinTextRT.DOAnchorPosX(0f, 0.2f).SetEase(Ease.InOutQuad));
+
+        // Scale to normal
+        entranceSequence.Join(playerNameRT.DOScale(1f, 0.15f).SetEase(Ease.InOutQuad));
+        entranceSequence.Join(spinTextRT.DOScale(1f, 0.15f).SetEase(Ease.InOutQuad));
+
+        yield return entranceSequence.WaitForCompletion();
+        yield return new WaitForSeconds(2f); // Same waiting time
+
+        // EXIT ANIMATIONS
+        Sequence exitSequence = DOTween.Sequence();
+
+        // Pre-exit pull back (small move in opposite direction)
+        exitSequence.Append(playerNameRT.DOAnchorPosX(40f, 0.2f).SetEase(Ease.InQuad));
+        exitSequence.Join(spinTextRT.DOAnchorPosX(-40f, 0.2f).SetEase(Ease.InQuad));
+
+        // Scale up slightly for momentum feel
+        exitSequence.Join(playerNameRT.DOScale(1.08f, 0.2f).SetEase(Ease.InQuad));
+        exitSequence.Join(spinTextRT.DOScale(1.08f, 0.2f).SetEase(Ease.InQuad));
+
+        // Exit with acceleration
+        exitSequence.Append(playerNameRT.DOAnchorPosX(-1250f, 0.55f).SetEase(Ease.InCubic));
+        exitSequence.Join(spinTextRT.DOAnchorPosX(1250f, 0.55f).SetEase(Ease.InCubic));
+
+        // Scale down while exiting for perspective effect
+        exitSequence.Join(playerNameRT.DOScale(0.9f, 0.55f).SetEase(Ease.InQuad));
+        exitSequence.Join(spinTextRT.DOScale(0.9f, 0.55f).SetEase(Ease.InQuad));
+
+        yield return exitSequence.WaitForCompletion();
         yield return new WaitForSeconds(1f);
 
         playersInstructionsObject.SetActive(false);
         texts.gameObject.SetActive(true);
         spinWheel.enabled = true;
+
     }
 }

@@ -17,6 +17,12 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField] private Transform entrySpawnPoint;
 
+    private void Awake()
+    {
+        PlayerData.numberOfPlayers = 3;
+        StartCoroutine(PlayerData.AssignPlayers());
+    }
+
     // Start is called before the first frame update
     void Start()
     {
