@@ -74,7 +74,7 @@ public class PlayerPrep : MonoBehaviour
             currentEntry.transform.SetParent(gameObject.transform);
             currentEntry.GetComponent<PlayerEntry>().Player = player;
             currentEntry.GetComponent<PlayerEntry>().LoadEntry();
-            currentEntry.GetComponent<PlayerEntry>().HideEntry();
+            currentEntry.transform.localScale = Vector3.zero;
 
             entriesArray[i] = currentEntry;
             i++;
@@ -119,7 +119,7 @@ public class PlayerPrep : MonoBehaviour
             RectTransform rt = entryObject.GetComponent<RectTransform>();
             Vector3 originalScale = rt.localScale;
 
-            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale * 0.1f, 0.25f).SetEase(Ease.InQuad)).OnComplete(() => entryObject.GetComponent<PlayerEntry>().HideEntry());
+            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale * 0.1f, 0.25f).SetEase(Ease.InQuad)).OnComplete(() => entryObject.transform.localScale = Vector3.zero);
         }
 
         float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;
@@ -153,8 +153,6 @@ public class PlayerPrep : MonoBehaviour
             GameObject entryObject = entriesArray[i];
             RectTransform rt = entryObject.GetComponent<RectTransform>();
             Vector3 originalScale = rt.localScale;
-
-            entryObject.GetComponent<PlayerEntry>().ShowEntry();
 
             rt.localScale = originalScale * 0.1f;
 

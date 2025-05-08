@@ -8,6 +8,7 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
     [SerializeField] private float torqueMultiplier = 50f;
     [SerializeField] private Pointer pointer;
+    [SerializeField] private GameObject pointerObject; //needed to check that the rotation of the pointer is 0 before starting a game
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
@@ -40,7 +41,7 @@ public class SpinWheel : MonoBehaviour
             }
 
             //The wheel has/will come to a stop 
-            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold)
+            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.rotation.z) < 5)
             {
                 rb2D.angularVelocity = 0;
                 hasSpinned = true;
