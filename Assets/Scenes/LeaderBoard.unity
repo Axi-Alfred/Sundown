@@ -726,6 +726,7 @@ MonoBehaviour:
   introText: {fileID: 1698893263}
   returnToMenuButton: {fileID: 2147426874}
   entrySpawnPoint: {fileID: 1975428790}
+  layoutGroupV: {fileID: 1975428791}
 --- !u!4 &1207907084
 Transform:
   m_ObjectHideFlags: 0
