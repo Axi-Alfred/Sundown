@@ -15,7 +15,7 @@ public class Pointer : MonoBehaviour
     [SerializeField] private Image playerSprite;
     private bool wheelHasSpinned;
 
-    [SerializeField] private float gameStartTimer = 1.5f;
+    [SerializeField] private float gameStartTimer = 2.5f;
 
     // Start is called before the first frame update
     void Start()

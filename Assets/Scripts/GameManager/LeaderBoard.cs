@@ -20,6 +20,8 @@ public class LeaderBoard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //if number of players is < 3 then change settings
+
         //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         returnToMenuButton.SetActive(false);
         entriesObjectsList.Clear();

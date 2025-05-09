@@ -3020,6 +3020,7 @@ MonoBehaviour:
   countdownNumberObject: {fileID: 1117118181}
   playersListPanel: {fileID: 952626966}
   InitialPopup: {fileID: 170333343}
+  initialPopupText: {fileID: 2048063745}
 --- !u!95 &2098080832
 Animator:
   serializedVersion: 5

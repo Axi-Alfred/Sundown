@@ -41,7 +41,7 @@ public class SpinWheel : MonoBehaviour
             }
 
             //The wheel has/will come to a stop 
-            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.rotation.z) < 5)
+            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.eulerAngles.z) < 5)
             {
                 rb2D.angularVelocity = 0;
                 hasSpinned = true;

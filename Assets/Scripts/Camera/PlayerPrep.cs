@@ -142,8 +142,6 @@ public class PlayerPrep : MonoBehaviour
         textSequence.AppendInterval(1.5f);
         textSequence.Join(textRT.DOAnchorPosY(300, 0.6f).SetEase(Ease.OutQuad));
 
-        //yield return textSequence.WaitForCompletion();
-
         yield return new WaitForSeconds(0.5f);
 
         float longestTweenDuration = 0.4f;
@@ -154,9 +152,12 @@ public class PlayerPrep : MonoBehaviour
             RectTransform rt = entryObject.GetComponent<RectTransform>();
             Vector3 originalScale = rt.localScale;
 
-            rt.localScale = originalScale * 0.1f;
+            rt.localScale = Vector3.one * 0.1f;
 
-            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.25f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale, 0.15f).SetEase(Ease.InQuad));    
+            Sequence s = DOTween.Sequence();
+            s.AppendInterval(i * delayBetweenEntries);
+            s.Append(rt.DOScale(Vector3.one * 1.2f, 0.25f).SetEase(Ease.OutQuad));
+            s.Append(rt.DOScale(Vector3.one, 0.15f).SetEase(Ease.InQuad));
         }
 
         float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;
