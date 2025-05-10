@@ -714,9 +714,9 @@ MonoBehaviour:
   negAll: {fileID: 8300000, guid: b66fef4c3f27b784e9dca2e0d7627a08, type: 3}
   audioPool: {fileID: 0}
   wordList:
-  - apple
-  - hello
-  - world
+  - circus
+  - clown
+  - apple pie
   - dream
   - mirror
   - flip
@@ -939,7 +939,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 38.568, y: -26.728027}
+  m_AnchoredPosition: {x: 38.568, y: -26.727966}
   m_SizeDelta: {x: 634.979, y: 220.02}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1982757605

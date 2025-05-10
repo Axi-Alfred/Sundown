@@ -165,7 +165,7 @@ public class isItRight : MonoBehaviour
     public void OnCorrectLetterTapped(LetterTile tile)
     {
         Debug.Log("✅ Correct letter tapped: " + tile.correctLetter);
-        audioPool.PlaySound(correct, 2f);
+        audioPool.PlaySound(correct, 2f, Random.Range(0.8f, 1.2f));
         fixedCount++;
 
         if (fixedCount >= totalToFix)
@@ -177,7 +177,7 @@ public class isItRight : MonoBehaviour
     public void OnWrongLetterTapped(LetterTile tile)
     {
         if (gameOver) return;
-        audioPool.PlaySound(incorrect, 2f);
+        audioPool.PlaySound(incorrect, 2f, Random.Range(0.8f, 1.2f));
         currentMistakes++;
         UpdateMistakeUI();
 
@@ -224,7 +224,7 @@ public class isItRight : MonoBehaviour
 
     private IEnumerator PlayVictorySequence()
     {
-        audioPool.PlaySound(posAll, 2f);
+        audioPool.PlaySound(posAll, 2f, Random.Range(0.9f, 1f));
         float delay = 0.05f;
         foreach (LetterTile tile in allTiles)
         {
@@ -241,7 +241,7 @@ public class isItRight : MonoBehaviour
     }
     private IEnumerator PlayLoseSequence()
     {
-        audioPool.PlaySound(negAll, 2f);
+        audioPool.PlaySound(negAll, 2f, Random.Range(0.9f, 1f));
         float flashDelay = 0.08f;
         foreach (var tile in allTiles)
         {

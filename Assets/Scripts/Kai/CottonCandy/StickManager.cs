@@ -5,7 +5,7 @@ using UnityEngine;
 public class StickManager : MonoBehaviour
 {
     [Header("Audio")]
-    [SerializeField] private AudioClip machineHum, crowdSounds;
+    [SerializeField] private AudioClip machineHum, crowdSounds, cottonCandy;
 
     [Header("References")]
     public Transform stickTip;
@@ -20,6 +20,7 @@ public class StickManager : MonoBehaviour
 
     private AudioSource machineSource;
     private AudioSource crowdSource;
+    private AudioSource playerInteractionSource;
     private Camera mainCam;
 
     private Vector2 lastDirection;
@@ -42,6 +43,9 @@ public class StickManager : MonoBehaviour
         crowdSource.loop = true;
         crowdSource.volume = 0.6f;
         crowdSource.Play();
+
+        playerInteractionSource = gameObject.AddComponent<AudioSource>();
+
 
         // Instantiate single cotton fluff object
         GameObject fluff = Instantiate(cottonCandyObject, stickTip.position, Quaternion.identity, stickTip);
@@ -86,7 +90,7 @@ public class StickManager : MonoBehaviour
     void MoveStick(Vector3 position)
     {
         transform.position = position;
-
+        // play pickup stick sound
         Vector2 toCenter = (Vector2)candyMachineCenter.position - (Vector2)stickTip.position;
 
         if (toCenter.magnitude <= detectionRadius)
@@ -123,7 +127,7 @@ public class StickManager : MonoBehaviour
     void CollectFluff()
     {
         if (cottonCandyTransform == null) return;
-
+        // Play cottoncandySound.
         Vector3 currentScale = cottonCandyTransform.localScale;
         Vector3 newScale = currentScale + Vector3.one * scalePerSpin;
 

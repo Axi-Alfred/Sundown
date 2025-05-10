@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class AudioPool : MonoBehaviour
@@ -19,7 +19,8 @@ public class AudioPool : MonoBehaviour
         }
     }
 
-    public void PlaySound(AudioClip clip, float volume = 1f)
+    // ✅ Updated: Now supports pitch control
+    public void PlaySound(AudioClip clip, float volume = 1f, float pitch = 1f)
     {
         foreach (AudioSource source in audioSources)
         {
@@ -27,6 +28,7 @@ public class AudioPool : MonoBehaviour
             {
                 source.clip = clip;
                 source.volume = volume;
+                source.pitch = pitch;  // ✅ Set the pitch
                 source.Play();
                 return;
             }
@@ -35,7 +37,7 @@ public class AudioPool : MonoBehaviour
         // If all sources are busy, just play on first (fallback)
         audioSources[0].clip = clip;
         audioSources[0].volume = volume;
+        audioSources[0].pitch = pitch;  // ✅ Set the pitch
         audioSources[0].Play();
     }
 }
-
