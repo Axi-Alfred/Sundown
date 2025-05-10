@@ -38,11 +38,17 @@ public class IconsManager : MonoBehaviour
     [SerializeField] private GameObject InitialPopup;
     [SerializeField] private GameObject initialPopupText;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip cameraShutter;
+
+    private AudioSource audioSource;
+
     private string[] playerNumbersStrings = new string[4] {"one", "two", "three", "four"};
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         frontCamera = GetComponent<FrontCamera>();    
         animator = GetComponent<Animator>();
         initialPopupText.SetActive(false);
@@ -98,6 +104,8 @@ public class IconsManager : MonoBehaviour
             yield return new WaitForSeconds(countdown.length);
 
             StartCoroutine(frontCamera.TakePicture());
+            audioSource.clip = cameraShutter;
+            audioSource.Play();
 
             countdownNumberObject.SetActive(false);
             instructions.gameObject.SetActive(false);
