@@ -44,7 +44,6 @@ public class isItRight : MonoBehaviour
         audioPool = FindObjectOfType<AudioPool>();
         currentMistakes = 0;
         UpdateMistakeUI();
-        StartMistakeTextFloat();
         LoadNextWord();
     }
     void LoadNextWord()
@@ -103,7 +102,7 @@ public class isItRight : MonoBehaviour
     private void CreateTiles(string word)
     {
         System.Random rand = new();
-        HashSet<string> nonFlippableLetters = new() { "l", "o", "x", "s", "z", "i", "" };
+        HashSet<string> nonFlippableLetters = new() { "l", "o", "x", "s", "z", "i", " ", "" };
         for (int i = 0; i < word.Length; i++)
         {
             string correct = word[i].ToString();
@@ -190,7 +189,7 @@ public class isItRight : MonoBehaviour
         }
 
     }
-    public void StartMistakeTextFloat()
+    /*public void StartMistakeTextFloat()
     {
         Vector3 originalPos = mistakeText.transform.localPosition;
 
@@ -203,7 +202,7 @@ public class isItRight : MonoBehaviour
             mistakeText.transform.DOLocalMove(originalPos + new Vector3(-10f, -10f, 0f), 1f)
         );
         floatSeq.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-    }
+    }*/
 
     private void UpdateMistakeUI()
     {
