@@ -1,36 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockMoveScript : MonoBehaviour
 {
     private float deadZone = -11.88f;
-    private bool isDeadly = true; // 🧨 Används för att sluta skada spelaren
+    private bool isDeadly = true;
 
     void Update()
     {
+        // Hämta nuvarande hastighet
         float currentSpeed = DifficultyManagerScript.Instance.GetCurrentSpeed();
-        transform.position += Vector3.down * currentSpeed * Time.deltaTime;
 
-        // Om blocket hamnar långt nedanför skärmen, ta bort det
+        // Flytta blocket nedåt
+        transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y - currentSpeed * Time.deltaTime,
+            transform.position.z
+        );
+
+        // Förstör block under deadZone
         if (transform.position.y < deadZone)
         {
             Destroy(gameObject);
-            Debug.Log("DESTROYED: Out of bounds");
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("Ground"))
+        if (other.CompareTag("Ground"))
         {
-            isDeadly = false; // 🔪 Blocket är inte längre farligt
-            Destroy(gameObject); // 💥 Ta bort blocket så att spelaren kan röra sig fritt
-            Debug.Log("Block hit ground and was destroyed");
+            isDeadly = false;
+            Destroy(gameObject);
         }
     }
 
-    // 👉 Den här metoden kan kallas av PlayerScript (valfritt)
+    // Returnerar om blocket är farligt
     public bool IsDeadly()
     {
         return isDeadly;

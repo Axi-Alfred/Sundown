@@ -44,7 +44,7 @@ public class StickManager : MonoBehaviour
         crowdSource = gameObject.AddComponent<AudioSource>();
         crowdSource.clip = crowdSounds;
         crowdSource.loop = true;
-        crowdSource.volume = 0.6f;
+        crowdSource.volume =1f;
         crowdSource.Play();
 
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
@@ -161,7 +161,11 @@ public class StickManager : MonoBehaviour
         // ✅ Win condition based on length along the stick
         if (newScale.magnitude >= winScale)
         {
+            PlayerData.currentPlayerTurn.AddScore(1);
+
             Debug.Log("You win!");
+            GameManager1.EndTurn();
+            
             // Trigger visual or game flow change here
         }
     }

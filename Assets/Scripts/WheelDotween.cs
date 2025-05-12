@@ -19,14 +19,15 @@ public class WheelDotween : MonoBehaviour
 
     private void Awake()
     {
-        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
-        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
+        
         spinWheel.enabled = false;
         texts.gameObject.SetActive(false);  
     }
     // Start is called before the first frame update
     void Start()
     {
+        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
         playersInstructionsObject.SetActive(true);
         StartCoroutine(SceneInitialization());
     }

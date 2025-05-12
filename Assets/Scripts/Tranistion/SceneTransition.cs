@@ -6,7 +6,7 @@ using TMPro;
 public class SceneTransition : MonoBehaviour
 {
     public static Animator animator;
-    private static string nextSceneToLoad;
+    private static object nextSceneToLoad;
 
     [Header("Optional Message Before Fade")]
     [Tooltip("If true, a message will appear before fade-out.")]
@@ -33,7 +33,7 @@ public class SceneTransition : MonoBehaviour
     /// <summary>
     /// Call this to begin a transition to a scene, with optional pause/message.
     /// </summary>
-    public static void FadeOut(string scene)
+    public static void FadeOut(object scene)
     {
         nextSceneToLoad = scene;
         instance.StartCoroutine(instance.FadeOutWithMessage());
@@ -76,6 +76,13 @@ public class SceneTransition : MonoBehaviour
     // Called via Animation Event at the end of FadeOut animation
     public void LoadSceneAfterTransition()
     {
-        SceneManager.LoadScene(nextSceneToLoad);
+        if (nextSceneToLoad is string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        else if (nextSceneToLoad is int sceneIndex)
+        {
+            SceneManager.LoadScene(sceneIndex);
+        }
     }
 }

@@ -1,30 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrampolineBounce : MonoBehaviour
 {
     [Header("Bounciness Settings")]
-    public float upwardForce = 10f;  // Hur mycket uppåt
-    public float forwardForce = 5f;  // Hur mycket framåt
+    public float uppåtkraft = 10f;      // Hur högt clownen studsar
+    public float maxSidokraft = 5f;     // Maximal kraft åt sidan
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D kollision)
     {
-        if (collision.gameObject.CompareTag("Clown"))
+        GameObject objektSomTräffade = kollision.gameObject;
+
+        if (objektSomTräffade.CompareTag("Clown"))
         {
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D clownKropp = objektSomTräffade.GetComponent<Rigidbody2D>();
 
-            if (rb != null)
+            if (clownKropp != null)
             {
-                // Nollställ vertikal hastighet
-                rb.velocity = new Vector2(rb.velocity.x, 0);
+                // Nollställ fallhastigheten i y-led
+                Vector2 nuvarandeHastighet = clownKropp.velocity;
+                nuvarandeHastighet.y = 0f;
+                clownKropp.velocity = nuvarandeHastighet;
 
-                // Skapa en riktning uppåt och lite åt sidan (höger)
-                Vector2 bounceDirection = new Vector2(1f, 1f).normalized;
+                // Räkna ut var clownen träffade trampolinen
+                Vector3 clownPosition = clownKropp.transform.position;
+                Vector3 trampolinPosition = transform.position;
+                float skillnadIXLed = clownPosition.x - trampolinPosition.x;
 
-                // Använd kraft med justerbara värden
-                Vector2 finalForce = new Vector2(bounceDirection.x * forwardForce, bounceDirection.y * upwardForce);
-                rb.AddForce(finalForce, ForceMode2D.Impulse);
+                // Bestäm sidkraft beroende på träffposition
+                float sidKraft = Mathf.Clamp(skillnadIXLed, -1f, 1f) * maxSidokraft;
+
+                // Skapa kraftvektor
+                Vector2 studsKraft = new Vector2(sidKraft, uppåtkraft);
+
+                // Applicera kraft
+                clownKropp.AddForce(studsKraft, ForceMode2D.Impulse);
             }
         }
     }

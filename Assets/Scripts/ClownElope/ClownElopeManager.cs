@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,20 +20,17 @@ public class ClownElopeManager : MonoBehaviour
             gameOver = true;
             Debug.Log("🎯 GAME OVER!");
 
-            // Spel fryser
+            // Pause game
             Time.timeScale = 0;
 
-            // Scenbyte function här nere
+            // End turn or load next scene
             GameManager1.EndTurn();
-            // SceneManager.LoadScene("GameOverScene");
+            // Or: SceneManager.LoadScene("GameOverScene");
         }
-
     }
 
     public bool IsGameOver()
     {
         return gameOver;
     }
-
-
 }

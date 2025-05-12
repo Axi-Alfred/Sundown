@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 public class BlockSpawnerScript : MonoBehaviour
 {
@@ -10,60 +8,65 @@ public class BlockSpawnerScript : MonoBehaviour
     public float widthOffset = 10f;
     public float minBlockSpacing = 1.5f;
 
-    private float timer;
+    private float timer = 0f;
     private float currentSpawnRate;
     private int currentBlocksPerWave = 1;
 
+    // Start is called before the first frame update
     void Start()
     {
         currentSpawnRate = baseSpawnRate;
-        SpawnWave();
+        SpawnBlockWave();
     }
 
+    // Update is called once per frame
     void Update()
     {
         timer += Time.deltaTime;
 
         if (timer >= currentSpawnRate)
         {
-            SpawnWave();
-            timer = 0;
+            SpawnBlockWave();
+            timer = 0f;
 
-            // Increase difficulty
-            currentSpawnRate = baseSpawnRate / DifficultyManagerScript.Instance.CurrentMultiplier;
-            currentBlocksPerWave = Mathf.Clamp(
-                Mathf.FloorToInt(DifficultyManagerScript.Instance.CurrentMultiplier / 0.5f),
-                1,
-                5
-            );
+            // Update difficulty
+            float currentMultiplier = DifficultyManagerScript.Instance.GetCurrentMultiplier();
+            currentSpawnRate = baseSpawnRate / currentMultiplier;
+
+            // Calculate number of blocks per wave
+            int estimatedBlocks = Mathf.FloorToInt(currentMultiplier / 0.5f);
+
+            // Clamp to 1?5 blocks
+            currentBlocksPerWave = Mathf.Clamp(estimatedBlocks, 1, 5);
         }
     }
 
-    void SpawnWave()
+    // Spawns a wave of blocks
+    void SpawnBlockWave()
     {
         List<float> usedPositions = new List<float>();
         int safetyCounter = 0;
 
-        // Always check against the player's initial position
-        usedPositions.Add(0f); // Player's starting X position
+        // Add center position (could be player position)
+        usedPositions.Add(0f);
 
         for (int i = 0; i < currentBlocksPerWave; i++)
         {
-            bool validPosition;
-            float xPos;
+            bool validPosition = false;
+            float xPos = 0f;
 
-            do
+            while (!validPosition && safetyCounter < 100)
             {
                 validPosition = true;
+
                 xPos = Random.Range(
                     transform.position.x - widthOffset,
                     transform.position.x + widthOffset
                 );
 
-                // Check spacing against ALL existing positions (including player)
-                foreach (float pos in usedPositions)
+                foreach (float used in usedPositions)
                 {
-                    if (Mathf.Abs(xPos - pos) < minBlockSpacing)
+                    if (Mathf.Abs(xPos - used) < minBlockSpacing)
                     {
                         validPosition = false;
                         break;
@@ -72,7 +75,6 @@ public class BlockSpawnerScript : MonoBehaviour
 
                 safetyCounter++;
             }
-            while (!validPosition && safetyCounter < 100);
 
             usedPositions.Add(xPos);
             Instantiate(block, new Vector3(xPos, transform.position.y, 0), Quaternion.identity);
