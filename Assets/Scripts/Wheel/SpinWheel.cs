@@ -18,6 +18,9 @@ public class SpinWheel : MonoBehaviour
     private bool hasSpinned; //has already bombaclat spinned and is currently stationary
     private bool hasReachedMotionThreshold;
 
+    [SerializeField] private float minDragDistance;
+    [SerializeField] private float minSpinForce;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,13 +77,20 @@ public class SpinWheel : MonoBehaviour
         else if (touch.phase == TouchPhase.Moved && isDragging)
         {
             Vector2 currentTouchPos = touch.position;
+            float dragDistance = Vector2.Distance(currentTouchPos, lastTouchPos);
+
+            if (dragDistance < minDragDistance) return;
 
             Vector2 from = lastTouchPos - wheelCenter;
             Vector2 to = currentTouchPos - wheelCenter;
 
             float angle = Vector2.SignedAngle(from, to);
 
-            rb2D.AddTorque(-angle * -torqueMultiplier);
+            float touchVelocity = touch.deltaPosition.magnitude / touch.deltaTime;
+
+            float torque = Mathf.Max(minSpinForce, Mathf.Abs(angle * touchVelocity * torqueMultiplier));
+
+            rb2D.AddTorque(-angle * -torque);
 
             lastTouchPos = currentTouchPos;
             isSpinning = true;
@@ -90,7 +100,6 @@ public class SpinWheel : MonoBehaviour
             isDragging = false;
         }
     }
-
 
     public void SpinWithButton()
     {
