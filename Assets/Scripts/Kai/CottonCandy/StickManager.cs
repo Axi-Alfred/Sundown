@@ -161,10 +161,10 @@ public class StickManager : MonoBehaviour
         // ✅ Win condition based on length along the stick
         if (newScale.magnitude >= winScale)
         {
-            PlayerData.currentPlayerTurn.AddScore(1);
+            //PlayerData.currentPlayerTurn.AddScore(1);
 
             Debug.Log("You win!");
-            GameManager1.EndTurn();
+            //GameManager1.EndTurn();
             
             // Trigger visual or game flow change here
         }
