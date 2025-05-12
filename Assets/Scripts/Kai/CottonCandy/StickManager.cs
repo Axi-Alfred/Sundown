@@ -14,9 +14,12 @@ public class StickManager : MonoBehaviour
 
     [Header("Growth Settings")]
     [SerializeField] private float detectionRadius = 2f;
-    [SerializeField] private float spawnThreshold = 90f; // faster feedback
-    [SerializeField] private float scalePerSpin = 0.01f;
-    [SerializeField] private float winScale = 1.2f;
+    [SerializeField] private float spawnThreshold = 90f;
+    [SerializeField] private float scalePerSpinAlongStick = 0.03f;
+    [SerializeField] private float scalePerSpinHorizontal = 0.01f;
+    [SerializeField] private float minScale = 0.5f;
+    [SerializeField] private float maxScale = 2.0f;
+    [SerializeField] private float winScale = 1.5f;
 
     private AudioSource machineSource;
     private AudioSource crowdSource;
@@ -45,7 +48,6 @@ public class StickManager : MonoBehaviour
         crowdSource.Play();
 
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
-
 
         // Instantiate single cotton fluff object
         GameObject fluff = Instantiate(cottonCandyObject, stickTip.position, Quaternion.identity, stickTip);
@@ -90,7 +92,7 @@ public class StickManager : MonoBehaviour
     void MoveStick(Vector3 position)
     {
         transform.position = position;
-        // play pickup stick sound
+
         Vector2 toCenter = (Vector2)candyMachineCenter.position - (Vector2)stickTip.position;
 
         if (toCenter.magnitude <= detectionRadius)
@@ -127,13 +129,37 @@ public class StickManager : MonoBehaviour
     void CollectFluff()
     {
         if (cottonCandyTransform == null) return;
-        // Play cottoncandySound.
-        Vector3 currentScale = cottonCandyTransform.localScale;
-        Vector3 newScale = currentScale + Vector3.one * scalePerSpin;
 
+        // Play cotton candy sound
+        playerInteractionSource.PlayOneShot(cottonCandy);
+
+        // Get current scale
+        Vector3 currentScale = cottonCandyTransform.localScale;
+        Vector3 newScale = currentScale;
+
+        // ✅ Grow along the stick's direction (mostly vertical)
+        Vector3 growthDirection = stickTip.up; // Direction the stick tip is facing
+
+        // Scale along the stick's direction
+        newScale += growthDirection * scalePerSpinAlongStick;
+
+        // ✅ Slight horizontal growth (fluff)
+        newScale.x += scalePerSpinHorizontal;
+        newScale.z += scalePerSpinHorizontal;
+
+        // ✅ Clamp the size to avoid overgrowth
+        newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
+        newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
+        newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
+
+        // Apply the new scale
         cottonCandyTransform.localScale = newScale;
 
-        if (newScale.x >= winScale)
+        // ✅ Align the fluff to always grow along the stick
+        cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2); // Centered on stick tip
+
+        // ✅ Win condition based on length along the stick
+        if (newScale.magnitude >= winScale)
         {
             Debug.Log("You win!");
             // Trigger visual or game flow change here

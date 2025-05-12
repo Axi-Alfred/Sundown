@@ -11,6 +11,7 @@ public class isItRight : MonoBehaviour
     [SerializeField] private int maxMistakes = 2;
     [SerializeField] private TMP_Text mistakeText;
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
+    [SerializeField] private AudioClip backgroundMusic;
     [SerializeField] private AudioPool audioPool;
     [SerializeField] private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
@@ -42,6 +43,7 @@ public class isItRight : MonoBehaviour
     void Start()
     {
         audioPool = FindObjectOfType<AudioPool>();
+        audioPool.PlayBackgroundMusic(backgroundMusic, 0.5f); // Adjust volume as needed
         currentMistakes = 0;
         UpdateMistakeUI();
         LoadNextWord();
