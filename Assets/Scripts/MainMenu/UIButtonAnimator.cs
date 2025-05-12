@@ -5,15 +5,26 @@ using UnityEngine;
 public class UIButtonAnimator : MonoBehaviour
 {
     private Animator animator;
+    private AudioSource audioSource;
 
-    void Awake()
+    [SerializeField] private AudioClip clickSound; // Tilldelas i Inspector
+
+    private void Awake()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void PlayClickAnimation()
     {
-        Debug.Log("Klickade på knappen!");
-        animator.SetTrigger("Pressed");
+        if (animator != null)
+        {
+            animator.SetTrigger("Pressed");
+        }
+
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
     }
 }
