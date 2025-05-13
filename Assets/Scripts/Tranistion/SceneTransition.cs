@@ -7,6 +7,7 @@ public class SceneTransition : MonoBehaviour
 {
     public static Animator animator;
     private static object nextSceneToLoad;
+    public static bool sceneHasLoaded;
 
     [Header("Optional Message Before Fade")]
     [Tooltip("If true, a message will appear before fade-out.")]
@@ -25,6 +26,7 @@ public class SceneTransition : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         animator.SetTrigger("FadeIn");
+        sceneHasLoaded = true;
 
         if (messageUI != null)
             messageUI.gameObject.SetActive(false);
@@ -84,5 +86,6 @@ public class SceneTransition : MonoBehaviour
         {
             SceneManager.LoadScene(sceneIndex);
         }
+        sceneHasLoaded = false;
     }
 }

@@ -9,6 +9,9 @@ public class GameManager1
     private static List<Player> tempPlayersList;
     public static int currentRound;
 
+    public static float gameSpeedMultiplier;
+    private static float increasePercentage = 0.2f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +51,11 @@ public class GameManager1
 
     public static IEnumerator RoundsLoop()
     {
+        gameSpeedMultiplier = 1;
+
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
+            gameSpeedMultiplier = SceneTransition.sceneHasLoaded == true ? 1f + (currentRound * increasePercentage) : 1;
             Debug.Log("Round " + currentRound);
             yield return PlayerTurnLoop();
         }
