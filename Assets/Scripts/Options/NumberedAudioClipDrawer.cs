@@ -31,7 +31,7 @@ public class NumberedAudioClipDrawer : PropertyDrawer
             ? int.Parse(property.propertyPath.Split('[', ']')[1]) + 1
             : -1;
 
-        string usage = $"sfxLibrary.Play({index});";
+        string usage = $"SFXLibrary.Play({index});";
         Rect usageRect = new Rect(position.x, y, position.width - 120f, lineHeight);
         EditorGUI.LabelField(usageRect, "Code to use:", usage);
 

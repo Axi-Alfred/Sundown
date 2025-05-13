@@ -10,6 +10,8 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
     public bool isReadyToJump = false;
     public bool isReadyToInteract = false;
 
+
+
     public void OnTapped()
     {
         if (!isReadyToInteract)
@@ -26,10 +28,10 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
         {
             if (isReadyToJump)
             {
+
                 isCaught = true;
                 isReadyToJump = false;
                 JumpToNewSpot();
-
                 // ✅ Register juggle on successful bounce
                 JuggleGameManager.Instance.RegisterJuggle();
             }
