@@ -673,9 +673,20 @@ MonoBehaviour:
   piePrefab: {fileID: 6671528082204439765, guid: c7785b50283e7e64a96f6f83873ba5f3, type: 3}
   pieParent: {fileID: 1852484729}
   goodPies:
-  - {fileID: 21300000, guid: 2c753a6165879f14d9f23e59102cc6f9, type: 3}
+  - {fileID: 1178763442, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 1369311039, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 1145616680, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 1303192528, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 150133560, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 728162767, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: -1267560400, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: 158385540, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
+  - {fileID: -1422998849, guid: f9ad3f67bfc90c24e99761da57411bfa, type: 3}
   badPies:
-  - {fileID: 21300000, guid: ff12a37a065854945873f4f01f19d6d2, type: 3}
+  - {fileID: -546715493, guid: 7cbaf877fc0b39f469ba278773cb11d8, type: 3}
+  - {fileID: 1270802953, guid: 7cbaf877fc0b39f469ba278773cb11d8, type: 3}
+  - {fileID: 1636673952, guid: 7cbaf877fc0b39f469ba278773cb11d8, type: 3}
+  - {fileID: -1919046435, guid: 7cbaf877fc0b39f469ba278773cb11d8, type: 3}
   roundsToWin: 3
   piesPerRound: 5
 --- !u!4 &2122196689
