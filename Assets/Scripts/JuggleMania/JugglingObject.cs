@@ -28,7 +28,7 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
         {
             if (isReadyToJump)
             {
-
+                SFX.Play(1);
                 isCaught = true;
                 isReadyToJump = false;
                 JumpToNewSpot();
