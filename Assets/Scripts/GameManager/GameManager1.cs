@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager1
+public static class GameManager1
 {
     private static List<Player> tempPlayersList;
     public static int currentRound;
@@ -12,17 +12,7 @@ public class GameManager1
     public static float gameSpeedMultiplier;
     private static float increasePercentage = 0.2f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public static bool newRoundHasBegun;
 
     public static IEnumerator PlayerTurnLoop()
     {
@@ -55,8 +45,8 @@ public class GameManager1
 
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            gameSpeedMultiplier = SceneTransition.sceneHasLoaded == true ? 1f + (currentRound * increasePercentage) : 1;
-            Debug.Log("Round " + currentRound);
+            newRoundHasBegun = true; //Sets till false i WheelDotween när animationen har spelat klar
+            gameSpeedMultiplier = SceneTransition.sceneHasLoaded == true ? Mathf.Min(1f + (currentRound * increasePercentage), 2f) : 1;
             yield return PlayerTurnLoop();
         }
 

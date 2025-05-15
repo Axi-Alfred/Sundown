@@ -69,14 +69,7 @@ public class IconsManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.75f);
 
-        RectTransform textRT = initialPopupText.GetComponent<RectTransform>();
-        textRT.localScale = Vector3.one * 0.2f;
-
-        Sequence textSequence = DOTween.Sequence();
-        textSequence.AppendCallback(() => initialPopupText.SetActive(true));
-        textSequence.Append(textRT.DOScale(1.1f, 0.4f).SetEase(Ease.OutBack));
-        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
-        textSequence.AppendInterval(1.5f);
+        StartCoroutine(InitialTextDOTween());
 
         yield return new WaitForSeconds(4f);
 
@@ -152,5 +145,19 @@ public class IconsManager : MonoBehaviour
     {
         hasContinued = true;
         ShowPlayersList();
+    }
+
+    private IEnumerator InitialTextDOTween()
+    {
+        RectTransform textRT = initialPopupText.GetComponent<RectTransform>();
+        textRT.localScale = Vector3.one * 0.2f;
+
+        Sequence textSequence = DOTween.Sequence();
+        textSequence.AppendCallback(() => initialPopupText.SetActive(true));
+        textSequence.Append(textRT.DOScale(1.1f, 0.4f).SetEase(Ease.OutBack));
+        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
+        textSequence.AppendInterval(1.5f);
+
+        yield return null;
     }
 }

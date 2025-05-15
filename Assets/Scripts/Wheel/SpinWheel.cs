@@ -60,8 +60,6 @@ public class SpinWheel : MonoBehaviour
         }
 
         pointer.WheelHasSpinned(hasSpinned);
-        print(hasSpinned);
-
     }
 
     private void SpinTheWheel(Touch touch)
