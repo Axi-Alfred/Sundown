@@ -91,7 +91,7 @@ public class IconsManager : MonoBehaviour
             yield return new WaitForSeconds(countdown.length);
 
             StartCoroutine(frontCamera.TakePicture());
-            SFXLibrary.instance.Play(1);
+            SFXLibrary.Instance.Play(1);
 
             countdownNumberObject.SetActive(false);
             instructions.gameObject.SetActive(false);

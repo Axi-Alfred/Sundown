@@ -38,7 +38,7 @@ public class PointerSpring : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        SFXLibrary.instance.Play(1);
+        SFXLibrary.Instance.Play(1);
 
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0;
