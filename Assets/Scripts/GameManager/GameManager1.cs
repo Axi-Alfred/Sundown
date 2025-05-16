@@ -10,7 +10,7 @@ public static class GameManager1
     public static int currentRound;
 
     public static float gameSpeedMultiplier;
-    private static float increasePercentage = 0.2f;
+    private static float increasePercentage = 0.15f;
 
     public static bool newRoundHasBegun;
 
@@ -46,7 +46,7 @@ public static class GameManager1
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
             newRoundHasBegun = true; //Sets till false i WheelDotween när animationen har spelat klar
-            gameSpeedMultiplier = SceneTransition.sceneHasLoaded == true ? Mathf.Min(1f + (currentRound * increasePercentage), 2f) : 1;
+            gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
             yield return PlayerTurnLoop();
         }
 

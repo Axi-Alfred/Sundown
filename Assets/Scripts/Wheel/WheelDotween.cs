@@ -39,6 +39,7 @@ public class WheelDotween : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(Time.timeScale);
         currentRoundNumber.text = GameManager1.currentRound.ToString();
         previousRoundNumber.text = (GameManager1.currentRound - 1).ToString();
         playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
@@ -89,14 +90,14 @@ public class WheelDotween : MonoBehaviour
         exitSequence.Join(playerNameRT.DOScale(1.08f, 0.2f).SetEase(Ease.InQuad));
         exitSequence.Join(spinTextRT.DOScale(1.08f, 0.2f).SetEase(Ease.InQuad));
 
-        exitSequence.Append(playerNameRT.DOAnchorPosX(-1250f, 1).SetEase(Ease.OutElastic, 0.9f, 0.25f));
-        exitSequence.Join(spinTextRT.DOAnchorPosX(1250f, 1).SetEase(Ease.OutElastic, 0.9f, 0.25f));
+        exitSequence.Append(playerNameRT.DOAnchorPosX(-1250f, 1f).SetEase(Ease.OutElastic, 0.9f, 0.5f));
+        exitSequence.Join(spinTextRT.DOAnchorPosX(1250f, 1f).SetEase(Ease.OutElastic, 0.9f, 0.5f));
 
         exitSequence.Join(playerNameRT.DOScale(0.9f, 0.55f).SetEase(Ease.InQuad));
         exitSequence.Join(spinTextRT.DOScale(0.9f, 0.55f).SetEase(Ease.InQuad));
 
         yield return exitSequence.WaitForCompletion();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         playersInstructionsObject.SetActive(false);
         texts.gameObject.SetActive(true);
@@ -136,13 +137,13 @@ public class WheelDotween : MonoBehaviour
             growInSequence.AppendCallback(() => newRoundTextObject.SetActive(true));
             growInSequence.Append(textRT.DOScale(1.1f, 0.4f).SetEase(Ease.OutBack));
             growInSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
-            growInSequence.AppendInterval(0.5f);
+            growInSequence.AppendInterval(0.4f);
 
             yield return growInSequence.WaitForCompletion();
 
             Sequence transitionSequence = DOTween.Sequence();
 
-            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.6f));
+            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.45f));
             transitionSequence.Join(previousRoundNumber.rectTransform.DOLocalMoveY(-100f, 0.6f).SetEase(Ease.InQuad));
 
             yield return new WaitForSeconds(0.4f);

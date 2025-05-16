@@ -74,7 +74,7 @@ public class VisualTimerBar : MonoBehaviour
 
         if (pausedByThisScript)
         {
-            Time.timeScale = 1f;
+            Time.timeScale = 1 * GameManager1.gameSpeedMultiplier;
         }
 
         timeLeft = duration;

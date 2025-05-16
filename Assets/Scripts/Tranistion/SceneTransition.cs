@@ -24,6 +24,7 @@ public class SceneTransition : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1;
         animator = GetComponent<Animator>();
         animator.SetTrigger("FadeIn");
         sceneHasLoaded = true;
@@ -78,6 +79,7 @@ public class SceneTransition : MonoBehaviour
     // Called via Animation Event at the end of FadeOut animation
     public void LoadSceneAfterTransition()
     {
+        Time.timeScale = 1;
         if (nextSceneToLoad is string sceneName)
         {
             SceneManager.LoadScene(sceneName);
