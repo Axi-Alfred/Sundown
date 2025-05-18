@@ -7,6 +7,7 @@ public class SpotController : MonoBehaviour
     public JugglingObject currentObject;
     public HandButton linkedButton;
 
+    public SFXLibrary sfxLibrary;
 
     public void OnTapped()
     {
@@ -14,6 +15,7 @@ public class SpotController : MonoBehaviour
             return;
 
         currentObject.OnTapped();
+        sfxLibrary.Play(1);
     }
 
     public void KillSpot()
