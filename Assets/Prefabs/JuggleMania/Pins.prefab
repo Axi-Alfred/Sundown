@@ -128,6 +128,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isKnife: 0
   currentSpot: {fileID: 0}
+  isCaught: 0
+  isReadyToJump: 0
+  isReadyToInteract: 0
+  sfxLibrary: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
 --- !u!60 &7176225870816622152
 PolygonCollider2D:
   m_ObjectHideFlags: 0

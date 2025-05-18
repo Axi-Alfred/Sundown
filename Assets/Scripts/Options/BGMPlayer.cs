@@ -1,17 +1,35 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class BGMPlayer : MonoBehaviour
 {
     public AudioClip musicClip;
+    public float delayInSeconds = 0f; // 🕒 How long to wait before starting music
+
+    private AudioSource audio;
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject); // Optional: survives scene change
-        AudioSource audio = GetComponent<AudioSource>();
+        audio = GetComponent<AudioSource>();
         audio.clip = musicClip;
         audio.loop = true;
         audio.playOnAwake = false;
-        audio.Play();
+
+        // Optional: Keep playing across scenes
+        DontDestroyOnLoad(gameObject);
+
+        // Delay playback
+        if (delayInSeconds > 0)
+            Invoke(nameof(PlayMusic), delayInSeconds);
+        else
+            PlayMusic();
+    }
+
+    private void PlayMusic()
+    {
+        if (musicClip != null)
+        {
+            audio.Play();
+        }
     }
 }

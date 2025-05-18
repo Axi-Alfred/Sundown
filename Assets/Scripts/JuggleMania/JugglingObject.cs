@@ -10,6 +10,8 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
     public bool isReadyToJump = false;
     public bool isReadyToInteract = false;
 
+
+
     public void OnTapped()
     {
         if (!isReadyToInteract)
@@ -17,6 +19,7 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
 
         if (isKnife)
         {
+            SFX.Play(2);
             Handheld.Vibrate();
             ScreenShakeManager.Instance.Shake();
             currentSpot.KillSpot();
@@ -26,10 +29,10 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
         {
             if (isReadyToJump)
             {
+                SFX.Play(1);
                 isCaught = true;
                 isReadyToJump = false;
                 JumpToNewSpot();
-
                 // ✅ Register juggle on successful bounce
                 JuggleGameManager.Instance.RegisterJuggle();
             }
