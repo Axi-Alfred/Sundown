@@ -3043,7 +3043,7 @@ MonoBehaviour:
   capturedImageDisplay: {fileID: 233014205}
   cameraSystemObject: {fileID: 386776906}
   faceTemplate: {fileID: 1862652545}
-  filterScale: 0.95
+  filterScale: 1
   webcamTexture: {fileID: 0}
 --- !u!4 &2098080830
 Transform:
@@ -3075,9 +3075,21 @@ MonoBehaviour:
   countdown: {fileID: 7400000, guid: 4e19914a9e36a084588dbcdb160b0138, type: 2}
   filtersArray:
   - {fileID: 11400000, guid: edb2398536d97cd42ab17ce50e86a97b, type: 2}
-  - {fileID: 11400000, guid: 93577df616a79a64d92a623ddb1f09e3, type: 2}
+  - {fileID: 11400000, guid: dac1baf25d54ff044be0e104821f4939, type: 2}
   - {fileID: 11400000, guid: dc49cd815f3dbf24fa5f34e418098a0e, type: 2}
-  - {fileID: 11400000, guid: edb2398536d97cd42ab17ce50e86a97b, type: 2}
+  - {fileID: 11400000, guid: 14fc2cbe71fc47945804fd58ece23515, type: 2}
+  - {fileID: 11400000, guid: c121de59e9552b143af5968b31ebc196, type: 2}
+  - {fileID: 11400000, guid: ee0f020462eba9f4d9f31c056b076f12, type: 2}
+  - {fileID: 11400000, guid: fd358e2270d5feb4484138aaa2a6fcd8, type: 2}
+  - {fileID: 11400000, guid: 2c0ecee37108b9541aeb9ab0c72df57a, type: 2}
+  - {fileID: 11400000, guid: 88b7296330fbe1d4fb9383e5437baf67, type: 2}
+  - {fileID: 11400000, guid: d54a08af7c4df26458a34bf4d70d0dc3, type: 2}
+  - {fileID: 11400000, guid: 7404f02a46fe79f499b9955a57b7ad98, type: 2}
+  - {fileID: 11400000, guid: aa9c174cc9b49ed4da130e8bacd6e1b9, type: 2}
+  - {fileID: 11400000, guid: 05492274294a0ed4a96a0669921a5cb6, type: 2}
+  - {fileID: 11400000, guid: aeefc1e669761324f96f80f145ec2e77, type: 2}
+  - {fileID: 11400000, guid: b7ef6df23a0bd5b4db794e069719bdf3, type: 2}
+  - {fileID: 11400000, guid: a3c3b6342afb38b4bae2aefd331a4491, type: 2}
   playerName: {fileID: 376178262}
   instructions: {fileID: 1692086646}
   nextPlayerButton: {fileID: 1829735091}
@@ -3087,7 +3099,6 @@ MonoBehaviour:
   playersListPanel: {fileID: 952626966}
   InitialPopup: {fileID: 170333343}
   initialPopupText: {fileID: 2048063745}
-  cameraShutter: {fileID: 8300000, guid: 6c8e2661cb448b1499ea589584a726f4, type: 3}
 --- !u!95 &2098080832
 Animator:
   serializedVersion: 5
