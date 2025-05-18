@@ -51,9 +51,10 @@ public class WheelDotween : MonoBehaviour
     {
         yield return null;
 
+        yield return new WaitForSeconds(0.75f);
+
         if (GameManager1.newRoundHasBegun)
         {
-            yield return new WaitForSeconds(0.75f);
             yield return StartCoroutine(NewRoundDOTWeeen());
         }
 

@@ -29,7 +29,7 @@ public class LeaderBoard : MonoBehaviour
         if (PlayerData.numberOfPlayers < 3)
         {
             layoutGroupV.childAlignment = TextAnchor.UpperCenter;
-            layoutGroupV.spacing = -500;
+            layoutGroupV.spacing = -600;
         }
         else
         {
@@ -146,11 +146,10 @@ public class LeaderBoard : MonoBehaviour
 
             yield return entrySequence.WaitForCompletion();
 
-            confettiParticles.SetActive(true);
-
             yield return new WaitForSeconds(delayBetweenEntries);
         }
 
+        confettiParticles.SetActive(true);
         entriesObjectsList[entriesObjectsList.Count-1].GetComponent<LeaderBoardEntry>().GiveCrown();
 
         yield return new WaitForSeconds(1.5f);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class VisualTimerBar : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class VisualTimerBar : MonoBehaviour
         if (timeLeft <= 0f)
         {
             timerRunning = false;
-            ShowEndPanel();
+            StartCoroutine(ShowEndPanel());
         }
     }
 
@@ -102,13 +103,14 @@ public class VisualTimerBar : MonoBehaviour
         }
     }
 
-    private void ShowEndPanel()
+    private IEnumerator ShowEndPanel()
     {
         if (endPanel != null)
         {
             endPanel.SetActive(true);
             if (endText != null)
                 endText.text = "Time's up!";
+            yield return new WaitForSeconds(1f);
             GameManager1.EndTurn();
         }
     }

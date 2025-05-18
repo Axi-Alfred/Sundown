@@ -24,7 +24,6 @@ public class SceneTransition : MonoBehaviour
 
     private void Awake()
     {
-        Time.timeScale = 1;
         animator = GetComponent<Animator>();
         animator.SetTrigger("FadeIn");
         sceneHasLoaded = true;
