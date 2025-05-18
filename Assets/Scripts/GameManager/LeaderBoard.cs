@@ -17,12 +17,15 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField] private Transform entrySpawnPoint;
 
-    [Header("Layout Group")]
     [SerializeField] private VerticalLayoutGroup layoutGroupV;
+
+    [SerializeField] private GameObject confettiParticles;
 
     // Start is called before the first frame update
     void Start()
     {
+        confettiParticles.SetActive(false);
+
         if (PlayerData.numberOfPlayers < 3)
         {
             layoutGroupV.childAlignment = TextAnchor.UpperCenter;
@@ -131,7 +134,7 @@ public class LeaderBoard : MonoBehaviour
                 entrySequence.Append(rt.DOScale(Vector3.one * 1.5f, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBack));
                 entrySequence.Append(rt.DOScale(Vector3.one, lastEntryAnimDuration * 0.4f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.7f);
-                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));
+                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));  
             }
             else
             {
@@ -139,10 +142,11 @@ public class LeaderBoard : MonoBehaviour
                 entrySequence.Append(rt.DOScale(Vector3.one, entryAnimDuration * 0.2f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.5f);
                 entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, entryAnimDuration * 0.4f).SetEase(Ease.OutBounce));
-                //For the future add confetti
             }
 
             yield return entrySequence.WaitForCompletion();
+
+            confettiParticles.SetActive(true);
 
             yield return new WaitForSeconds(delayBetweenEntries);
         }

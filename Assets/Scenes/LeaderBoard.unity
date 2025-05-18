@@ -309,6 +309,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Confetti
       objectReference: {fileID: 0}
+    - target: {fileID: 3284268304469469514, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127979564458340043, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -366,6 +374,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+--- !u!1 &263207797 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3284268304469469514, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+  m_PrefabInstance: {fileID: 263207796}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &794131012
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,6 +821,7 @@ MonoBehaviour:
   returnToMenuButton: {fileID: 2147426874}
   entrySpawnPoint: {fileID: 1975428790}
   layoutGroupV: {fileID: 1975428791}
+  confettiParticles: {fileID: 263207797}
 --- !u!4 &1207907084
 Transform:
   m_ObjectHideFlags: 0
