@@ -68,6 +68,8 @@ public class WheelDotween : MonoBehaviour
         playerNameRT.localScale = Vector3.one * 0.8f;
         spinTextRT.localScale = Vector3.one * 0.8f;
 
+        SFXLibrary.Instance.Play(2);
+
         entranceSequence.Join(playerNameRT.DOAnchorPosX(30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f)); 
         entranceSequence.Join(spinTextRT.DOAnchorPosX(-30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f)); 
 
@@ -84,6 +86,8 @@ public class WheelDotween : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         Sequence exitSequence = DOTween.Sequence();
+
+        SFXLibrary.Instance.Play(2);
 
         exitSequence.Append(playerNameRT.DOAnchorPosX(40f, 0.2f).SetEase(Ease.InQuad));
         exitSequence.Join(spinTextRT.DOAnchorPosX(-40f, 0.2f).SetEase(Ease.InQuad));

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: OrangeClown
   m_EditorClassIdentifier: 
   filterName: OrangeClown
-  filterSprite: {fileID: 21300000, guid: 4b1fa1d91d3899042a4de1465852af28, type: 3}
+  filterSprite: {fileID: 21300000, guid: 625db671ce486824484d242c24e30a83, type: 3}

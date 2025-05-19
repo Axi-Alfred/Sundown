@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PurplePoodle
   m_EditorClassIdentifier: 
   filterName: PurplePoodle
-  filterSprite: {fileID: 21300000, guid: e8b4fb41505710144899c569bbaf5077, type: 3}
+  filterSprite: {fileID: 21300000, guid: 6b7cd1cc6815b2742bab5f2286ab3d0a, type: 3}

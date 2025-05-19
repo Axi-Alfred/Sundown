@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SadJester
   m_EditorClassIdentifier: 
   filterName: SadJester
-  filterSprite: {fileID: 21300000, guid: 5f51f359940cbf44c920d7cb4958002e, type: 3}
+  filterSprite: {fileID: 21300000, guid: 3b02badd4d6b2c34997fe4f814c96bd6, type: 3}

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SwordsMaster
   m_EditorClassIdentifier: 
   filterName: SwordsMaster
-  filterSprite: {fileID: 21300000, guid: 2d85c7f83fc097442b6aa642220d4bf2, type: 3}
+  filterSprite: {fileID: 21300000, guid: 680404faee2d7844ea9efd78f8c8cfba, type: 3}

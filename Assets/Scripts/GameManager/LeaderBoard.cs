@@ -21,6 +21,8 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField] private GameObject confettiParticles;
 
+    //private float[] pitches = new float[4] {}; 
+
     // Start is called before the first frame update
     void Start()
     {

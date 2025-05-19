@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SneakyJester
   m_EditorClassIdentifier: 
   filterName: SneakyJester
-  filterSprite: {fileID: 21300000, guid: fe71fa8981755f94581dbda84da0605a, type: 3}
+  filterSprite: {fileID: 21300000, guid: 0549946287af8144487a4c136abbf434, type: 3}

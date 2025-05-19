@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Jester
   m_EditorClassIdentifier: 
   filterName: Jester
-  filterSprite: {fileID: 21300000, guid: 2bafc29d83395aa41b7b6151413ec8d2, type: 3}
+  filterSprite: {fileID: 21300000, guid: c8be7f5747ffb8c4aad0567360a00c76, type: 3}

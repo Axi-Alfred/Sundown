@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: RedClown
   m_EditorClassIdentifier: 
   filterName: RedClown
-  filterSprite: {fileID: 21300000, guid: 05427317ef326a44bba4686a160f58f2, type: 3}
+  filterSprite: {fileID: 21300000, guid: ac3acc6ffe21e6f44b771e4e417c1a18, type: 3}

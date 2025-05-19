@@ -38,6 +38,7 @@ public class SceneTransition : MonoBehaviour
     public static void FadeOut(object scene)
     {
         nextSceneToLoad = scene;
+        if (BGMPlayer.Instance != null) BGMPlayer.Instance.FadeOutMusic();
         instance.StartCoroutine(instance.FadeOutWithMessage());
     }
 

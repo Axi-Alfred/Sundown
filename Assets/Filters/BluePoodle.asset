@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BluePoodle
   m_EditorClassIdentifier: 
   filterName: BluePoodle
-  filterSprite: {fileID: 21300000, guid: 8e339855ffcdefb438fe9ed786445906, type: 3}
+  filterSprite: {fileID: 21300000, guid: 0fa2d834982fed040a17b560864d756a, type: 3}

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GreenClown
   m_EditorClassIdentifier: 
   filterName: GreenClown
-  filterSprite: {fileID: 21300000, guid: 626dd69d8c44b794c9f9d24b97506076, type: 3}
+  filterSprite: {fileID: 21300000, guid: 26c982e558238d048a9000648038dc1a, type: 3}

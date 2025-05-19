@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FineShyt
   m_EditorClassIdentifier: 
   filterName: FineShyt
-  filterSprite: {fileID: 21300000, guid: ca6f6faad2269ed4b9c1a546509582c4, type: 3}
+  filterSprite: {fileID: 21300000, guid: 134b277968ec7a74f96e330ccdf91ae2, type: 3}
