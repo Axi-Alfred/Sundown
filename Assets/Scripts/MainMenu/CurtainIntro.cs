@@ -38,7 +38,7 @@ public class CurtainIntro : MonoBehaviour
         RectTransform clownRect = clownObject.GetComponent<RectTransform>();
 
         Vector2 startPos = new Vector2(clownRect.anchoredPosition.x, 1800f);
-        Vector2 endPos = new Vector2(clownRect.anchoredPosition.x, -1200f);
+        Vector2 endPos = new Vector2(clownRect.anchoredPosition.x, 1000f);
         float duration = 4f;
         float t = 0;
 
