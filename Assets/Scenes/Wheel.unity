@@ -872,6 +872,8 @@ GameObject:
   - component: {fileID: 147122728}
   - component: {fileID: 147122727}
   - component: {fileID: 147122726}
+  - component: {fileID: 147122730}
+  - component: {fileID: 147122729}
   m_Layer: 5
   m_Name: Button_Settings
   m_TagString: Untagged
@@ -946,7 +948,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 956440279}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: ShowWheelSettings
+        m_MethodName: ShowWheelSettingsWithDelay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 147122730}
+        m_TargetAssemblyTypeName: UIButtonAnimator, Assembly-CSharp
+        m_MethodName: PlayClickAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -994,6 +1008,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 147122724}
   m_CullTransparentMesh: 1
+--- !u!95 &147122729
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147122724}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f872ace41e8a8449f8dc190d84dccd92, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &147122730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147122724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bfda09c9f1546a49a4c0dbad04d535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &188876758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,6 +1383,8 @@ GameObject:
   - component: {fileID: 229955577}
   - component: {fileID: 229955576}
   - component: {fileID: 229955575}
+  - component: {fileID: 229955579}
+  - component: {fileID: 229955578}
   m_Layer: 5
   m_Name: Button_Options
   m_TagString: Untagged
@@ -1361,7 +1410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 30, y: -30}
   m_SizeDelta: {x: 180, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &229955575
@@ -1410,7 +1459,19 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 956440279}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: ShowOptions
+        m_MethodName: ShowOptionsWithDelay
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 229955578}
+        m_TargetAssemblyTypeName: UIButtonAnimator, Assembly-CSharp
+        m_MethodName: PlayClickAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1458,6 +1519,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 229955573}
   m_CullTransparentMesh: 1
+--- !u!114 &229955578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229955573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bfda09c9f1546a49a4c0dbad04d535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &229955579
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229955573}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f872ace41e8a8449f8dc190d84dccd92, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &258790735
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,6 +1564,8 @@ GameObject:
   - component: {fileID: 258790739}
   - component: {fileID: 258790738}
   - component: {fileID: 258790737}
+  - component: {fileID: 258790741}
+  - component: {fileID: 258790740}
   m_Layer: 5
   m_Name: Button_ReturnMenu
   m_TagString: Untagged
@@ -1553,6 +1649,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 258790741}
+        m_TargetAssemblyTypeName: UIButtonAnimator, Assembly-CSharp
+        m_MethodName: PlayClickAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &258790738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,6 +1699,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 258790735}
   m_CullTransparentMesh: 1
+--- !u!95 &258790740
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258790735}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f872ace41e8a8449f8dc190d84dccd92, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &258790741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258790735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bfda09c9f1546a49a4c0dbad04d535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &259942037
 GameObject:
   m_ObjectHideFlags: 0
@@ -3022,7 +3163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5067345218561341769, guid: 041e89a442e9ed746a15d1166aabc5bb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3961,8 +4102,8 @@ MonoBehaviour:
   creditsPanel: {fileID: 0}
   playPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
-  optionsPanel: {fileID: 0}
-  wheelSettingsPanel: {fileID: 0}
+  optionsPanel: {fileID: 1060049176}
+  wheelSettingsPanel: {fileID: 1417074900}
   mainMenuSceneName: HuvudMenu
 --- !u!4 &956440280
 Transform:
@@ -4231,6 +4372,8 @@ GameObject:
   - component: {fileID: 1138176785}
   - component: {fileID: 1138176784}
   - component: {fileID: 1138176783}
+  - component: {fileID: 1138176787}
+  - component: {fileID: 1138176786}
   m_Layer: 5
   m_Name: Button_X
   m_TagString: Untagged
@@ -4314,6 +4457,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1138176787}
+        m_TargetAssemblyTypeName: UIButtonAnimator, Assembly-CSharp
+        m_MethodName: PlayClickAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1138176784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4352,6 +4507,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1138176781}
   m_CullTransparentMesh: 1
+--- !u!95 &1138176786
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138176781}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f872ace41e8a8449f8dc190d84dccd92, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1138176787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138176781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2bfda09c9f1546a49a4c0dbad04d535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1149258791
 GameObject:
   m_ObjectHideFlags: 0

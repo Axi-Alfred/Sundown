@@ -18,6 +18,7 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
+        //Hantering av escape-knapp för att stänga paneler
         if (creditsPanel != null && creditsPanel.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -67,9 +68,23 @@ public class MenuController : MonoBehaviour
         //SceneManager.LoadScene("X 1Camera"); // Ersätt Scene 1 med den första scenen
     }
 
-    public void ShowPlay()
+    // Generell metod för att visa paneler med en fördröjning
+    public void ShowPanelWithDelay(GameObject panel)
     {
-        playPanel.SetActive(true);
+        StartCoroutine(DelayedShowPanel(panel));
+    }
+
+    // Coroutine för att visa panel efter en fördröjning
+    private IEnumerator DelayedShowPanel(GameObject panel)
+    {
+        yield return new WaitForSeconds(0.2f); // Justera fördröjning om animationen tar längre tid
+        panel.SetActive(true);
+    }
+
+    // Funktioner för att visa och stänga paneler
+    public void ShowPlayWithDelay()
+    {
+        ShowPanelWithDelay(playPanel);
     }
 
     public void ClosePlay()
@@ -77,29 +92,9 @@ public class MenuController : MonoBehaviour
         playPanel.SetActive(false);
     }
 
-    public void ShowOptions()
+    public void ShowSettingsWithDelay()
     {
-        optionsPanel.SetActive(true);
-    }
-
-    public void CloseOptions()
-    {
-        optionsPanel.SetActive(false);
-    }
-
-    public void ShowWheelSettings()
-    {
-        wheelSettingsPanel.SetActive(true);
-    }
-
-    public void CloseWheelSettings()
-    {
-        wheelSettingsPanel.SetActive(false);
-    }
-
-    public void ShowSettings()
-    {
-        settingsPanel.SetActive(true);
+        ShowPanelWithDelay(settingsPanel);
     }
 
     public void CloseSettings()
@@ -107,14 +102,34 @@ public class MenuController : MonoBehaviour
         settingsPanel.SetActive(false);
     }
 
+    public void ShowOptionsWithDelay()
+    {
+        ShowPanelWithDelay(optionsPanel);
+    }
+
+    public void CloseOptions()
+    {
+        optionsPanel.SetActive(false);
+    }
+
+    public void ShowWheelSettingsWithDelay()
+    {
+        ShowPanelWithDelay(wheelSettingsPanel);
+    }
+
+    public void CloseWheelSettings()
+    {
+        wheelSettingsPanel.SetActive(false);
+    }
+
     public void QuitGame()
     {
         Application.Quit();
     }
 
-    public void ShowCredits()
+    public void ShowCreditsWithDelay()
     {
-        creditsPanel.SetActive(true);
+        ShowPanelWithDelay(creditsPanel);
     }
 
     public void CloseCredits()
