@@ -17,10 +17,8 @@ public class ScenesController : MonoBehaviour
 
     [Header("Scene Transition Settings")]
     public string nextSceneName;
-    public bool showMessageOnFadeOut = false;
-    public string messageText = "Minigame Complete!";
     public bool autoFadeOutOnTimerEnd = true;
-    public float fadeInDuration = 1f;
+    public float fadeInDuration = 0.5f;    // in seconds
 
     [Header("Timer Settings")]
     public float timerDuration = 10f;
@@ -39,15 +37,15 @@ public class ScenesController : MonoBehaviour
     {
         GameObject fadeObj = null;
 
-        // 1. Instantiate fade, but DO NOT fade in yet
+        // 1. Instantiate fade and trigger fade-in internally via Initialize()
         if (fadePrefab != null)
         {
             fadeObj = Instantiate(fadePrefab);
-            fadeController = fadeObj.GetComponent<SceneTransition>();
-            fadeController.Initialize(); // ← sets material but doesn't start fade
+            fadeController = fadeObj.GetComponentInChildren<SceneTransition>();
+            fadeController.Initialize(); // ⬅️ this handles fade-in automatically
         }
 
-        // 2. Enforce orientation (UI behind fade)
+        // 2. Enforce orientation (message shows behind fade)
         switch (orientationMode)
         {
             case OrientationMode.Landscape:
@@ -55,7 +53,7 @@ public class ScenesController : MonoBehaviour
                 {
                     var land = Instantiate(landscapeEnforcerPrefab);
                     var forcedLandscape = land.GetComponent<ForcedLandscape>();
-                    yield return forcedLandscape.StartEnforcing(); // ⏳ waits 5s total
+                    yield return forcedLandscape.StartEnforcing();
                 }
                 break;
 
@@ -64,28 +62,25 @@ public class ScenesController : MonoBehaviour
                 {
                     var port = Instantiate(portraitEnforcerPrefab);
                     var forcePortrait = port.GetComponent<ForcePortrait>();
-                    forcePortrait.Enforce(); // instant
+                    forcePortrait.Enforce();
                 }
                 break;
         }
 
-        // 3. Run fade-in (after orientation message is done)
-        if (fadeController != null)
+        // ✅ DO NOT call fadeController.StartFadeIn(); again
 
-        // 4. Remove fade canvas
+        // 3. Destroy fade object if needed
         if (fadeObj != null)
-            Destroy(fadeObj);
+            Destroy(fadeObj, fadeInDuration + 0.1f);
 
-        // 5. Instantiate timer and SKIP wait
+        // 4. Start timer
         if (timerPrefab != null)
         {
             var timerObj = Instantiate(timerPrefab);
             gameTimer = timerObj.GetComponent<VisualTimerBar>();
             gameTimer.duration = timerDuration;
             gameTimer.endMessage = timerEndMessage;
-
-            // ← skip delay and start immediately
-            gameTimer.StartTimerNow();
+            gameTimer.StartTimerSequence(); // ✅ This triggers countdown + timer
 
             if (autoFadeOutOnTimerEnd)
                 StartCoroutine(WaitForTimerAndEnd(timerDuration + 5f));
@@ -111,7 +106,7 @@ public class ScenesController : MonoBehaviour
 
         if (fadeController != null)
         {
-            fadeController.StartFadeOut(nextSceneName, showMessageOnFadeOut, messageText);
+            fadeController.StartFadeOut(nextSceneName);
         }
         else
         {

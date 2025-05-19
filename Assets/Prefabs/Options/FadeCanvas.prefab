@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3783150852148755352}
   - component: {fileID: 2699296354609831621}
   - component: {fileID: 2282442282468586367}
+  - component: {fileID: 486231242394152648}
   m_Layer: 5
   m_Name: FadeImage
   m_TagString: Untagged
@@ -75,6 +76,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &486231242394152648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638383580757729271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724806ea80eccc64fb2509ba40525f23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messageUI: {fileID: 0}
+  circleFadeMaterial: {fileID: 2100000, guid: 9cc05925c407e32429236a8a0f50a6fb, type: 2}
+  fadeDuration: 1.5
+  messageDuration: 3
 --- !u!1 &8799278765562626426
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +104,6 @@ GameObject:
   - component: {fileID: 8600048942152759602}
   - component: {fileID: 3642961353217801510}
   - component: {fileID: 1616990620030221107}
-  - component: {fileID: 1934540506058162809}
   m_Layer: 5
   m_Name: FadeCanvas
   m_TagString: Untagged
@@ -178,19 +194,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1934540506058162809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8799278765562626426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 724806ea80eccc64fb2509ba40525f23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  messageUI: {fileID: 0}
-  circleFadeMaterial: {fileID: 2100000, guid: 9cc05925c407e32429236a8a0f50a6fb, type: 2}
-  fadeDuration: 1.5
-  messageDuration: 3

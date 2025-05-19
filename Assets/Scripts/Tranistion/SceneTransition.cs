@@ -10,20 +10,20 @@ public class SceneTransition : MonoBehaviour
     public TMP_Text messageUI;
 
     [Header("Fade Settings")]
-    public Material circleFadeMaterial; // Assign in inspector (or fallback to Image's)
+    public Material circleFadeMaterial;
     public float fadeDuration = 1.5f;
     public float messageDuration = 3f;
 
     private string targetSceneName;
     private bool useMessage;
     private string messageText;
-    private bool isFadingOut = false;
 
     private Material runtimeMat;
+    private float fadeStartTime;
+    private bool fadingIn = false;
+    private bool fadingOut = false;
+    private float fadeOutStartTime;
 
-    /// <summary>
-    /// Call this immediately after instantiating the prefab.
-    /// </summary>
     public void Initialize()
     {
         var img = GetComponent<Image>();
@@ -33,7 +33,6 @@ public class SceneTransition : MonoBehaviour
             return;
         }
 
-        // TEMPORARILY disable the image to prevent premature rendering
         img.enabled = false;
 
         if (circleFadeMaterial == null && img.material == null)
@@ -48,83 +47,68 @@ public class SceneTransition : MonoBehaviour
             circleFadeMaterial = img.material;
         }
 
-        // Create a fresh instance of the material and assign it
         runtimeMat = new Material(circleFadeMaterial);
-        runtimeMat.SetFloat("_Cutoff", 0f); // 💣 Force black before render
+        runtimeMat.SetFloat("_Cutoff", 0f);
         img.material = runtimeMat;
-
-        // Now that material is safe, re-enable the Image
         img.enabled = true;
-
-        // Start fade animation
-        StartCoroutine(FadeIn());
 
         if (messageUI != null)
             messageUI.gameObject.SetActive(false);
 
-        Debug.Log("[SceneTransition] Fade initialized and started with _Cutoff = 0");
+        StartCoroutine(StartFadeNextFrame());
     }
 
-
-    public IEnumerator FadeIn()
+    private IEnumerator StartFadeNextFrame()
     {
-        if (runtimeMat == null)
-        {
-            Debug.LogError("[SceneTransition] FadeIn aborted — runtimeMat is null. Did you call Initialize()?");
-            yield break;
-        }
+        yield return null;
+        StartFadeIn();
+    }
 
-        float timer = 0f;
-        while (timer < fadeDuration)
-        {
-            timer += Time.unscaledDeltaTime;
-            float cutoff = Mathf.Lerp(0f, 1.5f, timer / fadeDuration);
-            runtimeMat.SetFloat("_Cutoff", cutoff);
-            yield return null;
-        }
+    public void StartFadeIn()
+    {
+        if (runtimeMat == null) return;
+        fadeStartTime = Time.realtimeSinceStartup;
+        fadingIn = true;
+        runtimeMat.SetFloat("_Cutoff", 0f);
+    }
 
+    public void StartFadeOut(string sceneName)
+    {
+        if (runtimeMat == null) return;
+        targetSceneName = sceneName;
+        fadingOut = true;
+        fadeOutStartTime = Time.realtimeSinceStartup;
         runtimeMat.SetFloat("_Cutoff", 1.5f);
     }
 
-    public void StartFadeOut(string sceneName, bool showMessage = false, string message = "Level Complete!")
+    private void Update()
     {
-        targetSceneName = sceneName;
-        useMessage = showMessage;
-        messageText = message;
-
-        StartCoroutine(FadeOutCoroutine());
-    }
-
-    private IEnumerator FadeOutCoroutine()
-    {
-        if (runtimeMat == null)
+        if (fadingIn && runtimeMat != null)
         {
-            Debug.LogError("[SceneTransition] FadeOut aborted — runtimeMat is null. Did you call Initialize()?");
-            yield break;
-        }
-
-        if (useMessage && messageUI != null)
-        {
-            Time.timeScale = 0f;
-            messageUI.text = messageText;
-            messageUI.gameObject.SetActive(true);
-            yield return new WaitForSecondsRealtime(messageDuration);
-            messageUI.gameObject.SetActive(false);
-            Time.timeScale = 1f;
-        }
-
-        isFadingOut = true;
-
-        float timer = 0f;
-        while (timer < fadeDuration)
-        {
-            timer += Time.unscaledDeltaTime;
-            float cutoff = Mathf.Lerp(1.5f, 0f, timer / fadeDuration);
+            float elapsed = Time.realtimeSinceStartup - fadeStartTime;
+            float cutoff = Mathf.Lerp(0f, 1.5f, elapsed / fadeDuration);
             runtimeMat.SetFloat("_Cutoff", cutoff);
-            yield return null;
+
+            if (elapsed >= fadeDuration)
+            {
+                runtimeMat.SetFloat("_Cutoff", 1.5f);
+                fadingIn = false;
+            }
         }
 
-        LoadSceneAfterTransition();
+        if (fadingOut && runtimeMat != null)
+        {
+            float elapsed = Time.realtimeSinceStartup - fadeOutStartTime;
+            float cutoff = Mathf.Lerp(1.5f, 0f, elapsed / fadeDuration);
+            runtimeMat.SetFloat("_Cutoff", cutoff);
+
+            if (elapsed >= fadeDuration)
+            {
+                runtimeMat.SetFloat("_Cutoff", 0f);
+                fadingOut = false;
+                LoadSceneAfterTransition();
+            }
+        }
     }
 
     private void LoadSceneAfterTransition()
