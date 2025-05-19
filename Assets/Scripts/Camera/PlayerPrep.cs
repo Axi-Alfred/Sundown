@@ -106,7 +106,8 @@ public class PlayerPrep : MonoBehaviour
     private IEnumerator StartGameCoroutine()
     {
         yield return StartCoroutine(IconsFadeOutDOTween());
-        SceneTransition.FadeOut("Wheel");
+        FindObjectOfType<SceneTransition>()?.StartFadeOut("Wheel");
+
     }
 
     public IEnumerator IconsFadeOutDOTween()

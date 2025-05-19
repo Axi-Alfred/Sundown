@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class ForcePortrait : MonoBehaviour
 {
-    void Start()
+    // Use this method to trigger portrait orientation manually
+    public void Enforce()
     {
         Screen.orientation = ScreenOrientation.Portrait;
 
@@ -11,5 +12,11 @@ public class ForcePortrait : MonoBehaviour
         Screen.autorotateToLandscapeLeft = false;
         Screen.autorotateToLandscapeRight = false;
         Screen.orientation = ScreenOrientation.AutoRotation;
+    }
+
+    // Optional: keep Start if you want auto-run in some scenes
+    void Start()
+    {
+        Enforce();
     }
 }

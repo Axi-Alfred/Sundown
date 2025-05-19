@@ -61,6 +61,6 @@ public class GameManager1
     public static void EndTurn()
     {
         PlayerData.currentPlayerTurn.HasPlayed = true;
-        SceneTransition.FadeOut("Wheel");
+        UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("SceneName");
     }
 }

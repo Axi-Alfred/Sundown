@@ -120,6 +120,7 @@ public class Pointer : MonoBehaviour
     {
         yield return new WaitForSeconds(gameStartTimer);
 
-        SceneTransition.FadeOut(level);
+        UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("SceneName");
+
     }
 }

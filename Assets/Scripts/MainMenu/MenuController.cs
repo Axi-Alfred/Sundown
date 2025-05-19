@@ -63,7 +63,7 @@ public class MenuController : MonoBehaviour
     {
         StartCoroutine(PlayerData.AssignPlayers());
         CoroutineHost.instance.Run(GameManager1.RoundsLoop());
-        SceneTransition.FadeOut("X 1Camera");
+        FindObjectOfType<SceneTransition>()?.StartFadeOut("X 1Camera");
         //SceneManager.LoadScene("X 1Camera"); // Ersätt Scene 1 med den första scenen
     }
 

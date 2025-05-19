@@ -65,7 +65,7 @@ public class LeaderBoard : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        SceneTransition.FadeOut("HuvudMenu");
+        FindObjectOfType<SceneTransition>()?.StartFadeOut("HuvudMenu");
     }
 
     private IEnumerator IntroDOTween()

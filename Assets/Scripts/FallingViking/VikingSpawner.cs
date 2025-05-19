@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class VikingSpawner : MonoBehaviour
 {
-    public GameObject vikingPrefab;
+    [Header("Prefabs")]
+    public GameObject[] vikingPrefabs; // Assign multiple Viking prefabs in the Inspector
     public GameObject axePrefab;
 
+    [Header("Settings")]
     public float spawnInterval = 1.5f;
     public float xRange = 7f;
 
@@ -20,11 +22,17 @@ public class VikingSpawner : MonoBehaviour
 
         GameObject faller;
 
-        // 80% chance to spawn a Viking, 20% an Axe
+        // 80% chance to spawn a random Viking, 20% chance to spawn an Axe
         if (Random.value < 0.8f)
-            faller = Instantiate(vikingPrefab, spawnPos, Quaternion.identity);
+        {
+            // Randomly pick one of the Viking prefabs
+            int index = Random.Range(0, vikingPrefabs.Length);
+            faller = Instantiate(vikingPrefabs[index], spawnPos, Quaternion.identity);
+        }
         else
+        {
             faller = Instantiate(axePrefab, spawnPos, Quaternion.identity);
+        }
 
         Rigidbody2D rb = faller.GetComponent<Rigidbody2D>();
         if (rb != null)

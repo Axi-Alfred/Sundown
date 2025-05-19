@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -6,6 +6,10 @@ public class VisualTimerBar : MonoBehaviour
 {
     [Header("Timer Settings")]
     public float duration = 10f;
+
+    [Tooltip("Message to display when the timer ends")]
+    public string endMessage = "Time's up!";
+
 
     [Header("UI References (Auto-Wired if Empty)")]
     public Image fillBar;
@@ -25,10 +29,10 @@ public class VisualTimerBar : MonoBehaviour
 
     void Start()
     {
-        
-            StartTimerSequence();
-        
+        // Only auto-run if manually told to
+        // StartTimerSequence(); ← remove or comment this
     }
+
 
     public void StartTimerSequence()
     {
@@ -57,7 +61,7 @@ public class VisualTimerBar : MonoBehaviour
 
     private System.Collections.IEnumerator SequenceBeforeTimer()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(4f);
 
         if (Time.timeScale > 0f)
         {
@@ -102,13 +106,19 @@ public class VisualTimerBar : MonoBehaviour
         }
     }
 
+    public void StartTimerNow()
+    {
+        timeLeft = duration;
+        timerRunning = true;
+    }
+
     private void ShowEndPanel()
     {
         if (endPanel != null)
         {
             endPanel.SetActive(true);
             if (endText != null)
-                endText.text = "Time's up!";
+                endText.text = endMessage;
             GameManager1.EndTurn();
         }
     }
