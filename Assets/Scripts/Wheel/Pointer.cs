@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +16,7 @@ public class Pointer : MonoBehaviour
     [SerializeField] private Image playerSprite;
     private bool wheelHasSpinned;
 
-    [SerializeField] private float gameStartTimer = 2;
+    [SerializeField] private float gameStartTimer = 2.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,9 @@ public class Pointer : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!nextGameText.gameObject.activeSelf) nextGameText.gameObject.SetActive(true);
+        StartCoroutine(GameTextPopupDOTween());
+        ScreenShake.instance.TriggerShake();
+
         switch (other.tag)
         { //Is it right, throwing pie, catch hop, cotton candy
             case "Game1":
@@ -114,6 +118,22 @@ public class Pointer : MonoBehaviour
     public void WheelHasSpinned(bool spinning)
     {
         wheelHasSpinned = spinning;
+    }
+
+    private IEnumerator GameTextPopupDOTween()
+    {
+        //yield return new WaitForSeconds(0.75f);
+
+        RectTransform textRT = nextGameText.GetComponent<RectTransform>();
+        textRT.localScale = Vector3.one * 0.2f;
+
+        Sequence textSequence = DOTween.Sequence();
+        textSequence.AppendCallback(() => nextGameText.gameObject.SetActive(true));
+        textSequence.Append(textRT.DOScale(1.1f, 0.3f).SetEase(Ease.OutBack));
+        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
+        textSequence.AppendInterval(1.5f);
+
+        yield return null;
     }
 
     IEnumerator Timer(int level)

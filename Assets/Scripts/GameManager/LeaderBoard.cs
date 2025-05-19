@@ -17,9 +17,28 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField] private Transform entrySpawnPoint;
 
+    [SerializeField] private VerticalLayoutGroup layoutGroupV;
+
+    [SerializeField] private GameObject confettiParticles;
+
+    //private float[] pitches = new float[4] {}; 
+
     // Start is called before the first frame update
     void Start()
     {
+        confettiParticles.SetActive(false);
+
+        if (PlayerData.numberOfPlayers < 3)
+        {
+            layoutGroupV.childAlignment = TextAnchor.UpperCenter;
+            layoutGroupV.spacing = -600;
+        }
+        else
+        {
+            layoutGroupV.childAlignment = TextAnchor.MiddleCenter;
+            layoutGroupV.spacing = 50;
+        }
+
         //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         returnToMenuButton.SetActive(false);
         entriesObjectsList.Clear();
@@ -33,7 +52,7 @@ public class LeaderBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(Time.timeScale);
     }
 
     private void InitializeLeaderBoard()
@@ -117,7 +136,7 @@ public class LeaderBoard : MonoBehaviour
                 entrySequence.Append(rt.DOScale(Vector3.one * 1.5f, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBack));
                 entrySequence.Append(rt.DOScale(Vector3.one, lastEntryAnimDuration * 0.4f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.7f);
-                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));
+                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));  
             }
             else
             {
@@ -125,7 +144,6 @@ public class LeaderBoard : MonoBehaviour
                 entrySequence.Append(rt.DOScale(Vector3.one, entryAnimDuration * 0.2f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.5f);
                 entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, entryAnimDuration * 0.4f).SetEase(Ease.OutBounce));
-                //For the future add confetti
             }
 
             yield return entrySequence.WaitForCompletion();
@@ -133,6 +151,7 @@ public class LeaderBoard : MonoBehaviour
             yield return new WaitForSeconds(delayBetweenEntries);
         }
 
+        confettiParticles.SetActive(true);
         entriesObjectsList[entriesObjectsList.Count-1].GetComponent<LeaderBoardEntry>().GiveCrown();
 
         yield return new WaitForSeconds(1.5f);

@@ -8,6 +8,7 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
     [SerializeField] private float torqueMultiplier = 50f;
     [SerializeField] private Pointer pointer;
+    [SerializeField] private GameObject pointerObject; //needed to check that the rotation of the pointer is 0 before starting a game
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
@@ -16,6 +17,9 @@ public class SpinWheel : MonoBehaviour
     private bool isSpinning;
     private bool hasSpinned; //has already bombaclat spinned and is currently stationary
     private bool hasReachedMotionThreshold;
+
+    [SerializeField] private float minDragDistance;
+    [SerializeField] private float minSpinForce;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +44,7 @@ public class SpinWheel : MonoBehaviour
             }
 
             //The wheel has/will come to a stop 
-            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold)
+            if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.eulerAngles.z) < 5)
             {
                 rb2D.angularVelocity = 0;
                 hasSpinned = true;
@@ -56,8 +60,7 @@ public class SpinWheel : MonoBehaviour
         }
 
         pointer.WheelHasSpinned(hasSpinned);
-        print(hasSpinned);
-
+        Debug.Log(Time.timeScale);
     }
 
     private void SpinTheWheel(Touch touch)
@@ -73,13 +76,20 @@ public class SpinWheel : MonoBehaviour
         else if (touch.phase == TouchPhase.Moved && isDragging)
         {
             Vector2 currentTouchPos = touch.position;
+            float dragDistance = Vector2.Distance(currentTouchPos, lastTouchPos);
+
+            if (dragDistance < minDragDistance) return;
 
             Vector2 from = lastTouchPos - wheelCenter;
             Vector2 to = currentTouchPos - wheelCenter;
 
             float angle = Vector2.SignedAngle(from, to);
 
-            rb2D.AddTorque(-angle * -torqueMultiplier);
+            float touchVelocity = touch.deltaPosition.magnitude / touch.deltaTime;
+
+            float torque = Mathf.Max(minSpinForce, Mathf.Abs(angle * touchVelocity * torqueMultiplier));
+
+            rb2D.AddTorque(-angle * -torque);
 
             lastTouchPos = currentTouchPos;
             isSpinning = true;
@@ -89,7 +99,6 @@ public class SpinWheel : MonoBehaviour
             isDragging = false;
         }
     }
-
 
     public void SpinWithButton()
     {

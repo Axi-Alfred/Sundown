@@ -285,6 +285,100 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85f8af4be2e5ace4e90eedc56527f7de, type: 3}
+--- !u!1001 &263207796
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2538222526121852421, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538222526121852421, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538222526121852421, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3284268304469469514, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_Name
+      value: Confetti
+      objectReference: {fileID: 0}
+    - target: {fileID: 3284268304469469514, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127979564458340043, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8981814567520063036, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+--- !u!1 &263207797 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3284268304469469514, guid: 69b0a719a307b0a48805cf45cd709e0a, type: 3}
+  m_PrefabInstance: {fileID: 263207796}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &794131012
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,8 +616,8 @@ Canvas:
   m_GameObject: {fileID: 956777500}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 794131014}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -726,6 +820,8 @@ MonoBehaviour:
   introText: {fileID: 1698893263}
   returnToMenuButton: {fileID: 2147426874}
   entrySpawnPoint: {fileID: 1975428790}
+  layoutGroupV: {fileID: 1975428791}
+  confettiParticles: {fileID: 263207797}
 --- !u!4 &1207907084
 Transform:
   m_ObjectHideFlags: 0
@@ -997,11 +1093,11 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 100
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 1
@@ -1147,3 +1243,4 @@ SceneRoots:
   - {fileID: 1681507768}
   - {fileID: 1207907084}
   - {fileID: 212576085}
+  - {fileID: 263207796}
