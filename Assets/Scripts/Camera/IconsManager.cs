@@ -125,6 +125,7 @@ public class IconsManager : MonoBehaviour
         }
         countdownNumber--;
         countdownNumberText.text = countdownNumber.ToString();
+        SFXLibrary.Instance.Play(2);
     }
 
     public void ShowPlayersList()
