@@ -20,6 +20,8 @@ public class StickManager : MonoBehaviour
     [SerializeField] private float minScale = 0.5f;
     [SerializeField] private float maxScale = 2.0f;
     [SerializeField] private float winScale = 1.5f;
+    [SerializeField] private Animator cottonCandyMachine;
+
 
     private AudioSource machineSource;
     private AudioSource crowdSource;
@@ -29,6 +31,9 @@ public class StickManager : MonoBehaviour
     private Vector2 lastDirection;
     private float rotationAccumulation = 0f;
     private Transform cottonCandyTransform;
+
+    private bool hasTriggeredAnimation = false;
+
 
     void Start()
     {
@@ -49,9 +54,11 @@ public class StickManager : MonoBehaviour
 
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
 
-        // Instantiate single cotton fluff object
+        // Instantiate
         GameObject fluff = Instantiate(cottonCandyObject, stickTip.position, Quaternion.identity, stickTip);
         cottonCandyTransform = fluff.transform;
+
+
         cottonCandyTransform.localScale = Vector3.zero;
     }
 
@@ -99,6 +106,14 @@ public class StickManager : MonoBehaviour
         {
             Vector2 currentDirection = toCenter.normalized;
 
+            if (!hasTriggeredAnimation)
+            {
+                cottonCandyMachine.SetTrigger("cottonCandy");
+                hasTriggeredAnimation = true;
+            }
+
+
+
             if (lastDirection != Vector2.zero)
             {
                 float angle = Vector2.SignedAngle(lastDirection, currentDirection);
@@ -121,6 +136,9 @@ public class StickManager : MonoBehaviour
         {
             rotationAccumulation = 0f;
             lastDirection = Vector2.zero;
+
+            cottonCandyMachine.SetBool("cottonCandy", false);
+
         }
 
         Debug.DrawLine(stickTip.position, candyMachineCenter.position, Color.magenta);
@@ -152,22 +170,18 @@ public class StickManager : MonoBehaviour
         newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
         newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
 
-        // Apply the new scale
         cottonCandyTransform.localScale = newScale;
+        cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2);
 
-        // ✅ Align the fluff to always grow along the stick
-        cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2); // Centered on stick tip
-
-        // ✅ Win condition based on length along the stick
+        // ✅ Win condition
         if (newScale.magnitude >= winScale)
         {
-            //PlayerData.currentPlayerTurn.AddScore(1);
-
+            PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
-            //GameManager1.EndTurn();
-            
-            // Trigger visual or game flow change here
+            Time.timeScale = 0f;
+            GameManager1.EndTurn();
         }
+
     }
 
     void automaticSpinner()
