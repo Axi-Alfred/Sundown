@@ -27,6 +27,8 @@ public class ScenesController : MonoBehaviour
     private SceneTransition fadeController;
     private VisualTimerBar gameTimer;
     private bool alreadyTransitioning = false;
+    private bool delayTimerStart = false;
+
 
     void Start()
     {
@@ -42,7 +44,18 @@ public class ScenesController : MonoBehaviour
         {
             fadeObj = Instantiate(fadePrefab);
             fadeController = fadeObj.GetComponentInChildren<SceneTransition>();
-            fadeController.Initialize(); // ⬅️ this handles fade-in automatically
+
+            // Delay fade-in start if we're in portrait mode
+            if (orientationMode == OrientationMode.Portrait)
+            {
+                yield return new WaitForSecondsRealtime(1f);
+                fadeController.Initialize(); // now starts fade-in after 1s
+            }
+            else
+            {
+                fadeController.Initialize(); // immediate in other modes
+            }
+
         }
 
         // 2. Enforce orientation (message shows behind fade)
@@ -63,6 +76,8 @@ public class ScenesController : MonoBehaviour
                     var port = Instantiate(portraitEnforcerPrefab);
                     var forcePortrait = port.GetComponent<ForcePortrait>();
                     forcePortrait.Enforce();
+
+                    delayTimerStart = true; // ⏳ flag the delay
                 }
                 break;
         }
@@ -80,7 +95,11 @@ public class ScenesController : MonoBehaviour
             gameTimer = timerObj.GetComponent<VisualTimerBar>();
             gameTimer.duration = timerDuration;
             gameTimer.endMessage = timerEndMessage;
-            gameTimer.StartTimerSequence(); // ✅ This triggers countdown + timer
+            if (delayTimerStart)
+                StartCoroutine(StartTimerAfterDelay(1f)); // delay only if portrait
+            else
+                gameTimer.StartTimerSequence(); // immediate for landscape/none
+
 
             if (autoFadeOutOnTimerEnd)
                 StartCoroutine(WaitForTimerAndEnd(timerDuration + 5f));
@@ -97,6 +116,11 @@ public class ScenesController : MonoBehaviour
             alreadyTransitioning = true;
             EndGameAndFadeOut();
         }
+    }
+    private IEnumerator StartTimerAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        gameTimer.StartTimerSequence();
     }
 
     public void EndGameAndFadeOut()

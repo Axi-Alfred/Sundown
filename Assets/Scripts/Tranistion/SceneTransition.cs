@@ -75,6 +75,7 @@ public class SceneTransition : MonoBehaviour
     public void StartFadeOut(string sceneName)
     {
         if (runtimeMat == null) return;
+        //if (BGMPlayer.Instance != null) BGMPlayer.Instance.FadeOutMusic();
         targetSceneName = sceneName;
         fadingOut = true;
         fadeOutStartTime = Time.realtimeSinceStartup;
