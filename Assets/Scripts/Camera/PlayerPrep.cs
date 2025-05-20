@@ -13,7 +13,7 @@ public class PlayerPrep : MonoBehaviour
 {
     public static PlayerPrep instance;
 
-    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry av spelare
+    [SerializeField] private GameObject entryPrefab; // Prefab för varje spelare
     [SerializeField] private GameObject iconContainer;
     [SerializeField] private TMP_Text playersText;
     [SerializeField] private GameObject startGameButton;
@@ -32,7 +32,7 @@ public class PlayerPrep : MonoBehaviour
     void Start()
     {
         startGameButton.SetActive(false);
-        entriesArray = new GameObject[PlayerData.numberOfPlayers];
+        entriesArray = new GameObject[PlayerManager.Instance.numberOfPlayers];
 
         // Clear old entries
         while (transform.childCount > 0)
@@ -56,7 +56,7 @@ public class PlayerPrep : MonoBehaviour
         GameObject currentEntry;
         int i = 0;
 
-        foreach (var player in PlayerData.playersArray)
+        foreach (var player in PlayerManager.Instance.playersArray)
         {
             currentEntry = Instantiate(entryPrefab);
             currentEntry.transform.SetParent(transform);

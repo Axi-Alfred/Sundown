@@ -51,7 +51,7 @@ public class isItRight : MonoBehaviour
     {
         if (RightWords >= 3)
         {
-            PlayerData.currentPlayerTurn.AddScore(1);
+            PlayerManager.Instance.currentPlayerTurn.AddScore(1);
             GameManager1.EndTurn();
             return;
         }

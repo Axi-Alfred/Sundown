@@ -16,7 +16,7 @@ public static class GameManager1
 
     public static IEnumerator PlayerTurnLoop()
     {
-        tempPlayersList = PlayerData.playersArray.ToList();
+        tempPlayersList = PlayerManager.Instance.playersArray.ToList();
         tempPlayersList = tempPlayersList.OrderBy(p => Random.value).ToList();
 
         foreach (Player i in tempPlayersList)
@@ -26,13 +26,13 @@ public static class GameManager1
 
         for (int i = 0; i < tempPlayersList.Count; i++)
         {
-            PlayerData.currentPlayerTurn = tempPlayersList[i];
-            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
+            PlayerManager.Instance.currentPlayerTurn = tempPlayersList[i];
+            Debug.Log("Player turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
 
-            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
+            yield return new WaitUntil(() => PlayerManager.Instance.currentPlayerTurn.HasPlayed == true);
             yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Wheel");
 
-            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.PlayerName);
+            Debug.Log("Player finished turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
         }
 
         yield break;
@@ -42,7 +42,7 @@ public static class GameManager1
     {
         gameSpeedMultiplier = 1;
 
-        for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
+        for (currentRound = 1; currentRound <= PlayerManager.Instance.numberOfRounds; currentRound++)
         {
             newRoundHasBegun = true;
             gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
@@ -55,7 +55,8 @@ public static class GameManager1
 
     public static void EndTurn()
     {
-        PlayerData.currentPlayerTurn.HasPlayed = true;
+        PlayerManager.Instance.currentPlayerTurn.HasPlayed = true;
+        Time.timeScale = 1f;
 
         var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
         if (sceneController != null)
@@ -67,5 +68,4 @@ public static class GameManager1
             UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("Wheel");
         }
     }
-
 }

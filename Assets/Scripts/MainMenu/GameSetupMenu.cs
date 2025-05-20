@@ -6,7 +6,7 @@ using TMPro;
 public class GameSetupMenu : MonoBehaviour
 {
     public TMP_Dropdown playerDropdown; // Dra in dropdown för antal spelare
-    public TMP_Dropdown roundDropdown; // Dra in dropdown för antal rundor
+    public TMP_Dropdown roundDropdown;  // Dra in dropdown för antal rundor
     public GameObject playerSetupPanel; // Dra in panelen som ska visas efter
 
     // Variabler som lagrar valen
@@ -23,15 +23,12 @@ public class GameSetupMenu : MonoBehaviour
             case 0:
                 numberOfRounds = 4;
                 break;
-
             case 1:
                 numberOfRounds = 6;
                 break;
-
             case 2:
                 numberOfRounds = 8;
                 break;
-
             case 3:
                 numberOfRounds = 10;
                 break;
@@ -40,8 +37,8 @@ public class GameSetupMenu : MonoBehaviour
         Debug.Log("Antal spelare: " + numberOfPlayers);
         Debug.Log("Antal rundor: " + numberOfRounds);
 
-        PlayerData.numberOfPlayers = numberOfPlayers;
-        PlayerData.numberOfRounds = numberOfRounds;
+        PlayerManager.Instance.numberOfPlayers = numberOfPlayers;
+        PlayerManager.Instance.numberOfRounds = numberOfRounds;
 
         // Visa nästa panel
         playerSetupPanel.SetActive(true);

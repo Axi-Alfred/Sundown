@@ -30,9 +30,9 @@ public class Pointer : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
 
-        playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.PlayerName;
-        roundText.text = GameManager1.currentRound == PlayerData.numberOfRounds ? "Round " + GameManager1.currentRound + ", Final Round" : "Round " + GameManager1.currentRound;
-        playerSprite.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+        playerText.text = "Now spinning: " + PlayerManager.Instance.currentPlayerTurn.PlayerName;
+        roundText.text = GameManager1.currentRound == PlayerManager.Instance.numberOfRounds ? "Round " + GameManager1.currentRound + ", Final Round" : "Round " + GameManager1.currentRound;
+        playerSprite.sprite = PlayerManager.Instance.currentPlayerTurn.PlayerIcon;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

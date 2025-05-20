@@ -18,13 +18,13 @@ public class ScenesController : MonoBehaviour
 
     [Header("Scene Transition Settings")]
     public string nextSceneName;
-    public bool enableFadeIn = true;   // ✅ Toggle for fade-in
-    public bool enableFadeOut = true;  // ✅ Toggle for fade-out
+    public bool enableFadeIn = true;
+    public bool enableFadeOut = true;
     public bool autoFadeOutOnTimerEnd = true;
     public float fadeInDuration = 0.5f;
 
     [Header("Timer Settings")]
-    public bool enableTimer = true;    // ✅ Toggle for timer
+    public bool enableTimer = true;
     public float timerDuration = 10f;
     public string timerEndMessage = "Time's up!";
 
@@ -35,6 +35,14 @@ public class ScenesController : MonoBehaviour
 
     void Start()
     {
+        // ✅ Ensure PlayerManager persists across scenes
+        if (GameObject.FindObjectOfType<PlayerManager>() == null)
+        {
+            GameObject persistentData = new GameObject("PlayerManager");
+            persistentData.AddComponent<PlayerManager>();
+            DontDestroyOnLoad(persistentData);
+        }
+
         StartCoroutine(SceneSetupSequence());
     }
 
@@ -108,17 +116,17 @@ public class ScenesController : MonoBehaviour
     }
 
     private IEnumerator WaitForTimerAndEnd(float waitTime)
-{
-    yield return new WaitForSeconds(waitTime);
-
-    if (!alreadyTransitioning)
     {
-        alreadyTransitioning = true;
-        nextSceneName = "Wheel"; // ✅ force return to Wheel scene
-        EndGameAndFadeOut();
-    }
-}
+        yield return new WaitForSeconds(waitTime);
 
+        if (!alreadyTransitioning)
+        {
+            alreadyTransitioning = true;
+            if (string.IsNullOrEmpty(nextSceneName))
+                nextSceneName = "Wheel";
+            EndGameAndFadeOut();
+        }
+    }
 
     private IEnumerator StartTimerAfterDelay(float delay)
     {
@@ -131,6 +139,8 @@ public class ScenesController : MonoBehaviour
         if (alreadyTransitioning) return;
         alreadyTransitioning = true;
 
+        Time.timeScale = 1f; // ✅ ensure normal time
+
         Debug.Log("[ScenesController] EndGameAndFadeOut called. Scene = " + nextSceneName);
 
         if (enableFadeOut && fadeController != null)
@@ -141,8 +151,15 @@ public class ScenesController : MonoBehaviour
         else
         {
             Debug.LogWarning("[ScenesController] Fade disabled or fadeController missing. Loading directly.");
-            UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 
+    public void TriggerEndNow()
+    {
+        if (!alreadyTransitioning)
+        {
+            EndGameAndFadeOut();
+        }
+    }
 }

@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
@@ -13,26 +9,23 @@ public class FrontCamera : MonoBehaviour
     [SerializeField] public RawImage cameraPreview;
     [SerializeField] private Image capturedImageDisplay;
     [SerializeField] private GameObject cameraSystemObject;
-
     [SerializeField] private Image faceTemplate;
     [SerializeField] private float filterScale = 0.75f;
 
     private Sprite tempFilterSprite;
     private IconsManager iconsManager;
 
-
     public WebCamTexture webcamTexture;
     private WebCamDevice webcamDevice;
-
     private float aspectRatio;
     private float imageRotation = -90;
 
     private void Start()
     {
         iconsManager = GetComponent<IconsManager>();
-
-        StartCoroutine(WaitForCameraPermission()); //Before initializing you need to first check permission using this coroutine
+        StartCoroutine(WaitForCameraPermission());
     }
+
     private void InitializeCamera()
     {
         faceTemplate.gameObject.SetActive(true);
@@ -42,13 +35,11 @@ public class FrontCamera : MonoBehaviour
             if (i.isFrontFacing)
             {
                 webcamDevice = i;
-
                 break;
             }
         }
 
         webcamTexture = new WebCamTexture(webcamDevice.name);
-
         cameraPreview.texture = webcamTexture;
         webcamTexture.Play();
         aspectRatio = (float)webcamTexture.width / (float)webcamTexture.height;
@@ -74,8 +65,6 @@ public class FrontCamera : MonoBehaviour
     public IEnumerator TakePicture()
     {
         capturedImageDisplay.gameObject.SetActive(true);
-
-        //Filter initiation
         tempFilterSprite = iconsManager.currentFilter.filterSprite;
 
         yield return new WaitForEndOfFrame();
@@ -85,18 +74,15 @@ public class FrontCamera : MonoBehaviour
         picTexture.SetPixels(pixels);
         picTexture.Apply();
 
-        picTexture = RotateTexture(picTexture, clockwise: true);
+        picTexture = RotateTexture(picTexture, true);
         picTexture = FlipTextureVertically(picTexture);
 
-        Sprite rotatedSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f));
-        capturedImageDisplay.sprite = rotatedSprite;
+        Sprite merged = MergeImages(picTexture);
+        capturedImageDisplay.sprite = merged;
 
         AdjustTakenImageAspectRatio(picTexture);
 
-        //Could potentially play some extra animation after the pic is taken before the filter is applied
-
-        capturedImageDisplay.sprite = MergeImages(picTexture);
-
+        // ✅ Save to player
         iconsManager.currentPlayer.PlayerIcon = capturedImageDisplay.sprite;
         iconsManager.currentPlayer.PlayerName = iconsManager.currentFilter.name;
 
@@ -110,14 +96,12 @@ public class FrontCamera : MonoBehaviour
             Permission.RequestUserPermission(Permission.Camera);
 
         yield return new WaitUntil(() => Permission.HasUserAuthorizedPermission(Permission.Camera));
-
         InitializeCamera();
     }
 
     public void RetakePictureButton()
     {
         cameraPreview.gameObject.SetActive(true);
-
         faceTemplate.gameObject.SetActive(true);
         capturedImageDisplay.sprite = null;
         capturedImageDisplay.gameObject.SetActive(false);
@@ -126,7 +110,6 @@ public class FrontCamera : MonoBehaviour
     private Sprite MergeImages(Texture2D baseTexture)
     {
         Texture2D filterTexture = tempFilterSprite.texture;
-
         int textureWidth = baseTexture.width;
         int textureHeight = baseTexture.height;
 
@@ -166,7 +149,6 @@ public class FrontCamera : MonoBehaviour
         }
 
         result.Apply();
-
         return Sprite.Create(result, new Rect(0, 0, textureWidth, textureHeight), new Vector2(0.5f, 0.5f));
     }
 
@@ -180,14 +162,13 @@ public class FrontCamera : MonoBehaviour
         result.Apply();
         RenderTexture.ReleaseTemporary(rt);
         return result;
-
     }
 
     public static Texture2D RotateTexture(Texture2D original, bool clockwise)
     {
         int width = original.width;
         int height = original.height;
-        Texture2D rotated = new Texture2D(height, width); 
+        Texture2D rotated = new Texture2D(height, width);
 
         for (int i = 0; i < width; ++i)
         {
@@ -208,7 +189,6 @@ public class FrontCamera : MonoBehaviour
     {
         int width = original.width;
         int height = original.height;
-
         Texture2D flipped = new Texture2D(width, height, original.format, false);
 
         for (int y = 0; y < height; y++)
@@ -218,31 +198,5 @@ public class FrontCamera : MonoBehaviour
 
         flipped.Apply();
         return flipped;
-    }
-
-    //Ignore this method totally, its old and doesnt work, only here for veckoredovisning :)
-    private Sprite Merge()
-    {
-        int width = tempFilterSprite.texture.width;
-        int height = tempFilterSprite.texture.height;
-        Texture2D tempBackgroundTexture = new Texture2D(width, height);
-
-        Color[] filterPixels = tempFilterSprite.texture.GetPixels();
-        Color[] newPixels = new Color[width * height]; 
-
-        for (int i = 0; i < filterPixels.Length; i++)
-        {
-
-            if (filterPixels[i].a > 0)
-            {
-                newPixels[i] = filterPixels[i];
-            }
-        }
-
-        tempBackgroundTexture.SetPixels(newPixels);
-        tempBackgroundTexture.Apply();
-
-        return Sprite.Create(tempBackgroundTexture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f));
-
     }
 }

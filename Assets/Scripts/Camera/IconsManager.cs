@@ -75,7 +75,7 @@ public class IconsManager : MonoBehaviour
 
         InitialPopup.SetActive(false);
 
-        for (int i = 0; i < PlayerData.playersArray.Length; i++)
+        for (int i = 0; i < PlayerManager.Instance.playersArray.Length; i++)
         {
             hasTakenPic = false;
             instructions.gameObject.SetActive(true);
@@ -85,12 +85,13 @@ public class IconsManager : MonoBehaviour
             continueButton.gameObject.SetActive(false);
             currentFilter = tempFiltersList[i];
             instructions.text = "Player number " + playerNumbersStrings[i] + ", show us what you got!";
-            currentPlayer = PlayerData.playersArray[i];
+            currentPlayer = PlayerManager.Instance.playersArray[i];
             animator.SetBool("PlayCountdown", true);
 
             yield return new WaitForSeconds(countdown.length);
 
-            StartCoroutine(frontCamera.TakePicture());
+            yield return StartCoroutine(frontCamera.TakePicture());
+
             SFXLibrary.Instance.Play(1);
 
             countdownNumberObject.SetActive(false);
@@ -99,7 +100,7 @@ public class IconsManager : MonoBehaviour
             playerName.text = "Your name is " + currentFilter.filterName;
             animator.SetBool("PlayCountdown", false);
 
-            if (i == (PlayerData.playersArray.Length - 1))
+            if (i == (PlayerManager.Instance.playersArray.Length - 1))
             {
                 continueButton.gameObject.SetActive(true);
                 yield return new WaitUntil(() => hasContinued);

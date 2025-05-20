@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
@@ -27,31 +26,33 @@ public class WheelDotween : MonoBehaviour
     {
         spinWheel.enabled = false;
         roundsText.enabled = false;
-        texts.gameObject.SetActive(false);  
+        texts.gameObject.SetActive(false);
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         playersInstructionsObject.SetActive(true);
         StartCoroutine(SceneInitialization());
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Debug.Log(Time.timeScale);
         currentRoundNumber.text = GameManager1.currentRound.ToString();
         previousRoundNumber.text = (GameManager1.currentRound - 1).ToString();
-        playerIcon.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
-        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
-        Debug.Log("New Round: " + GameManager1.newRoundHasBegun);
     }
 
     private IEnumerator SceneInitialization()
     {
         yield return null;
-
         yield return new WaitForSeconds(0.75f);
+
+        // ✅ Set player icon and name once when scene starts
+        var player = PlayerManager.Instance.currentPlayerTurn;
+        if (player != null && player.PlayerIcon != null)
+        {
+            playerIcon.sprite = player.PlayerIcon;
+            playerName.text = player.PlayerName;
+        }
 
         if (GameManager1.newRoundHasBegun)
         {
@@ -60,18 +61,16 @@ public class WheelDotween : MonoBehaviour
 
         Sequence entranceSequence = DOTween.Sequence();
 
-
         RectTransform playerNameRT = playerName.gameObject.GetComponent<RectTransform>();
         RectTransform spinTextRT = spinText.gameObject.GetComponent<RectTransform>();
-
 
         playerNameRT.localScale = Vector3.one * 0.8f;
         spinTextRT.localScale = Vector3.one * 0.8f;
 
         SFXLibrary.Instance.Play(2);
 
-        entranceSequence.Join(playerNameRT.DOAnchorPosX(30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f)); 
-        entranceSequence.Join(spinTextRT.DOAnchorPosX(-30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f)); 
+        entranceSequence.Join(playerNameRT.DOAnchorPosX(30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f));
+        entranceSequence.Join(spinTextRT.DOAnchorPosX(-30f, 0.6f).SetEase(Ease.OutElastic, 0.9f, 0.25f));
 
         entranceSequence.Join(playerNameRT.DOScale(1.1f, 0.5f).SetEase(Ease.OutBack));
         entranceSequence.Join(spinTextRT.DOScale(1.1f, 0.5f).SetEase(Ease.OutBack));
@@ -108,7 +107,6 @@ public class WheelDotween : MonoBehaviour
         texts.gameObject.SetActive(true);
         roundsText.enabled = true;
         spinWheel.enabled = true;
-
     }
 
     private IEnumerator NewRoundDOTWeeen()
@@ -159,7 +157,6 @@ public class WheelDotween : MonoBehaviour
             textRT.DOPunchPosition(new Vector3(0, -20, 0), 0.5f, 2);
 
             yield return transitionSequence.WaitForCompletion();
-
             yield return new WaitForSeconds(1.5f);
         }
 
@@ -172,5 +169,4 @@ public class WheelDotween : MonoBehaviour
 
         GameManager1.newRoundHasBegun = false;
     }
-
 }

@@ -23,7 +23,7 @@ public class PigSmack : MonoBehaviour, IPointerDownHandler
             spriteRenderer.sprite = smackedPig;
 
             // ✅ Award point
-            PlayerData.currentPlayerTurn.AddScore(1);
+            PlayerManager.Instance.currentPlayerTurn.AddScore(1);
 
             // ✅ End the round
             GameManager1.EndTurn();

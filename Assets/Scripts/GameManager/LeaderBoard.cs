@@ -10,25 +10,20 @@ using DG.Tweening;
 public class LeaderBoard : MonoBehaviour
 {
     List<GameObject> entriesObjectsList = new List<GameObject>();
-    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
+    [SerializeField] private GameObject entryPrefab;
     [SerializeField] private GameObject panel;
     [SerializeField] private TMP_Text introText;
     [SerializeField] private GameObject returnToMenuButton;
 
     [SerializeField] private Transform entrySpawnPoint;
-
     [SerializeField] private VerticalLayoutGroup layoutGroupV;
-
     [SerializeField] private GameObject confettiParticles;
 
-    //private float[] pitches = new float[4] {}; 
-
-    // Start is called before the first frame update
     void Start()
     {
         confettiParticles.SetActive(false);
 
-        if (PlayerData.numberOfPlayers < 3)
+        if (PlayerManager.Instance.numberOfPlayers < 3)
         {
             layoutGroupV.childAlignment = TextAnchor.UpperCenter;
             layoutGroupV.spacing = -600;
@@ -39,31 +34,23 @@ public class LeaderBoard : MonoBehaviour
             layoutGroupV.spacing = 50;
         }
 
-        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         returnToMenuButton.SetActive(false);
         entriesObjectsList.Clear();
         while (transform.childCount > 0)
         {
             Destroy(transform.GetChild(0).gameObject);
         }
-        StartCoroutine(IntroDOTween());
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(Time.timeScale);
+        StartCoroutine(IntroDOTween());
     }
 
     private void InitializeLeaderBoard()
     {
-        List<Player> playersList = SortByScore(PlayerData.playersArray);
+        List<Player> playersList = SortByScore(PlayerManager.Instance.playersArray);
 
         GameObject currentEntry;
-
         foreach (var player in playersList)
         {
-            currentEntry = null;
             currentEntry = Instantiate(entryPrefab);
             currentEntry.transform.SetParent(entrySpawnPoint);
             currentEntry.GetComponent<LeaderBoardEntry>().Player = player;
@@ -76,16 +63,13 @@ public class LeaderBoard : MonoBehaviour
     public static List<Player> SortByScore(Player[] players)
     {
         List<Player> playersCopy = players.ToList();
-
         playersCopy.Sort((a, b) => a.PlayerScore.CompareTo(b.PlayerScore));
-
         return playersCopy;
     }
 
     public void ReturnToMenu()
     {
-        // ✅ Fade to Main Menu
-        SceneTransition transition = FindObjectOfType<SceneTransition>();
+        var transition = FindObjectOfType<SceneTransition>();
         if (transition != null)
         {
             transition.StartFadeOut("HuvudMenu");
@@ -95,22 +79,19 @@ public class LeaderBoard : MonoBehaviour
             SceneManager.LoadScene("HuvudMenu");
         }
 
-        // ✅ Clear all player data so new game starts fresh
-        PlayerData.playersArray = null;
-        PlayerData.playersHaveBeenAssigned = false;
-        PlayerData.currentPlayerTurn = null;
-        PlayerData.numberOfPlayers = 0;
-        PlayerData.numberOfRounds = 0;
+        // ✅ Clear data for next game
+        PlayerManager.Instance.playersArray = null;
+        PlayerManager.Instance.currentPlayerTurn = null;
+        PlayerManager.Instance.numberOfPlayers = 0;
+        PlayerManager.Instance.numberOfRounds = 0;
     }
-
 
     private IEnumerator IntroDOTween()
     {
         introText.enabled = false;
-
         yield return new WaitForSeconds(1.5f);
 
-        RectTransform textRT = introText.gameObject.GetComponent<RectTransform>();
+        RectTransform textRT = introText.GetComponent<RectTransform>();
         textRT.localScale = Vector3.one * 0.2f;
 
         Sequence textSequence = DOTween.Sequence();
@@ -130,7 +111,7 @@ public class LeaderBoard : MonoBehaviour
     {
         float delayBetweenEntries = 0.3f;
         float entryAnimDuration = 0.6f;
-        float lastEntryAnimDuration = 1.0f; 
+        float lastEntryAnimDuration = 1.0f;
 
         VerticalLayoutGroup layoutGroup = entrySpawnPoint.GetComponent<VerticalLayoutGroup>();
         bool hasLayoutGroup = layoutGroup != null;
@@ -148,12 +129,12 @@ public class LeaderBoard : MonoBehaviour
 
             Sequence entrySequence = DOTween.Sequence();
 
-            if (i == entriesObjectsList.Count - 1) 
+            if (i == entriesObjectsList.Count - 1)
             {
                 entrySequence.Append(rt.DOScale(Vector3.one * 1.5f, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBack));
                 entrySequence.Append(rt.DOScale(Vector3.one, lastEntryAnimDuration * 0.4f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.7f);
-                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));  
+                entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));
             }
             else
             {
@@ -164,15 +145,13 @@ public class LeaderBoard : MonoBehaviour
             }
 
             yield return entrySequence.WaitForCompletion();
-
             yield return new WaitForSeconds(delayBetweenEntries);
         }
 
         confettiParticles.SetActive(true);
-        entriesObjectsList[entriesObjectsList.Count-1].GetComponent<LeaderBoardEntry>().GiveCrown();
+        entriesObjectsList[entriesObjectsList.Count - 1].GetComponent<LeaderBoardEntry>().GiveCrown();
 
         yield return new WaitForSeconds(1.5f);
-
         returnToMenuButton.SetActive(true);
     }
 }

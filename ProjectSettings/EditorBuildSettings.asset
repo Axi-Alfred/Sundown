@@ -18,10 +18,10 @@ EditorBuildSettings:
     path: Assets/Scenes/X 1Camera.unity
     guid: 1237a644d042e55449276070b8b4479a
   - enabled: 1
-    path: Assets/Scenes/X 3IsItRight - Check.unity
+    path: Assets/Scenes/X 3IsItRight.unity
     guid: 6240caf1fe1a536448d150708ea0569a
   - enabled: 1
-    path: Assets/Scenes/X 4OddOneOut - Done.unity
+    path: Assets/Scenes/X 4OddOneOut.unity
     guid: d06da606ee72f97499b895fdf8b2595f
   - enabled: 1
     path: Assets/Scenes/X 5PopTheBalloon2.unity

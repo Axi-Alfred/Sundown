@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Player
 {
-    public int PlayerId { get; private set; } //Tjena det e Sadra som har skrivit de här, om någon ser det här och undrar vad det är för något fråga gärna så kan jag förklara :D
+    public int PlayerId { get; private set; }
     public int PlayerScore { get; private set; } = 0;
     public bool HasPlayed { get; set; }
     public int CurrentIconInt { get; private set; }
 
     private string playerName;
-    public string PlayerName {  get { return playerName; } set { playerName = value; }}
+    public string PlayerName { get { return playerName; } set { playerName = value; } }
 
     private Sprite playerIcon;
-    public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; }}
+    public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; } }
 
+    // âœ… New: Store the raw texture from the camera
+    public Texture2D PlayerPhotoTexture { get; private set; }
 
     public Player(string name, int iD)
     {
@@ -28,9 +28,20 @@ public class Player
         PlayerScore += score;
     }
 
-    override
-    public string ToString()
+    // âœ… Call this when setting the photo from the camera
+    public void SetPhoto(Texture2D texture)
     {
-        return "Player name: " + PlayerName + ", " + "Player iD: " + PlayerId;
+        PlayerPhotoTexture = texture;
+
+        // Convert texture to sprite
+        playerIcon = Sprite.Create(
+            texture,
+            new Rect(0, 0, texture.width, texture.height),
+            new Vector2(0.5f, 0.5f));
+    }
+
+    public override string ToString()
+    {
+        return "Player name: " + PlayerName + ", Player iD: " + PlayerId;
     }
 }
