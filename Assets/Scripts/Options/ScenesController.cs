@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ScenesController : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class ScenesController : MonoBehaviour
 
     [Header("Scene Transition Settings")]
     public string nextSceneName;
+    public bool enableFadeIn = true;   // ✅ Toggle for fade-in
+    public bool enableFadeOut = true;  // ✅ Toggle for fade-out
     public bool autoFadeOutOnTimerEnd = true;
-    public float fadeInDuration = 0.5f;    // in seconds
+    public float fadeInDuration = 0.5f;
 
     [Header("Timer Settings")]
+    public bool enableTimer = true;    // ✅ Toggle for timer
     public float timerDuration = 10f;
     public string timerEndMessage = "Time's up!";
 
@@ -28,7 +32,6 @@ public class ScenesController : MonoBehaviour
     private VisualTimerBar gameTimer;
     private bool alreadyTransitioning = false;
     private bool delayTimerStart = false;
-
 
     void Start()
     {
@@ -39,26 +42,27 @@ public class ScenesController : MonoBehaviour
     {
         GameObject fadeObj = null;
 
-        // 1. Instantiate fade and trigger fade-in internally via Initialize()
+        // 1. Instantiate fade and trigger fade-in
         if (fadePrefab != null)
         {
             fadeObj = Instantiate(fadePrefab);
             fadeController = fadeObj.GetComponentInChildren<SceneTransition>();
 
-            // Delay fade-in start if we're in portrait mode
-            if (orientationMode == OrientationMode.Portrait)
+            if (enableFadeIn && fadeController != null)
             {
-                yield return new WaitForSecondsRealtime(1f);
-                fadeController.Initialize(); // now starts fade-in after 1s
+                if (orientationMode == OrientationMode.Portrait)
+                {
+                    yield return new WaitForSecondsRealtime(1f);
+                    fadeController.Initialize();
+                }
+                else
+                {
+                    fadeController.Initialize();
+                }
             }
-            else
-            {
-                fadeController.Initialize(); // immediate in other modes
-            }
-
         }
 
-        // 2. Enforce orientation (message shows behind fade)
+        // 2. Enforce orientation
         switch (orientationMode)
         {
             case OrientationMode.Landscape:
@@ -76,36 +80,32 @@ public class ScenesController : MonoBehaviour
                     var port = Instantiate(portraitEnforcerPrefab);
                     var forcePortrait = port.GetComponent<ForcePortrait>();
                     forcePortrait.Enforce();
-
-                    delayTimerStart = true; // ⏳ flag the delay
+                    delayTimerStart = true;
                 }
                 break;
         }
 
-        // ✅ DO NOT call fadeController.StartFadeIn(); again
-
         // 3. Destroy fade object if needed
-        if (fadeObj != null)
+        if (enableFadeIn && fadeObj != null)
             Destroy(fadeObj, fadeInDuration + 0.1f);
 
-        // 4. Start timer
-        if (timerPrefab != null)
+        // 4. Start timer if enabled
+        if (enableTimer && timerPrefab != null)
         {
             var timerObj = Instantiate(timerPrefab);
             gameTimer = timerObj.GetComponent<VisualTimerBar>();
             gameTimer.duration = timerDuration;
             gameTimer.endMessage = timerEndMessage;
-            if (delayTimerStart)
-                StartCoroutine(StartTimerAfterDelay(1f)); // delay only if portrait
-            else
-                gameTimer.StartTimerSequence(); // immediate for landscape/none
 
+            if (delayTimerStart)
+                StartCoroutine(StartTimerAfterDelay(1f));
+            else
+                gameTimer.StartTimerSequence();
 
             if (autoFadeOutOnTimerEnd)
                 StartCoroutine(WaitForTimerAndEnd(timerDuration + 5f));
         }
     }
-
 
     private IEnumerator WaitForTimerAndEnd(float waitTime)
     {
@@ -117,6 +117,7 @@ public class ScenesController : MonoBehaviour
             EndGameAndFadeOut();
         }
     }
+
     private IEnumerator StartTimerAfterDelay(float delay)
     {
         yield return new WaitForSecondsRealtime(delay);
@@ -128,13 +129,13 @@ public class ScenesController : MonoBehaviour
         if (alreadyTransitioning) return;
         alreadyTransitioning = true;
 
-        if (fadeController != null)
+        if (enableFadeOut && fadeController != null)
         {
             fadeController.StartFadeOut(nextSceneName);
         }
         else
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 }
