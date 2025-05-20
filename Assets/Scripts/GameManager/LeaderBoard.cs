@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +10,7 @@ using DG.Tweening;
 public class LeaderBoard : MonoBehaviour
 {
     List<GameObject> entriesObjectsList = new List<GameObject>();
-    [SerializeField] private GameObject entryPrefab; //Prefaben f�r varje individuellt entry i leaderboarden
+    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
     [SerializeField] private GameObject panel;
     [SerializeField] private TMP_Text introText;
     [SerializeField] private GameObject returnToMenuButton;
@@ -39,7 +39,7 @@ public class LeaderBoard : MonoBehaviour
             layoutGroupV.spacing = 50;
         }
 
-        //Loopen �r till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         returnToMenuButton.SetActive(false);
         entriesObjectsList.Clear();
         while (transform.childCount > 0)
@@ -84,8 +84,25 @@ public class LeaderBoard : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        FindObjectOfType<SceneTransition>()?.StartFadeOut("HuvudMenu");
+        // ✅ Fade to Main Menu
+        SceneTransition transition = FindObjectOfType<SceneTransition>();
+        if (transition != null)
+        {
+            transition.StartFadeOut("HuvudMenu");
+        }
+        else
+        {
+            SceneManager.LoadScene("HuvudMenu");
+        }
+
+        // ✅ Clear all player data so new game starts fresh
+        PlayerData.playersArray = null;
+        PlayerData.playersHaveBeenAssigned = false;
+        PlayerData.currentPlayerTurn = null;
+        PlayerData.numberOfPlayers = 0;
+        PlayerData.numberOfRounds = 0;
     }
+
 
     private IEnumerator IntroDOTween()
     {

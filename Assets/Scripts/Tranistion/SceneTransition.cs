@@ -15,42 +15,39 @@ public class SceneTransition : MonoBehaviour
     public float messageDuration = 3f;
 
     private string targetSceneName;
-    private bool useMessage;
-    private string messageText;
+    private bool fadingIn = false;
+    private bool fadingOut = false;
 
     private Material runtimeMat;
     private float fadeStartTime;
-    private bool fadingIn = false;
-    private bool fadingOut = false;
-    private float fadeOutStartTime;
+    private Image image;
+
+    void Awake()
+    {
+        Initialize();
+    }
 
     public void Initialize()
     {
-        var img = GetComponent<Image>();
-        if (img == null)
+        image = GetComponent<Image>();
+        if (image == null)
         {
-            Debug.LogError("[SceneTransition] No UI.Image component found.");
+            Debug.LogError("[SceneTransition] Missing Image component.");
             return;
         }
 
-        img.enabled = false;
-
-        if (circleFadeMaterial == null && img.material == null)
+        if (circleFadeMaterial == null && image.material == null)
         {
-            Debug.LogError("[SceneTransition] No material assigned and no fallback available.");
+            Debug.LogError("[SceneTransition] No fade material assigned.");
             return;
         }
 
-        if (circleFadeMaterial == null)
-        {
-            Debug.LogWarning("[SceneTransition] No material assigned — using image’s current material.");
-            circleFadeMaterial = img.material;
-        }
-
-        runtimeMat = new Material(circleFadeMaterial);
+        // Use assigned material or fallback
+        Material baseMat = circleFadeMaterial != null ? circleFadeMaterial : image.material;
+        runtimeMat = new Material(baseMat);
         runtimeMat.SetFloat("_Cutoff", 0f);
-        img.material = runtimeMat;
-        img.enabled = true;
+        image.material = runtimeMat;
+        image.enabled = true;
 
         if (messageUI != null)
             messageUI.gameObject.SetActive(false);
@@ -60,7 +57,7 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator StartFadeNextFrame()
     {
-        yield return null;
+        yield return null; // delay one frame
         StartFadeIn();
     }
 
@@ -70,23 +67,38 @@ public class SceneTransition : MonoBehaviour
         fadeStartTime = Time.realtimeSinceStartup;
         fadingIn = true;
         runtimeMat.SetFloat("_Cutoff", 0f);
+        Debug.Log("[SceneTransition] Starting fade-in...");
     }
 
     public void StartFadeOut(string sceneName)
     {
-        if (runtimeMat == null) return;
-        if (BGMPlayer.Instance != null) BGMPlayer.Instance.FadeOutMusic();
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("[SceneTransition] StartFadeOut called with empty scene name!");
+            return;
+        }
+
+        if (runtimeMat == null)
+        {
+            Debug.LogError("[SceneTransition] Cannot start fade-out, runtimeMat is null.");
+            return;
+        }
+
         targetSceneName = sceneName;
+        fadeStartTime = Time.realtimeSinceStartup;
         fadingOut = true;
-        fadeOutStartTime = Time.realtimeSinceStartup;
         runtimeMat.SetFloat("_Cutoff", 1.5f);
+        Debug.Log($"[SceneTransition] Starting fade-out to scene: {targetSceneName}");
     }
 
     private void Update()
     {
-        if (fadingIn && runtimeMat != null)
+        if (runtimeMat == null) return;
+
+        float elapsed = Time.realtimeSinceStartup - fadeStartTime;
+
+        if (fadingIn)
         {
-            float elapsed = Time.realtimeSinceStartup - fadeStartTime;
             float cutoff = Mathf.Lerp(0f, 1.5f, elapsed / fadeDuration);
             runtimeMat.SetFloat("_Cutoff", cutoff);
 
@@ -94,12 +106,12 @@ public class SceneTransition : MonoBehaviour
             {
                 runtimeMat.SetFloat("_Cutoff", 1.5f);
                 fadingIn = false;
+                Debug.Log("[SceneTransition] Fade-in complete.");
             }
         }
 
-        if (fadingOut && runtimeMat != null)
+        if (fadingOut)
         {
-            float elapsed = Time.realtimeSinceStartup - fadeOutStartTime;
             float cutoff = Mathf.Lerp(1.5f, 0f, elapsed / fadeDuration);
             runtimeMat.SetFloat("_Cutoff", cutoff);
 
@@ -107,6 +119,7 @@ public class SceneTransition : MonoBehaviour
             {
                 runtimeMat.SetFloat("_Cutoff", 0f);
                 fadingOut = false;
+                Debug.Log("[SceneTransition] Fade-out complete. Loading scene...");
                 LoadSceneAfterTransition();
             }
         }
@@ -116,7 +129,12 @@ public class SceneTransition : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(targetSceneName))
         {
+            Debug.Log($"[SceneTransition] Loading scene: {targetSceneName}");
             SceneManager.LoadScene(targetSceneName);
+        }
+        else
+        {
+            Debug.LogError("[SceneTransition] Scene name is empty. Cannot load scene.");
         }
     }
 }

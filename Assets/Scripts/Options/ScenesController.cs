@@ -108,15 +108,17 @@ public class ScenesController : MonoBehaviour
     }
 
     private IEnumerator WaitForTimerAndEnd(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
+{
+    yield return new WaitForSeconds(waitTime);
 
-        if (!alreadyTransitioning)
-        {
-            alreadyTransitioning = true;
-            EndGameAndFadeOut();
-        }
+    if (!alreadyTransitioning)
+    {
+        alreadyTransitioning = true;
+        nextSceneName = "Wheel"; // ✅ force return to Wheel scene
+        EndGameAndFadeOut();
     }
+}
+
 
     private IEnumerator StartTimerAfterDelay(float delay)
     {
@@ -129,13 +131,18 @@ public class ScenesController : MonoBehaviour
         if (alreadyTransitioning) return;
         alreadyTransitioning = true;
 
+        Debug.Log("[ScenesController] EndGameAndFadeOut called. Scene = " + nextSceneName);
+
         if (enableFadeOut && fadeController != null)
         {
+            Debug.Log("[ScenesController] Starting fade-out...");
             fadeController.StartFadeOut(nextSceneName);
         }
         else
         {
-            SceneManager.LoadScene(nextSceneName);
+            Debug.LogWarning("[ScenesController] Fade disabled or fadeController missing. Loading directly.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
         }
     }
+
 }

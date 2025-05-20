@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,7 +30,6 @@ public static class GameManager1
             Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
 
             yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
-
             yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Wheel");
 
             Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.PlayerName);
@@ -45,7 +44,7 @@ public static class GameManager1
 
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            newRoundHasBegun = true; //Sets till false i WheelDotween n�r animationen har spelat klar
+            newRoundHasBegun = true;
             gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
             yield return PlayerTurnLoop();
         }
@@ -57,6 +56,16 @@ public static class GameManager1
     public static void EndTurn()
     {
         PlayerData.currentPlayerTurn.HasPlayed = true;
-        UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("SceneName");
+
+        var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
+        if (sceneController != null)
+        {
+            sceneController.EndGameAndFadeOut(); // ✅ uses nextSceneName
+        }
+        else
+        {
+            UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("Wheel");
+        }
     }
+
 }

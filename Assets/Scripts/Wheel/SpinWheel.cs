@@ -1,40 +1,42 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpinWheel : MonoBehaviour
 {
+    [Header("Wheel Settings")]
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
     [SerializeField] private float torqueMultiplier = 50f;
+    [SerializeField] private float minDragDistance;
+    [SerializeField] private float minSpinForce;
     [SerializeField] private Pointer pointer;
-    [SerializeField] private GameObject pointerObject; //needed to check that the rotation of the pointer is 0 before starting a game
+    [SerializeField] private GameObject pointerObject;
+
+    [Header("Pie Setup")]
+    [SerializeField] private GameObject[] wheelSlices; // Assign each pie GameObject manually
+
+    [Header("Minigame Settings")]
+    [SerializeField] private float sceneLoadDelay = 1.5f;
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
     private Vector2 wheelCenter;
     private bool isDragging;
     private bool isSpinning;
-    private bool hasSpinned; //has already bombaclat spinned and is currently stationary
+    private bool hasSpinned;
     private bool hasReachedMotionThreshold;
 
-    [SerializeField] private float minDragDistance;
-    [SerializeField] private float minSpinForce;
-
-    // Start is called before the first frame update
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
         wheelCenter = Camera.main.WorldToScreenPoint(transform.position);
-        float wheelRotation = UnityEngine.Random.Range(1, 90);
+        float wheelRotation = Random.Range(1, 90);
         transform.localRotation = Quaternion.Euler(0, 0, wheelRotation);
     }
 
-    // Update is called once per frame
     void Update()
     {
         float wheelVelocity = Mathf.Abs(rb2D.angularVelocity);
-
 
         if (isSpinning)
         {
@@ -43,14 +45,15 @@ public class SpinWheel : MonoBehaviour
                 hasReachedMotionThreshold = true;
             }
 
-            //The wheel has/will come to a stop 
             if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.eulerAngles.z) < 5)
             {
                 rb2D.angularVelocity = 0;
-                hasSpinned = true;
                 isSpinning = false;
+                hasSpinned = true;
                 hasReachedMotionThreshold = false;
                 Handheld.Vibrate();
+
+                StartCoroutine(LaunchMinigameByPointer());
             }
         }
 
@@ -60,13 +63,11 @@ public class SpinWheel : MonoBehaviour
         }
 
         pointer.WheelHasSpinned(hasSpinned);
-        Debug.Log(Time.timeScale);
     }
 
     private void SpinTheWheel(Touch touch)
     {
         if (hasSpinned || isSpinning) return;
-
 
         if (touch.phase == TouchPhase.Began)
         {
@@ -77,16 +78,12 @@ public class SpinWheel : MonoBehaviour
         {
             Vector2 currentTouchPos = touch.position;
             float dragDistance = Vector2.Distance(currentTouchPos, lastTouchPos);
-
             if (dragDistance < minDragDistance) return;
 
             Vector2 from = lastTouchPos - wheelCenter;
             Vector2 to = currentTouchPos - wheelCenter;
-
             float angle = Vector2.SignedAngle(from, to);
-
             float touchVelocity = touch.deltaPosition.magnitude / touch.deltaTime;
-
             float torque = Mathf.Max(minSpinForce, Mathf.Abs(angle * touchVelocity * torqueMultiplier));
 
             rb2D.AddTorque(-angle * -torque);
@@ -102,16 +99,69 @@ public class SpinWheel : MonoBehaviour
 
     public void SpinWithButton()
     {
-        int randomSpinForce = UnityEngine.Random.Range(500, 1000);
+        int randomSpinForce = Random.Range(500, 1000);
         rb2D.AddTorque(-randomSpinForce);
+        isSpinning = true;
     }
 
     public void ResetWheel()
     {
         rb2D.angularVelocity = 0;
-        GetComponent<Rigidbody2D>().rotation = 0f;
+        rb2D.rotation = 0f;
         hasSpinned = false;
         isSpinning = false;
         hasReachedMotionThreshold = false;
+    }
+
+    private IEnumerator LaunchMinigameByPointer()
+    {
+        yield return new WaitForSeconds(sceneLoadDelay);
+
+        GameObject closest = null;
+        float closestAngle = 999f;
+
+        foreach (var slice in wheelSlices)
+        {
+            Vector3 direction = slice.transform.position - pointerObject.transform.position;
+            float angle = Vector3.Angle(pointerObject.transform.up, direction);
+
+            if (angle < closestAngle)
+            {
+                closestAngle = angle;
+                closest = slice;
+            }
+        }
+
+        if (closest == null)
+        {
+            Debug.LogError("[SpinWheel] No slice found!");
+            yield break;
+        }
+
+        string tag = closest.tag; // e.g., "Game7"
+        if (!tag.StartsWith("Game"))
+        {
+            Debug.LogError("[SpinWheel] Invalid tag: " + tag);
+            yield break;
+        }
+
+        string numberPart = tag.Substring(4); // remove "Game"
+        if (!int.TryParse(numberPart, out int sceneIndex))
+        {
+            Debug.LogError("[SpinWheel] Cannot parse scene index from tag: " + tag);
+            yield break;
+        }
+
+        Debug.Log($"[SpinWheel] Launching scene index {sceneIndex} via tag {tag}");
+
+        SceneTransition transition = FindObjectOfType<SceneTransition>();
+        if (transition != null)
+        {
+            transition.StartFadeOut(sceneIndex.ToString());
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneIndex);
+        }
     }
 }

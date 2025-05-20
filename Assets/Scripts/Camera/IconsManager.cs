@@ -146,7 +146,19 @@ public class IconsManager : MonoBehaviour
     {
         hasContinued = true;
         ShowPlayersList();
+
+        // Trigger scene transition via ScenesController
+        ScenesController controller = FindObjectOfType<ScenesController>();
+        if (controller != null)
+        {
+            controller.EndGameAndFadeOut();
+        }
+        else
+        {
+            Debug.LogWarning("[IconsManager] No ScenesController found to handle fade.");
+        }
     }
+
 
     private IEnumerator InitialTextDOTween()
     {
