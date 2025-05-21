@@ -36,13 +36,6 @@ public class SceneTransition : MonoBehaviour
             return;
         }
 
-        if (circleFadeMaterial == null && image.material == null)
-        {
-            Debug.LogError("[SceneTransition] No fade material assigned.");
-            return;
-        }
-
-        // Use assigned material or fallback
         Material baseMat = circleFadeMaterial != null ? circleFadeMaterial : image.material;
         runtimeMat = new Material(baseMat);
         runtimeMat.SetFloat("_Cutoff", 0f);
@@ -57,41 +50,41 @@ public class SceneTransition : MonoBehaviour
 
     private IEnumerator StartFadeNextFrame()
     {
-        yield return null; // delay one frame
+        yield return null;
         StartFadeIn();
     }
 
     public void StartFadeIn()
     {
         if (runtimeMat == null) return;
-        fadeStartTime = Time.realtimeSinceStartup;
         fadingIn = true;
+        fadeStartTime = Time.realtimeSinceStartup;
         runtimeMat.SetFloat("_Cutoff", 0f);
-        Debug.Log("[SceneTransition] Starting fade-in...");
+        Debug.Log("[SceneTransition] Starting fade-in.");
     }
 
     public void StartFadeOut(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogError("[SceneTransition] StartFadeOut called with empty scene name!");
+            Debug.LogError("[SceneTransition] StartFadeOut called with empty scene name.");
             return;
         }
 
         if (runtimeMat == null)
         {
-            Debug.LogError("[SceneTransition] Cannot start fade-out, runtimeMat is null.");
+            Debug.LogError("[SceneTransition] Cannot fade out, runtime material is null.");
             return;
         }
 
         targetSceneName = sceneName;
-        fadeStartTime = Time.realtimeSinceStartup;
         fadingOut = true;
+        fadeStartTime = Time.realtimeSinceStartup;
         runtimeMat.SetFloat("_Cutoff", 1.5f);
-        Debug.Log($"[SceneTransition] Starting fade-out to scene: {targetSceneName}");
+        Debug.Log("[SceneTransition] Starting fade-out to: " + targetSceneName);
     }
 
-    private void Update()
+    void Update()
     {
         if (runtimeMat == null) return;
 
@@ -117,9 +110,8 @@ public class SceneTransition : MonoBehaviour
 
             if (elapsed >= fadeDuration)
             {
-                runtimeMat.SetFloat("_Cutoff", 0f);
                 fadingOut = false;
-                Debug.Log("[SceneTransition] Fade-out complete. Loading scene...");
+                Debug.Log("[SceneTransition] Fade-out complete. Loading: " + targetSceneName);
                 LoadSceneAfterTransition();
             }
         }
@@ -129,12 +121,11 @@ public class SceneTransition : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(targetSceneName))
         {
-            Debug.Log($"[SceneTransition] Loading scene: {targetSceneName}");
             SceneManager.LoadScene(targetSceneName);
         }
         else
         {
-            Debug.LogError("[SceneTransition] Scene name is empty. Cannot load scene.");
+            Debug.LogError("[SceneTransition] Target scene is empty!");
         }
     }
 }

@@ -86,6 +86,22 @@ public class FrontCamera : MonoBehaviour
         iconsManager.currentPlayer.PlayerIcon = capturedImageDisplay.sprite;
         iconsManager.currentPlayer.PlayerName = iconsManager.currentFilter.name;
 
+        // ✅ Assign the player so the next scene knows who it is
+        PlayerManager.Instance.currentPlayerTurn = iconsManager.currentPlayer;
+
+        // ✅ Debug logs to confirm it's actually working
+        Debug.Log($"📸 Player Icon Set: {iconsManager.currentPlayer.PlayerIcon != null}");
+        Debug.Log($"🧠 Player Name Set: {iconsManager.currentPlayer.PlayerName}");
+        Debug.Log($"📌 Player Assigned to PlayerManager: {PlayerManager.Instance.currentPlayerTurn != null}");
+        Debug.Log($"🎯 PlayerManager.currentPlayerTurn name: {PlayerManager.Instance.currentPlayerTurn?.PlayerName}");
+
+        // ✅ Check if all players are done, then start game loop
+        if (PlayerManager.Instance.AllPlayersCaptured())
+        {
+            Debug.Log("[FrontCamera] All players ready — starting game rounds.");
+            GameFlowManager.Instance.StartCoroutine(GameManager1.RoundsLoop());
+        }
+
         faceTemplate.gameObject.SetActive(false);
         cameraPreview.gameObject.SetActive(false);
     }

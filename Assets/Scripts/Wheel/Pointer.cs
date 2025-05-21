@@ -7,10 +7,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class Pointer : MonoBehaviour
 {
-    [SerializeField] private TMP_Text nextGameText;
     [SerializeField] private TMP_Text playerText;
     [SerializeField] private TMP_Text roundText;
     [SerializeField] private Image playerSprite;
@@ -18,101 +16,29 @@ public class Pointer : MonoBehaviour
 
     [SerializeField] private float gameStartTimer = 2.5f;
 
-    // Start is called before the first frame update
     void Start()
     {
         GetComponent<BoxCollider2D>().enabled = false;
-        nextGameText.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
 
         playerText.text = "Now spinning: " + PlayerManager.Instance.currentPlayerTurn.PlayerName;
-        roundText.text = GameManager1.currentRound == PlayerManager.Instance.numberOfRounds ? "Round " + GameManager1.currentRound + ", Final Round" : "Round " + GameManager1.currentRound;
+        roundText.text = GameManager1.currentRound == PlayerManager.Instance.numberOfRounds
+            ? "Round " + GameManager1.currentRound + ", Final Round"
+            : "Round " + GameManager1.currentRound;
+
         playerSprite.sprite = PlayerManager.Instance.currentPlayerTurn.PlayerIcon;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!nextGameText.gameObject.activeSelf) nextGameText.gameObject.SetActive(true);
-        StartCoroutine(GameTextPopupDOTween());
         ScreenShake.instance.TriggerShake();
 
-        switch (other.tag)
-        { //Is it right, throwing pie, catch hop, cotton candy
-            case "Game1":
-                nextGameText.text = "Odd One Out will begin now";
-                StartCoroutine(Timer(4));
-                break;
-
-            case "Game2":
-                nextGameText.text = "Pop The Balloon will begin now";
-                StartCoroutine(Timer(5));
-                break;
-
-            case "Game3":
-                nextGameText.text = "Juggle Mania will begin now";
-                StartCoroutine(Timer(6));
-                break;
-
-            case "Game4":
-                nextGameText.text = "Smacked Pig will begin now";
-                StartCoroutine(Timer(7));
-                break;
-
-            case "Game5":
-                nextGameText.text = "Falling Gods will begin now";
-                StartCoroutine(Timer(8));
-                break;
-
-            case "Game6":
-                nextGameText.text = "Clown Elope will begin now";
-                StartCoroutine(Timer(9));
-                break;
-
-            case "Game7":
-                nextGameText.text = "Dunk Tank will begin now";
-                StartCoroutine(Timer(10));
-                break;
-
-            case "Game8":
-                nextGameText.text = "Don't Get Hit will begin now";
-                StartCoroutine(Timer(11));
-                break;
-
-            case "Game9":
-                nextGameText.text = "Catch Hop will begin now";
-                StartCoroutine(Timer(12));
-                break;
-
-            case "Game10":
-                nextGameText.text = "Is It Right will begin now";
-                StartCoroutine(Timer(13));
-                break;
-
-            case "Game11":
-                nextGameText.text = "Cotton Candy will begin now";
-                StartCoroutine(Timer(14));
-                break;
-
-            case "Game12":
-                nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 14)));
-                break;
-
-            case "Game13":
-                nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 14)));
-                break;
-
-            case "RandomGame":
-                nextGameText.text = "Random game will now begin";
-                StartCoroutine(Timer(Random.Range(4, 14))); //De här siffrorna kommer ändras beroende på vilka scener vi har med och vad de har för index
-                break;
-        }
+        string tag = other.tag;
+        StartCoroutine(Timer(tag));
     }
 
     public void WheelHasSpinned(bool spinning)
@@ -120,27 +46,21 @@ public class Pointer : MonoBehaviour
         wheelHasSpinned = spinning;
     }
 
-    private IEnumerator GameTextPopupDOTween()
-    {
-        //yield return new WaitForSeconds(0.75f);
-
-        RectTransform textRT = nextGameText.GetComponent<RectTransform>();
-        textRT.localScale = Vector3.one * 0.2f;
-
-        Sequence textSequence = DOTween.Sequence();
-        textSequence.AppendCallback(() => nextGameText.gameObject.SetActive(true));
-        textSequence.Append(textRT.DOScale(1.1f, 0.3f).SetEase(Ease.OutBack));
-        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
-        textSequence.AppendInterval(1.5f);
-
-        yield return null;
-    }
-
-    IEnumerator Timer(int level)
+    IEnumerator Timer(string tag)
     {
         yield return new WaitForSeconds(gameStartTimer);
 
-        UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("SceneName");
+        string sceneName = SpinWheel.GetSceneForTag(tag);
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError($"[Pointer] Scene name for tag '{tag}' not found!");
+            yield break;
+        }
 
+        var transition = FindObjectOfType<SceneTransition>();
+        if (transition != null)
+            transition.StartFadeOut(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
     }
 }

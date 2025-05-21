@@ -19,8 +19,13 @@ public class WheelDotween : MonoBehaviour
 
     [Header("New Round Texts")]
     [SerializeField] private GameObject newRoundTextObject;
-    [SerializeField] TMP_Text currentRoundNumber;
-    [SerializeField] TMP_Text previousRoundNumber;
+    [SerializeField] private TMP_Text currentRoundNumber;
+    [SerializeField] private TMP_Text previousRoundNumber;
+
+    [Header("Player Identity Display")]
+    [SerializeField] private Image playerIconCircle; // CircleMask > PlayerIcon
+    [SerializeField] private TMP_Text filterNameTop; // "You are now spinning"
+    [SerializeField] private TMP_Text filterNameBottom; // Large text below wheel
 
     private void Awake()
     {
@@ -32,8 +37,54 @@ public class WheelDotween : MonoBehaviour
     void Start()
     {
         playersInstructionsObject.SetActive(true);
-        StartCoroutine(SceneInitialization());
+        StartCoroutine(DelayedInit());
     }
+
+
+    private void ShowPlayerVisuals()
+    {
+        var player = PlayerManager.Instance.currentPlayerTurn;
+
+        if (player == null)
+        {
+            Debug.LogError("❌ No currentPlayerTurn found in PlayerManager.");
+            return;
+        }
+
+        Debug.Log($"✅ Player Found: {player.PlayerName}");
+        Debug.Log($"🖼 Has PlayerIcon? {player.PlayerIcon != null}");
+
+        if (player.PlayerIcon != null)
+        {
+            if (playerIconCircle == null)
+            {
+                Debug.LogError("❌ playerIconCircle is not assigned in Inspector.");
+            }
+            else
+            {
+                playerIconCircle.sprite = player.PlayerIcon;
+                playerIconCircle.color = Color.white;
+                playerIconCircle.preserveAspect = true;
+                Debug.Log("🖼 Player icon applied to circle.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ PlayerIcon is null — photo was likely not saved.");
+        }
+
+        if (filterNameTop == null || filterNameBottom == null)
+        {
+            Debug.LogError($"❌ FilterNameTop or Bottom is not assigned. Top: {filterNameTop}, Bottom: {filterNameBottom}");
+        }
+        else
+        {
+            filterNameTop.text = player.PlayerName;
+            filterNameBottom.text = player.PlayerName;
+            Debug.Log($"📝 Filter name set: {player.PlayerName}");
+        }
+    }
+
 
     void Update()
     {
@@ -45,14 +96,6 @@ public class WheelDotween : MonoBehaviour
     {
         yield return null;
         yield return new WaitForSeconds(0.75f);
-
-        // ✅ Set player icon and name once when scene starts
-        var player = PlayerManager.Instance.currentPlayerTurn;
-        if (player != null && player.PlayerIcon != null)
-        {
-            playerIcon.sprite = player.PlayerIcon;
-            playerName.text = player.PlayerName;
-        }
 
         if (GameManager1.newRoundHasBegun)
         {
@@ -169,4 +212,28 @@ public class WheelDotween : MonoBehaviour
 
         GameManager1.newRoundHasBegun = false;
     }
+    public TMP_Text chosenGameText; // 👈 assign in Inspector
+
+    public void ShowChosenGameName(string displayName)
+    {
+        if (chosenGameText != null)
+        {
+            chosenGameText.text = $"🎮 {displayName}";
+            StartCoroutine(ClearChosenName());
+        }
+    }
+
+    private IEnumerator ClearChosenName()
+    {
+        yield return new WaitForSeconds(3f);
+        chosenGameText.text = "";
+    }
+    private IEnumerator DelayedInit()
+    {
+        yield return null; // ✅ Wait one frame
+        ShowPlayerVisuals(); // 👈 Now it's safe to access currentPlayerTurn
+        StartCoroutine(SceneInitialization());
+    }
+
+
 }

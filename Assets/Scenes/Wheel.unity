@@ -246,7 +246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &22159727
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5588,10 +5588,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelMotionlessThreshold: 1
   torqueMultiplier: 25
-  pointer: {fileID: 1807274576}
-  pointerObject: {fileID: 189837970}
   minDragDistance: 250
   minSpinForce: 10
+  pointer: {fileID: 1807274576}
+  pointerObject: {fileID: 189837970}
+  wheelSlices:
+  - {fileID: 1836351970}
+  - {fileID: 1980978241}
+  - {fileID: 367210161}
+  - {fileID: 221355939}
+  - {fileID: 188876758}
+  - {fileID: 294536119}
+  - {fileID: 2082249438}
+  - {fileID: 1149258791}
+  - {fileID: 1235364105}
+  - {fileID: 145312673}
+  - {fileID: 2006512383}
+  - {fileID: 99683289}
+  - {fileID: 1426233604}
+  - {fileID: 836166769}
+  - {fileID: 1493485892}
+  - {fileID: 386708218}
+  sceneLoadDelay: 1.5
+  allowKeyboardSpin: 1
+  spinKey: 32
 --- !u!50 &1178934445
 Rigidbody2D:
   serializedVersion: 4
@@ -5641,6 +5661,10 @@ MonoBehaviour:
   newRoundTextObject: {fileID: 157980228}
   currentRoundNumber: {fileID: 1462107317}
   previousRoundNumber: {fileID: 985407752}
+  playerIconCircle: {fileID: 1275138297}
+  filterNameTop: {fileID: 37306394}
+  filterNameBottom: {fileID: 1573271411}
+  chosenGameText: {fileID: 22159728}
 --- !u!1 &1235364105
 GameObject:
   m_ObjectHideFlags: 0
@@ -7239,7 +7263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26c2b379efbe0c4cabdc457609e5964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextGameText: {fileID: 22159728}
   playerText: {fileID: 560537744}
   roundText: {fileID: 770116985}
   playerSprite: {fileID: 2124620984}

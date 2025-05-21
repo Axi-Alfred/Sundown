@@ -1,6 +1,6 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SpinWheel : MonoBehaviour
 {
@@ -13,10 +13,14 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private GameObject pointerObject;
 
     [Header("Pie Setup")]
-    [SerializeField] private GameObject[] wheelSlices; // Assign each pie GameObject manually
+    [SerializeField] private GameObject[] wheelSlices;
 
     [Header("Minigame Settings")]
     [SerializeField] private float sceneLoadDelay = 1.5f;
+
+    [Header("Editor Testing")]
+    [SerializeField] private bool allowKeyboardSpin = true;
+    [SerializeField] private KeyCode spinKey = KeyCode.Space;
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
@@ -26,12 +30,45 @@ public class SpinWheel : MonoBehaviour
     private bool hasSpinned;
     private bool hasReachedMotionThreshold;
 
+    public static readonly Dictionary<string, string> tagToScene = new()
+{
+    { "Game1", "X 3IsItRight" },
+    { "Game2", "X 4OddOneOut" },
+    { "Game3", "X 5PopTheBalloon" },
+    { "Game4", "X 7JuggleMania" },
+    { "Game5", "X 9SmackedPig" },
+    { "Game6", "X 10CottonCandy" },
+    { "Game7", "X 11FallingGods" },
+    { "Game8", "X 12ClownElope" },
+    { "Game9", "X 13DunkTank" },
+    { "Game10", "X 14DontGetHit" },
+    { "Game11", "X 15CatchHop_Main" },
+};
+
+    public static readonly Dictionary<string, string> tagToDisplayName = new()
+{
+    { "Game1", "Is It Right?" },
+    { "Game2", "Odd One Out" },
+    { "Game3", "Pop The Balloon" },
+    { "Game4", "Juggle Mania" },
+    { "Game5", "Pig?" },
+    { "Game6", "Cotton Candy" },
+    { "Game7", "Save the Clowns" },
+    { "Game8", "Clown Elope" },
+    { "Game9", "Dunk Tank" },
+    { "Game10", "Don't Get Hit" },
+    { "Game11", "Catch Hop" },
+    { "Game12", "Random Game!" },
+    { "Game13", "Random Game!" }
+};
+
+
+
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
         wheelCenter = Camera.main.WorldToScreenPoint(transform.position);
-        float wheelRotation = Random.Range(1, 90);
-        transform.localRotation = Quaternion.Euler(0, 0, wheelRotation);
+        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(1, 90));
     }
 
     void Update()
@@ -41,9 +78,7 @@ public class SpinWheel : MonoBehaviour
         if (isSpinning)
         {
             if (!hasReachedMotionThreshold && wheelVelocity > wheelMotionlessThreshold)
-            {
                 hasReachedMotionThreshold = true;
-            }
 
             if (hasReachedMotionThreshold && wheelVelocity < wheelMotionlessThreshold && Mathf.Abs(pointerObject.transform.eulerAngles.z) < 5)
             {
@@ -51,11 +86,18 @@ public class SpinWheel : MonoBehaviour
                 isSpinning = false;
                 hasSpinned = true;
                 hasReachedMotionThreshold = false;
-                Handheld.Vibrate();
 
+                Handheld.Vibrate();
                 StartCoroutine(LaunchMinigameByPointer());
             }
         }
+
+#if UNITY_EDITOR
+        if (allowKeyboardSpin && Input.GetKeyDown(spinKey) && !isSpinning && !hasSpinned)
+        {
+            SpinWithButton();
+        }
+#endif
 
         if (Input.touchCount > 0 && !isSpinning && !hasSpinned)
         {
@@ -87,7 +129,6 @@ public class SpinWheel : MonoBehaviour
             float torque = Mathf.Max(minSpinForce, Mathf.Abs(angle * touchVelocity * torqueMultiplier));
 
             rb2D.AddTorque(-angle * -torque);
-
             lastTouchPos = currentTouchPos;
             isSpinning = true;
         }
@@ -122,6 +163,12 @@ public class SpinWheel : MonoBehaviour
 
         foreach (var slice in wheelSlices)
         {
+            if (slice == null)
+            {
+                Debug.LogWarning("[SpinWheel] Null slice found in wheelSlices.");
+                continue;
+            }
+
             Vector3 direction = slice.transform.position - pointerObject.transform.position;
             float angle = Vector3.Angle(pointerObject.transform.up, direction);
 
@@ -138,30 +185,67 @@ public class SpinWheel : MonoBehaviour
             yield break;
         }
 
-        string tag = closest.tag; // e.g., "Game7"
-        if (!tag.StartsWith("Game"))
+        string tag = closest.tag;
+        Debug.Log($"[SpinWheel] Slice tag: {tag}");
+
+        if (tagToDisplayName.TryGetValue(tag, out string displayName))
         {
-            Debug.LogError("[SpinWheel] Invalid tag: " + tag);
+            var ui = FindObjectOfType<WheelDotween>();
+            if (ui != null)
+                ui.ShowChosenGameName(displayName);
+        }
+
+
+        string sceneName;
+
+        if (tag == "RandomGame")
+        {
+            List<string> scenes = new List<string>(tagToScene.Values);
+            sceneName = scenes[Random.Range(0, scenes.Count)];
+            Debug.Log($"[SpinWheel] RANDOM pick → {sceneName}");
+        }
+        else if (!tagToScene.TryGetValue(tag, out sceneName))
+        {
+            Debug.LogError($"[SpinWheel] Unknown tag: {tag}");
             yield break;
         }
 
-        string numberPart = tag.Substring(4); // remove "Game"
-        if (!int.TryParse(numberPart, out int sceneIndex))
+        if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogError("[SpinWheel] Cannot parse scene index from tag: " + tag);
+            Debug.LogError("[SpinWheel] Scene name is EMPTY. Aborting spin.");
             yield break;
         }
 
-        Debug.Log($"[SpinWheel] Launching scene index {sceneIndex} via tag {tag}");
+        Debug.Log($"[SpinWheel] Launching scene: {sceneName}");
 
-        SceneTransition transition = FindObjectOfType<SceneTransition>();
-        if (transition != null)
+        ScenesController controller = FindObjectOfType<ScenesController>();
+        if (controller != null)
         {
-            transition.StartFadeOut(sceneIndex.ToString());
+            controller.nextSceneName = sceneName;
+            Debug.Log($"[SpinWheel] Setting nextSceneName to: {controller.nextSceneName}");
+            controller.TriggerEndNow();
         }
         else
         {
-            SceneManager.LoadScene(sceneIndex);
+            Debug.LogError("[SpinWheel] ScenesController not found!");
         }
     }
+    public static string GetDisplayNameForTag(string tag)
+    {
+        return tagToDisplayName.ContainsKey(tag) ? tagToDisplayName[tag] : "Unknown Game";
+    }
+
+    public static string GetSceneForTag(string tag)
+    {
+        if (tag == "Game12" || tag == "Game13" || tag == "RandomGame")
+        {
+            // Pick a real random scene from the valid list
+            List<string> validScenes = new List<string>(tagToScene.Values);
+            return validScenes[Random.Range(0, validScenes.Count)];
+        }
+
+        return tagToScene.ContainsKey(tag) ? tagToScene[tag] : string.Empty;
+    }
+
+
 }

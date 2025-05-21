@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -20,5 +20,20 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    // ✅ Call this after each picture is taken to see if all players are done
+    public bool AllPlayersCaptured()
+    {
+        if (playersArray == null || playersArray.Length == 0)
+            return false;
+
+        foreach (Player player in playersArray)
+        {
+            if (player == null || player.PlayerIcon == null)
+                return false;
+        }
+
+        return true;
     }
 }
