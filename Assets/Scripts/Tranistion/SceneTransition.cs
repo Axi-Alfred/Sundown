@@ -27,7 +27,7 @@ public class SceneTransition : MonoBehaviour
         Initialize();
     }
 
-    public void Initialize()
+    public void Initialize(bool autoStartFadeIn = true)
     {
         image = GetComponent<Image>();
         if (image == null)
@@ -38,15 +38,17 @@ public class SceneTransition : MonoBehaviour
 
         Material baseMat = circleFadeMaterial != null ? circleFadeMaterial : image.material;
         runtimeMat = new Material(baseMat);
-        runtimeMat.SetFloat("_Cutoff", 0f);
+        runtimeMat.SetFloat("_Cutoff", 0f); // Start hidden
         image.material = runtimeMat;
         image.enabled = true;
 
         if (messageUI != null)
             messageUI.gameObject.SetActive(false);
 
-        StartCoroutine(StartFadeNextFrame());
+        if (autoStartFadeIn)
+            StartCoroutine(StartFadeNextFrame());
     }
+
 
     private IEnumerator StartFadeNextFrame()
     {

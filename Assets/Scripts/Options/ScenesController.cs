@@ -41,9 +41,9 @@ public class ScenesController : MonoBehaviour
     {
         GameObject fadeObj = null;
 
-        if (fadePrefab != null)
+        if (fadePrefab != null && enableFadeIn)
         {
-            Debug.Log("[ScenesController] Instantiating fade prefab...");
+            Debug.Log("[ScenesController] Instantiating fade prefab for fade-in...");
             fadeObj = Instantiate(fadePrefab);
             fadeController = fadeObj.GetComponentInChildren<SceneTransition>();
 
@@ -51,16 +51,20 @@ public class ScenesController : MonoBehaviour
             {
                 Debug.LogError("[ScenesController] Fade prefab does not contain SceneTransition.");
             }
-            else if (enableFadeIn)
+            else
             {
-                fadeController.Initialize();
+                fadeController.Initialize(autoStartFadeIn: true);
+                // Optional: Destroy after fade-in completes
+                Destroy(fadeObj, fadeInDuration + 0.5f);
             }
         }
+
         else
         {
             Debug.LogWarning("[ScenesController] No fadePrefab assigned.");
         }
 
+        // Handle orientation enforcement
         switch (orientationMode)
         {
             case OrientationMode.Landscape:
@@ -83,9 +87,9 @@ public class ScenesController : MonoBehaviour
                 break;
         }
 
-        if (enableFadeIn && fadeObj != null)
-            Destroy(fadeObj, fadeInDuration + 0.1f);
+        // ❌ No longer destroy the fade object. It remains in the scene ready for fade-out.
 
+        // Handle optional timer setup
         if (enableTimer && timerPrefab != null)
         {
             var timerObj = Instantiate(timerPrefab);
@@ -102,6 +106,7 @@ public class ScenesController : MonoBehaviour
                 StartCoroutine(WaitForTimerAndEnd(timerDuration + 5f));
         }
     }
+
 
     private IEnumerator WaitForTimerAndEnd(float waitTime)
     {
@@ -128,16 +133,29 @@ public class ScenesController : MonoBehaviour
 
         Debug.Log("[ScenesController] Fading out to: " + nextSceneName);
 
-        if (enableFadeOut && fadeController != null)
+        if (enableFadeOut && fadePrefab != null)
         {
-            fadeController.StartFadeOut(nextSceneName);
+            GameObject fadeObj = Instantiate(fadePrefab);
+            SceneTransition fadeController = fadeObj.GetComponentInChildren<SceneTransition>();
+
+            if (fadeController != null)
+            {
+                fadeController.Initialize(autoStartFadeIn: false); // set up, but don’t fade in
+                fadeController.StartFadeOut(nextSceneName);        // directly trigger fade-out
+            }
+            else
+            {
+                Debug.LogError("[ScenesController] Instantiated fade prefab is missing SceneTransition.");
+                SceneManager.LoadScene(nextSceneName); // fallback
+            }
         }
         else
         {
-            Debug.LogWarning("[ScenesController] Fade disabled or fadeController missing. Loading directly.");
+            Debug.LogWarning("[ScenesController] Fade disabled or prefab missing. Loading scene directly.");
             SceneManager.LoadScene(nextSceneName);
         }
     }
+
 
     public void TriggerEndNow()
     {
