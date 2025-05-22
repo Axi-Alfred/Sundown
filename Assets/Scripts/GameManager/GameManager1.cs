@@ -51,7 +51,16 @@ public static class GameManager1
         }
 
         Debug.Log("All rounds finished!");
-        SceneManager.LoadScene("LeaderBoard");
+        SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
+        if (transition != null)
+        {
+            transition.StartFadeOut("LeaderBoard");
+        }
+        else
+        {
+            Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
+            SceneManager.LoadScene("LeaderBoard");
+        }
     }
 
     public static void EndTurn()
