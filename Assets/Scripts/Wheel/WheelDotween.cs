@@ -24,8 +24,6 @@ public class WheelDotween : MonoBehaviour
 
     [Header("Player Identity Display")]
     [SerializeField] private Image playerIconCircle; // CircleMask > PlayerIcon
-    [SerializeField] private TMP_Text filterNameTop; // "You are now spinning"
-    [SerializeField] private TMP_Text filterNameBottom; // Large text below wheel
 
     private void Awake()
     {
@@ -71,17 +69,6 @@ public class WheelDotween : MonoBehaviour
         else
         {
             Debug.LogWarning("⚠️ PlayerIcon is null — photo was likely not saved.");
-        }
-
-        if (filterNameTop == null || filterNameBottom == null)
-        {
-            Debug.LogError($"❌ FilterNameTop or Bottom is not assigned. Top: {filterNameTop}, Bottom: {filterNameBottom}");
-        }
-        else
-        {
-            filterNameTop.text = player.PlayerName;
-            filterNameBottom.text = player.PlayerName;
-            Debug.Log($"📝 Filter name set: {player.PlayerName}");
         }
     }
 

@@ -65,7 +65,7 @@ public static class GameManager1
 
     public static void EndTurn()
     {
-        PlayerManager.Instance.currentPlayerTurn.HasPlayed = true;
+        PlayerData.currentPlayerTurn.HasPlayed = true;
         Time.timeScale = 1f;
 
         var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
