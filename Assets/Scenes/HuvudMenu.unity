@@ -5077,6 +5077,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3511121566227159653, guid: 1619f0f8731883e48b38b604476e24be, type: 3}
+      propertyPath: numberOfRounds
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511121566227159653, guid: 1619f0f8731883e48b38b604476e24be, type: 3}
+      propertyPath: numberOfPlayers
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5428555484329151560, guid: 1619f0f8731883e48b38b604476e24be, type: 3}
       propertyPath: m_Name
       value: PlayerManager
