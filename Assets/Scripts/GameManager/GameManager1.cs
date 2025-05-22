@@ -16,7 +16,7 @@ public static class GameManager1
 
     public static IEnumerator PlayerTurnLoop()
     {
-        tempPlayersList = PlayerManager.Instance.playersArray.ToList();
+        tempPlayersList = PlayerData.playersArray.ToList();
         tempPlayersList = tempPlayersList.OrderBy(p => Random.value).ToList();
 
         foreach (Player i in tempPlayersList)
@@ -26,13 +26,14 @@ public static class GameManager1
 
         for (int i = 0; i < tempPlayersList.Count; i++)
         {
-            PlayerManager.Instance.currentPlayerTurn = tempPlayersList[i];
-            Debug.Log("Player turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
+            PlayerData.currentPlayerTurn = tempPlayersList[i];
+            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
 
-            yield return new WaitUntil(() => PlayerManager.Instance.currentPlayerTurn.HasPlayed == true);
+            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
+
             yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Wheel");
 
-            Debug.Log("Player finished turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
+            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.PlayerName);
         }
 
         yield break;
@@ -42,9 +43,9 @@ public static class GameManager1
     {
         gameSpeedMultiplier = 1;
 
-        for (currentRound = 1; currentRound <= PlayerManager.Instance.numberOfRounds; currentRound++)
+        for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            newRoundHasBegun = true;
+            newRoundHasBegun = true; //Sets till false i WheelDotween när animationen har spelat klar
             gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
             yield return PlayerTurnLoop();
         }

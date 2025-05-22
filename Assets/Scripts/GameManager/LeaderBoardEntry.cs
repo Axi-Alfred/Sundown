@@ -1,11 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
 public class LeaderBoardEntry : MonoBehaviour
 {
-    // Assigned externally during instantiation
+    //Det här är scriptet i prefaben som spawnar en gång per spelare i leaderboarden
     public Player Player { get; set; }
     public int Position { get; set; }
 
@@ -14,24 +14,21 @@ public class LeaderBoardEntry : MonoBehaviour
     [SerializeField] private Image playerIcon;
     [SerializeField] private Image crown;
 
+
+    // Start is called before the first frame update
     void Start()
     {
-        // Nothing needed here right now
+
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // Optional: You can remove this if not used
+
     }
 
     public void LoadEntry()
     {
-        if (Player == null)
-        {
-            Debug.LogWarning("[LeaderBoardEntry] No Player data assigned!");
-            return;
-        }
-
         playerName.text = Player.PlayerName;
         playerScore.text = Player.PlayerScore.ToString();
         playerIcon.sprite = Player.PlayerIcon;

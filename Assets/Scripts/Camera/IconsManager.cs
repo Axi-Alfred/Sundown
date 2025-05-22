@@ -38,12 +38,12 @@ public class IconsManager : MonoBehaviour
     [SerializeField] private GameObject InitialPopup;
     [SerializeField] private GameObject initialPopupText;
 
-    private string[] playerNumbersStrings = new string[4] {"one", "two", "three", "four"};
+    private string[] playerNumbersStrings = new string[4] { "one", "two", "three", "four" };
 
     // Start is called before the first frame update
     void Start()
     {
-        frontCamera = GetComponent<FrontCamera>();    
+        frontCamera = GetComponent<FrontCamera>();
         animator = GetComponent<Animator>();
         initialPopupText.SetActive(false);
 
@@ -62,7 +62,7 @@ public class IconsManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public IEnumerator TakePlayerPictureLoop()
@@ -75,7 +75,7 @@ public class IconsManager : MonoBehaviour
 
         InitialPopup.SetActive(false);
 
-        for (int i = 0; i < PlayerManager.Instance.playersArray.Length; i++)
+        for (int i = 0; i < PlayerData.playersArray.Length; i++)
         {
             hasTakenPic = false;
             instructions.gameObject.SetActive(true);
@@ -85,13 +85,12 @@ public class IconsManager : MonoBehaviour
             continueButton.gameObject.SetActive(false);
             currentFilter = tempFiltersList[i];
             instructions.text = "Player number " + playerNumbersStrings[i] + ", show us what you got!";
-            currentPlayer = PlayerManager.Instance.playersArray[i];
+            currentPlayer = PlayerData.playersArray[i];
             animator.SetBool("PlayCountdown", true);
 
             yield return new WaitForSeconds(countdown.length);
 
-            yield return StartCoroutine(frontCamera.TakePicture());
-
+            StartCoroutine(frontCamera.TakePicture());
             SFXLibrary.Instance.Play(1);
 
             countdownNumberObject.SetActive(false);
@@ -100,7 +99,7 @@ public class IconsManager : MonoBehaviour
             playerName.text = "Your name is " + currentFilter.filterName;
             animator.SetBool("PlayCountdown", false);
 
-            if (i == (PlayerManager.Instance.playersArray.Length - 1))
+            if (i == (PlayerData.playersArray.Length - 1))
             {
                 continueButton.gameObject.SetActive(true);
                 yield return new WaitUntil(() => hasContinued);
@@ -147,19 +146,7 @@ public class IconsManager : MonoBehaviour
     {
         hasContinued = true;
         ShowPlayersList();
-
-        // Trigger scene transition via ScenesController
-        ScenesController controller = FindObjectOfType<ScenesController>();
-        if (controller != null)
-        {
-            controller.EndGameAndFadeOut();
-        }
-        else
-        {
-            Debug.LogWarning("[IconsManager] No ScenesController found to handle fade.");
-        }
     }
-
 
     private IEnumerator InitialTextDOTween()
     {

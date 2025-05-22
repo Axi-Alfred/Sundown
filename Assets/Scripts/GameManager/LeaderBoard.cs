@@ -10,20 +10,25 @@ using DG.Tweening;
 public class LeaderBoard : MonoBehaviour
 {
     List<GameObject> entriesObjectsList = new List<GameObject>();
-    [SerializeField] private GameObject entryPrefab;
+    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry i leaderboarden
     [SerializeField] private GameObject panel;
     [SerializeField] private TMP_Text introText;
     [SerializeField] private GameObject returnToMenuButton;
 
     [SerializeField] private Transform entrySpawnPoint;
+
     [SerializeField] private VerticalLayoutGroup layoutGroupV;
+
     [SerializeField] private GameObject confettiParticles;
 
+    //private float[] pitches = new float[4] {}; 
+
+    // Start is called before the first frame update
     void Start()
     {
         confettiParticles.SetActive(false);
 
-        if (PlayerManager.Instance.numberOfPlayers < 3)
+        if (PlayerData.numberOfPlayers < 3)
         {
             layoutGroupV.childAlignment = TextAnchor.UpperCenter;
             layoutGroupV.spacing = -600;
@@ -34,23 +39,31 @@ public class LeaderBoard : MonoBehaviour
             layoutGroupV.spacing = 50;
         }
 
+        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         returnToMenuButton.SetActive(false);
         entriesObjectsList.Clear();
         while (transform.childCount > 0)
         {
             Destroy(transform.GetChild(0).gameObject);
         }
-
         StartCoroutine(IntroDOTween());
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Debug.Log(Time.timeScale);
     }
 
     private void InitializeLeaderBoard()
     {
-        List<Player> playersList = SortByScore(PlayerManager.Instance.playersArray);
+        List<Player> playersList = SortByScore(PlayerData.playersArray);
 
         GameObject currentEntry;
+
         foreach (var player in playersList)
         {
+            currentEntry = null;
             currentEntry = Instantiate(entryPrefab);
             currentEntry.transform.SetParent(entrySpawnPoint);
             currentEntry.GetComponent<LeaderBoardEntry>().Player = player;
@@ -63,7 +76,9 @@ public class LeaderBoard : MonoBehaviour
     public static List<Player> SortByScore(Player[] players)
     {
         List<Player> playersCopy = players.ToList();
+
         playersCopy.Sort((a, b) => a.PlayerScore.CompareTo(b.PlayerScore));
+
         return playersCopy;
     }
 
@@ -89,9 +104,10 @@ public class LeaderBoard : MonoBehaviour
     private IEnumerator IntroDOTween()
     {
         introText.enabled = false;
+
         yield return new WaitForSeconds(1.5f);
 
-        RectTransform textRT = introText.GetComponent<RectTransform>();
+        RectTransform textRT = introText.gameObject.GetComponent<RectTransform>();
         textRT.localScale = Vector3.one * 0.2f;
 
         Sequence textSequence = DOTween.Sequence();
@@ -145,6 +161,7 @@ public class LeaderBoard : MonoBehaviour
             }
 
             yield return entrySequence.WaitForCompletion();
+
             yield return new WaitForSeconds(delayBetweenEntries);
         }
 
@@ -152,6 +169,7 @@ public class LeaderBoard : MonoBehaviour
         entriesObjectsList[entriesObjectsList.Count - 1].GetComponent<LeaderBoardEntry>().GiveCrown();
 
         yield return new WaitForSeconds(1.5f);
+
         returnToMenuButton.SetActive(true);
     }
 }

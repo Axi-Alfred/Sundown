@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Player
 {
@@ -13,8 +15,6 @@ public class Player
     private Sprite playerIcon;
     public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; } }
 
-    // ✅ New: Store the raw texture from the camera
-    public Texture2D PlayerPhotoTexture { get; private set; }
 
     public Player(string name, int iD)
     {
@@ -28,20 +28,9 @@ public class Player
         PlayerScore += score;
     }
 
-    // ✅ Call this when setting the photo from the camera
-    public void SetPhoto(Texture2D texture)
+    override
+    public string ToString()
     {
-        PlayerPhotoTexture = texture;
-
-        // Convert texture to sprite
-        playerIcon = Sprite.Create(
-            texture,
-            new Rect(0, 0, texture.width, texture.height),
-            new Vector2(0.5f, 0.5f));
-    }
-
-    public override string ToString()
-    {
-        return "Player name: " + PlayerName + ", Player iD: " + PlayerId;
+        return "Player name: " + PlayerName + ", " + "Player iD: " + PlayerId;
     }
 }
