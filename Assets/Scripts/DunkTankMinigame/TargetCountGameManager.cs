@@ -34,7 +34,7 @@ public class TargetCounterGameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("🏆 All targets hit! Point awarded.");
-        PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+        PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
 }

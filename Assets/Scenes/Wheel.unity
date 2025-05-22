@@ -7267,6 +7267,7 @@ MonoBehaviour:
   roundText: {fileID: 770116985}
   playerSprite: {fileID: 2124620984}
   gameStartTimer: 1.5
+  nextGameText: {fileID: 22159728}
 --- !u!61 &1807274577
 BoxCollider2D:
   m_ObjectHideFlags: 0

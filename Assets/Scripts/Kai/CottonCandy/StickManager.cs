@@ -176,7 +176,7 @@ public class StickManager : MonoBehaviour
         // ✅ Win condition
         if (newScale.magnitude >= winScale)
         {
-            PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+            PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
             Time.timeScale = 1f;
             GameManager1.EndTurn();

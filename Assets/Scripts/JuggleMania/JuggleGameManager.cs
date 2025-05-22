@@ -36,7 +36,7 @@ public class JuggleGameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("👏 You win! Juggled enough.");
-        PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+        PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
 }

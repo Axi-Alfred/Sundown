@@ -57,7 +57,7 @@ public class BalloonGameManager : MonoBehaviour
         if (poppedBalloons >= 20)
         {
             poppedBalloons = 0;
-            PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+            PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("🎉 Score awarded!");
             GameManager1.EndTurn(); // ✅ Go to Wheel scene
         }

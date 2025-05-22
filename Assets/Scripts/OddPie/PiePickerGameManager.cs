@@ -82,7 +82,7 @@ public class PiePickerGameManager : MonoBehaviour
     {
         gameOver = true;
         Debug.Log("🏆 You win! Point awarded.");
-        PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+        PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
 

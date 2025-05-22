@@ -43,7 +43,7 @@ public class WheelDotween : MonoBehaviour
 
     private void ShowPlayerVisuals()
     {
-        var player = PlayerManager.Instance.currentPlayerTurn;
+        var player = PlayerData.currentPlayerTurn;
 
         if (player == null)
         {

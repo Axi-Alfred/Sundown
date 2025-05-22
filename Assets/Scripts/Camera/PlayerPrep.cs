@@ -120,7 +120,7 @@ public class PlayerPrep : MonoBehaviour
 
     public IEnumerator IconsFadeOutDOTween()
     {
-        float longestTweenDuration = 0.4f;
+        float longestTweenDuration = 0.5f;
 
         for (int i = 0; i < entriesArray.Length; i++)
         {
@@ -132,7 +132,7 @@ public class PlayerPrep : MonoBehaviour
         }
 
         float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;
-        yield return new WaitForSeconds(totalDuration - 0.25f);
+        yield return new WaitForSeconds(totalDuration);
     }
 
     public IEnumerator IconsFadeInDOTween()
