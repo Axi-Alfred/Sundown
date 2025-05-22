@@ -35,6 +35,7 @@ public class MenuController : MonoBehaviour
     {
         Debug.Log("[MenuController] Assigning players...");
         yield return PlayerData.AssignPlayers();
+        CoroutineHost.instance.Run(GameManager1.RoundsLoop());
 
         Debug.Log("[MenuController] Players assigned.");
 
