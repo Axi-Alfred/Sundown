@@ -5,7 +5,8 @@ using UnityEngine;
 public class StickManager : MonoBehaviour
 {
     [Header("Audio")]
-    [SerializeField] private AudioClip machineHum, crowdSounds, cottonCandy;
+    [SerializeField] private AudioClip machineHum;
+    [SerializeField] private AudioClip cottonCandy;
 
     [Header("References")]
     public Transform stickTip;
@@ -17,19 +18,19 @@ public class StickManager : MonoBehaviour
     [SerializeField] private float spawnThreshold = 90f;
     [SerializeField] private float scalePerSpinAlongStick = 0.03f;
     [SerializeField] private float scalePerSpinHorizontal = 0.01f;
-    [SerializeField] private float minScale = 0.5f;
-    [SerializeField] private float maxScale = 2.0f;
     [SerializeField] private float winScale = 1.5f;
     [SerializeField] private Animator cottonCandyMachine;
 
 
     private AudioSource machineSource;
-    private AudioSource crowdSource;
     private AudioSource playerInteractionSource;
     private Camera mainCam;
 
+
     private Vector2 lastDirection;
     private float rotationAccumulation = 0f;
+    private bool hasWon = false;
+
     private Transform cottonCandyTransform;
 
     private bool hasTriggeredAnimation = false;
@@ -45,12 +46,6 @@ public class StickManager : MonoBehaviour
         machineSource.loop = true;
         machineSource.volume = 0.8f;
         machineSource.Play();
-
-        crowdSource = gameObject.AddComponent<AudioSource>();
-        crowdSource.clip = crowdSounds;
-        crowdSource.loop = true;
-        crowdSource.volume =1f;
-        crowdSource.Play();
 
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
 
@@ -90,11 +85,15 @@ public class StickManager : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Vector3 touchWorldPos = mainCam.ScreenToWorldPoint(touch.position);
-            touchWorldPos.z = 0f;
-            MoveStick(touchWorldPos);
+            if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+            {
+                Vector3 touchWorldPos = mainCam.ScreenToWorldPoint(touch.position);
+                touchWorldPos.z = 0f;
+                MoveStick(touchWorldPos);
+            }
         }
     }
+
 
     void MoveStick(Vector3 position)
     {
@@ -148,8 +147,14 @@ public class StickManager : MonoBehaviour
     {
         if (cottonCandyTransform == null) return;
 
-        // Play cotton candy sound
-        playerInteractionSource.PlayOneShot(cottonCandy);
+        // Play cotton candy sound, cotton candy sound will loop while collecting
+        if (!playerInteractionSource.isPlaying)
+        {
+            playerInteractionSource.clip = cottonCandy;
+            playerInteractionSource.loop = true;
+            playerInteractionSource.Play();
+        }
+
 
         // Get current scale
         Vector3 currentScale = cottonCandyTransform.localScale;
@@ -165,22 +170,21 @@ public class StickManager : MonoBehaviour
         newScale.x += scalePerSpinHorizontal;
         newScale.z += scalePerSpinHorizontal;
 
-        // ✅ Clamp the size to avoid overgrowth
-        newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
-        newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
-        newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
-
         cottonCandyTransform.localScale = newScale;
         cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2);
 
         // ✅ Win condition
-        if (newScale.magnitude >= winScale)
+        if (!hasWon && newScale.magnitude >= winScale)
         {
+            hasWon = true;
+            playerInteractionSource.Stop();
             PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
             Time.timeScale = 0f;
             GameManager1.EndTurn();
         }
+
+
 
     }
 

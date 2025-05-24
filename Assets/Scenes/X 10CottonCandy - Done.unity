@@ -718,7 +718,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   machineHum: {fileID: 8300000, guid: 8f884c667c25839439836d0fb05401d2, type: 3}
-  crowdSounds: {fileID: 8300000, guid: 75097bc5fbfb5724c9356082ca40684f, type: 3}
   cottonCandy: {fileID: 8300000, guid: c40875dd0f326144eab9e41aeee4787a, type: 3}
   stickTip: {fileID: 1583569887}
   candyMachineCenter: {fileID: 15084007}
@@ -727,8 +726,6 @@ MonoBehaviour:
   spawnThreshold: 260
   scalePerSpinAlongStick: 0.07
   scalePerSpinHorizontal: 0.05
-  minScale: 0.3
-  maxScale: 2
   winScale: 1.5
   cottonCandyMachine: {fileID: 1613657644}
 --- !u!82 &1024300273
@@ -827,6 +824,71 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1001 &1069814639
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.0192232
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.8574
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.013226831
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2666117773295662666, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543543275428829020, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: musicClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 75097bc5fbfb5724c9356082ca40684f, type: 3}
+    - target: {fileID: 5661837328320448353, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719853169740158259, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_Name
+      value: BGMPlayer
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 99dcf990d59097b459831564ace73506, type: 3}
 --- !u!1 &1225719594
 GameObject:
   m_ObjectHideFlags: 0
@@ -6255,3 +6317,4 @@ SceneRoots:
   - {fileID: 357530668}
   - {fileID: 1613657643}
   - {fileID: 613650726}
+  - {fileID: 1069814639}

@@ -44,7 +44,6 @@ public class isItRight : MonoBehaviour
     void Start()
     {
         audioPool = FindObjectOfType<AudioPool>();
-        audioPool.PlayBackgroundMusic(backgroundMusic, 0.5f); // Adjust volume as needed
         currentMistakes = 0;
         UpdateMistakeUI();
         LoadNextWord();
