@@ -61,8 +61,6 @@ public class VisualTimerBar : MonoBehaviour
             countdownText.gameObject.SetActive(false);
         }
 
-        Time.timeScale = GameManager1.gameSpeedMultiplier;
-
         // Begin the timer
         timeLeft = duration;
         timerRunning = true;

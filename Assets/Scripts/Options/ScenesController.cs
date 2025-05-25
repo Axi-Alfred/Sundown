@@ -37,6 +37,11 @@ public class ScenesController : MonoBehaviour
         StartCoroutine(SceneSetupSequence());
     }
 
+    void Update()
+    {
+        print(Time.timeScale);
+    }
+
     private IEnumerator SceneSetupSequence()
     {
         GameObject fadeObj = null;
@@ -98,12 +103,18 @@ public class ScenesController : MonoBehaviour
             gameTimer.endMessage = timerEndMessage;
 
             if (delayTimerStart)
+            {
                 StartCoroutine(StartTimerAfterDelay(1f));
+            }
             else
+            {
                 gameTimer.StartTimerSequence();
+            }
 
             if (autoFadeOutOnTimerEnd)
+            {
                 StartCoroutine(WaitForTimerAndEnd(timerDuration + 5f));
+            }
         }
     }
 

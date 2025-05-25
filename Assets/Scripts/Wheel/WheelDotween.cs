@@ -77,6 +77,7 @@ public class WheelDotween : MonoBehaviour
     {
         currentRoundNumber.text = GameManager1.currentRound.ToString();
         previousRoundNumber.text = (GameManager1.currentRound - 1).ToString();
+        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
     }
 
     private IEnumerator SceneInitialization()
@@ -176,13 +177,13 @@ public class WheelDotween : MonoBehaviour
 
             Sequence transitionSequence = DOTween.Sequence();
 
-            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.45f));
-            transitionSequence.Join(previousRoundNumber.rectTransform.DOLocalMoveY(-100f, 0.6f).SetEase(Ease.InQuad));
+            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.3f));
+            transitionSequence.Join(previousRoundNumber.rectTransform.DOLocalMoveY(-100f, 0.3f).SetEase(Ease.InQuad));
 
             yield return new WaitForSeconds(0.4f);
 
-            transitionSequence.Join(currentRoundNumber.DOFade(1f, 0.6f));
-            transitionSequence.Join(currentRoundNumber.rectTransform.DOLocalMoveY(startPos.y, 0.6f).SetEase(Ease.OutElastic));
+            transitionSequence.Join(currentRoundNumber.DOFade(1f, 0.45f));
+            transitionSequence.Join(currentRoundNumber.rectTransform.DOLocalMoveY(startPos.y, 0.3f).SetEase(Ease.OutElastic));
 
             textRT.DOPunchPosition(new Vector3(0, -20, 0), 0.5f, 2);
 

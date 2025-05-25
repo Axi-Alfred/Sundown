@@ -18,6 +18,8 @@ public class Pointer : MonoBehaviour
 
     [SerializeField] private TMP_Text nextGameText;
 
+    [SerializeField] private SpinWheel wheel;
+
     void Start()
     {
         GetComponent<BoxCollider2D>().enabled = false;
@@ -33,6 +35,8 @@ public class Pointer : MonoBehaviour
             : "Round " + GameManager1.currentRound;
 
         playerSprite.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+
+        if (wheel.tag != null) nextGameText.text = SpinWheel.GetDisplayNameForTag(wheel.tag) + " will begin now!";
     }
 
     private void OnTriggerEnter2D(Collider2D other)

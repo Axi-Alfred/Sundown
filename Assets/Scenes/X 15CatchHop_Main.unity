@@ -371,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clownPrefabs:
   - {fileID: 5823898155569132510, guid: ad2916c70c5e7444cbc00ebad2301df6, type: 3}
-  - {fileID: 5823898155569132510, guid: ec764451497b0f64c8f9d4f9af8b8f61, type: 3}
+  - {fileID: 5823898155569132510, guid: 35d15171c889a6b4d985c3084976ec51, type: 3}
   - {fileID: 5823898155569132510, guid: 3ad8fb82b5d5b71488c264af4f488f7a, type: 3}
   spawnPosition: {fileID: 2096803688}
   kanonAnimator: {fileID: 0}

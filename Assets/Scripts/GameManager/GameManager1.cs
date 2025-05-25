@@ -9,7 +9,7 @@ public static class GameManager1
     private static List<Player> tempPlayersList;
     public static int currentRound;
 
-    public static float gameSpeedMultiplier;
+    public static float gameSpeedMultiplier = 1;
     private static float increasePercentage = 0.15f;
 
     public static bool newRoundHasBegun;
@@ -46,21 +46,11 @@ public static class GameManager1
         for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
             newRoundHasBegun = true; //Sets till false i WheelDotween när animationen har spelat klar
-            gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
+            if (currentRound > 1) gameSpeedMultiplier = Mathf.Min(1f + ((currentRound-1) * increasePercentage), 2f);
             yield return PlayerTurnLoop();
         }
 
         Debug.Log("All rounds finished!");
-        SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
-        if (transition != null)
-        {
-            transition.StartFadeOut("LeaderBoard");
-        }
-        else
-        {
-            Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
-            SceneManager.LoadScene("LeaderBoard");
-        }
     }
 
     public static void EndTurn()
@@ -71,11 +61,15 @@ public static class GameManager1
         var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
         if (sceneController != null)
         {
-            sceneController.EndGameAndFadeOut(); // ✅ uses nextSceneName
-        }
-        else
-        {
-            UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("Wheel");
+            if (currentRound == PlayerData.numberOfRounds)
+            {
+                sceneController.nextSceneName = "LeaderBoard";
+            }
+            else
+            {
+                sceneController.nextSceneName = "Wheel";
+            }
+            sceneController.EndGameAndFadeOut();
         }
     }
 }
