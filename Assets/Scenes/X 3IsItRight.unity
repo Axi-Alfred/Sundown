@@ -1298,16 +1298,10 @@ MonoBehaviour:
   backgroundMusic: {fileID: 8300000, guid: 78775c971399fb74895c6e2e42c3dfe2, type: 3}
   audioPool: {fileID: 154409414}
   wordList:
-  - circus
   - clown
-  - apple pie
-  - dream
-  - mirror
-  - flip
-  - level
-  - cloud
-  - right
-  - brain
+  - bicycle
+  - pies
+  - ball
   letterTilePrefab: {fileID: 3328203379672074029, guid: 3ba57c969f1bbcb46aaa70b8ba0fe76b, type: 3}
   letterParent: {fileID: 1147276989}
 --- !u!4 &608171599
@@ -2889,3 +2883,4 @@ SceneRoots:
   - {fileID: 1359495589}
   - {fileID: 166238940}
   - {fileID: 532863360}
+  - {fileID: 172015919}

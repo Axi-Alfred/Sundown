@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class isItRight : MonoBehaviour
 {
-    [SerializeField] private int maxMistakes = 2;
+    [SerializeField] private int maxMistakes = 3;
     [SerializeField] private TMP_Text mistakeText;
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
     [SerializeField] private AudioClip backgroundMusic;
@@ -103,14 +103,26 @@ public class isItRight : MonoBehaviour
     private void CreateTiles(string word)
     {
         System.Random rand = new();
-        HashSet<string> nonFlippableLetters = new() { "l", "o", "x", "s", "z", "i", " ", "" };
+        HashSet<char> nonFlippableLetters = new()
+    {
+        'l', 'o', 'x', 's', 'z', 'i', 'u', 'n', 'h',
+        'O', 'X', 'S', 'Z', 'I', 'U', 'N', 'H', 'V', 'C'
+    };
 
         for (int i = 0; i < word.Length; i++)
         {
-            string correct = word[i].ToString();
-            bool isFlippable = !nonFlippableLetters.Contains(correct);
+            char letterChar = word[i];
+            string correct = letterChar.ToString();
+            bool isFlippable = !nonFlippableLetters.Contains(letterChar);
+
+            // Determine if letter starts correct
             bool startsCorrect = !isFlippable || rand.NextDouble() < 0.4f;
-            string shown = startsCorrect ? correct : NewLetter.FlipLetter(correct);
+
+            // Unflippable letters appear as empty strings if incorrect
+            string shown = startsCorrect
+                ? correct
+                : (isFlippable ? correct : "");
+
             bool isCorrect = isFlippable && !startsCorrect;
 
             if (isCorrect)
@@ -124,13 +136,31 @@ public class isItRight : MonoBehaviour
 
             GameObject go = Instantiate(letterTilePrefab, letterParent);
             NewLetter tile = go.GetComponent<NewLetter>();
+
             tile.Setup(shown, correct, isCorrect, startsCorrect);
-            go.GetComponent<Button>().onClick.AddListener(tile.OnClick);
+
+            // Rotate only flippable and incorrectly placed letters
+            tile.contentTransform.localRotation = startsCorrect || !isFlippable
+                ? Quaternion.identity
+                : Quaternion.Euler(0, 0, 180);
+
+            // Disable interaction if the letter is empty
+            Button button = go.GetComponent<Button>();
+            if (string.IsNullOrEmpty(shown))
+            {
+                button.interactable = false; // non-interactive
+            }
+            else
+            {
+                button.onClick.AddListener(tile.OnClick);
+                button.interactable = true;
+            }
 
             spawnedTiles.Add(tile);
             allTiles.Add(tile);
         }
     }
+
 
     private void EnsureMinimumFlips(int wordLength)
     {
@@ -154,7 +184,6 @@ public class isItRight : MonoBehaviour
 
         totalToFix = spawnedTiles.Count(t => t.isCorrect);
         displayedMaxMistakes = totalToFix;
-        maxMistakes = distinctLetters > 5 ? 3 : 2;
     }
 
     private void FinalizeWordSetup()

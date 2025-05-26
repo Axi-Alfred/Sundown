@@ -21,7 +21,7 @@ public class NewLetter : MonoBehaviour
 
     public void Setup(string shown, string correct, bool isCorrectLetter, bool startsCorrect)
     {
-        StopAllCoroutines(); // 🛑 Stop lingering fades or shakes
+        StopAllCoroutines();
 
         displayedLetter = shown;
         correctLetter = correct;
@@ -29,30 +29,15 @@ public class NewLetter : MonoBehaviour
         hasBeenPressed = false;
 
         letterText.text = shown;
+        GetComponent<Image>().color = Color.white;
 
-        // ✅ Always reset visuals
-        Image img = GetComponent<Image>();
-        img.color = Color.white;
+        // Set interaction based on if letter is empty or not
+        Button button = GetComponent<Button>();
+        button.interactable = !string.IsNullOrEmpty(shown);
 
-        GetComponent<Button>().interactable = true;
+        contentTransform.localRotation = startsCorrect ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
     }
 
-
-    public static string FlipLetter(string c)
-    {
-        Dictionary<char, char> flipMap = new()
-    {
-        { 'a', 'ɐ' }, { 'b', 'q' }, { 'c', 'ɔ' }, { 'd', 'p' }, { 'e', 'ǝ' },
-        { 'f', 'ɟ' }, { 'g', 'ƃ' }, { 'h', 'ɥ' }, { 'i', 'ᴉ' }, { 'j', 'ɾ' },
-        { 'k', 'ʞ' }, { 'l', 'l' }, { 'm', 'ɯ' }, { 'n', 'u' }, { 'o', 'o' },
-        { 'p', 'd' }, { 'q', 'b' }, { 'r', 'ɹ' }, { 's', 's' }, { 't', 'ʇ' },
-        { 'u', 'n' }, { 'v', 'ʌ' }, { 'w', 'ʍ' }, { 'x', 'x' }, { 'y', 'ʎ' },
-        { 'z', 'z' }
-    };
-
-        char ch = c.ToLower()[0];
-        return flipMap.ContainsKey(ch) ? flipMap[ch].ToString() : c;
-    }
     public void OnClick()
     {
         if (hasBeenPressed) return;
@@ -67,64 +52,38 @@ public class NewLetter : MonoBehaviour
     public void ForceFlip()
     {
         isCorrect = true;
-        displayedLetter = FlipLetter(correctLetter);
-        letterText.text = displayedLetter;
+        displayedLetter = correctLetter;
+        letterText.text = correctLetter;
 
-        // ✅ Reset visuals
+        contentTransform.localRotation = Quaternion.Euler(0, 0, 180);
+
         GetComponent<Button>().interactable = true;
         GetComponent<Image>().color = Color.white;
         hasBeenPressed = false;
     }
 
-
     private IEnumerator AnimateFlip()
     {
-        float duration = 0.08f;
+        float duration = 0.15f;
         float elapsed = 0f;
-        Vector3 originalScale = contentTransform.localScale;
+        Quaternion startRotation = contentTransform.localRotation;
+        Quaternion endRotation = Quaternion.identity;
 
         while (elapsed < duration)
         {
-            float progress = elapsed / duration;
-            float scaleX = Mathf.Lerp(1f, 0f, progress);
-            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
-
+            contentTransform.localRotation = Quaternion.Slerp(startRotation, endRotation, elapsed / duration);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        letterText.text = correctLetter;
-        StartCoroutine(Bounce());
+        contentTransform.localRotation = endRotation;
 
-
-        // 🟢 Fördröj färgsättning tills efter flip-back är klar
-        elapsed = 0f;
-        while (elapsed < duration)
-        {
-            float progress = elapsed / duration;
-            float scaleX = Mathf.Lerp(0f, 1f, progress);
-            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
+        // Update visuals
         GetComponent<Button>().interactable = false;
-
-        if (isCorrect)
-        {
-            GetComponent<Image>().color = isItRight.Instance.victoryGreen;
-            StartCoroutine(Bounce()); // 🟢 studsa på rätt bokstav
-            isItRight.Instance.OnCorrectLetterTapped(this);
-        }
-        else
-        {
-            GetComponent<Image>().color = Color.red;
-            isItRight.Instance.OnWrongLetterTapped(this);
-        }
-
-
+        GetComponent<Image>().color = isItRight.Instance.victoryGreen;
+        isItRight.Instance.OnCorrectLetterTapped(this);
     }
+
 
     public IEnumerator AnimateShake()
     {
