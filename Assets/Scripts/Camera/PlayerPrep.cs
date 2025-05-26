@@ -165,6 +165,7 @@ public class PlayerPrep : MonoBehaviour
 
             Sequence s = DOTween.Sequence();
             s.AppendInterval(i * delayBetweenEntries);
+            SFXLibrary.Instance.Play(3);
             s.Append(rt.DOScale(Vector3.one * 1.2f, 0.25f).SetEase(Ease.OutQuad));
             s.Append(rt.DOScale(Vector3.one, 0.15f).SetEase(Ease.InQuad));
         }

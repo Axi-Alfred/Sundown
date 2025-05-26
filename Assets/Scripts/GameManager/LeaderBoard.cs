@@ -21,8 +21,14 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField] private GameObject confettiParticles;
 
-    //private float[] pitches = new float[4] {}; 
+    private float[] entriesPitches = new float[4] {1.45f, 1.3f, 1.15f, 1};
 
+
+    private void Awake()
+    {
+        //PlayerData.numberOfPlayers = 4;
+        //StartCoroutine(PlayerData.AssignPlayers());
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +58,7 @@ public class LeaderBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Time.timeScale);
+        
     }
 
     private void InitializeLeaderBoard()
@@ -144,16 +150,20 @@ public class LeaderBoard : MonoBehaviour
             rt.anchoredPosition = new Vector2(finalPosition.x, finalPosition.y + 100f);
 
             Sequence entrySequence = DOTween.Sequence();
-
+            
             if (i == entriesObjectsList.Count - 1)
             {
                 entrySequence.Append(rt.DOScale(Vector3.one * 1.5f, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBack));
                 entrySequence.Append(rt.DOScale(Vector3.one, lastEntryAnimDuration * 0.4f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.7f);
                 entrySequence.Append(rt.DOAnchorPosY(finalPosition.y, lastEntryAnimDuration * 0.6f).SetEase(Ease.OutBounce));
+                SFXLibrary.Instance.Play(1, entriesPitches[0]);
             }
             else
             {
+                int pitchesIndex = (entriesObjectsList.Count - 1) - i;
+                Debug.Log("Index " + pitchesIndex);
+                SFXLibrary.Instance.Play(1, entriesPitches[pitchesIndex]);
                 entrySequence.Append(rt.DOScale(Vector3.one * 1.2f, entryAnimDuration * 0.4f).SetEase(Ease.OutBack));
                 entrySequence.Append(rt.DOScale(Vector3.one, entryAnimDuration * 0.2f).SetEase(Ease.InOutQuad));
                 entrySequence.AppendInterval(0.5f);

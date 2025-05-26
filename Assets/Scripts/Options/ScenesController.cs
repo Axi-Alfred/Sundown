@@ -39,7 +39,7 @@ public class ScenesController : MonoBehaviour
 
     void Update()
     {
-        print(Time.timeScale);
+   
     }
 
     private IEnumerator SceneSetupSequence()
