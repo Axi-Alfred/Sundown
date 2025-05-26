@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -6,6 +6,9 @@ public class VisualTimerBar : MonoBehaviour
 {
     [Header("Timer Settings")]
     public float duration = 10f;
+
+    [Tooltip("Message to display when the timer ends")]
+    public string endMessage = "Time's up!";
 
     [Header("UI References (Auto-Wired if Empty)")]
     public Image fillBar;
@@ -15,19 +18,11 @@ public class VisualTimerBar : MonoBehaviour
 
     private float timeLeft;
     private bool timerRunning = false;
-    private bool pausedByThisScript = false;
     private bool hasStarted = false;
 
     void Awake()
     {
         AutoWireUIReferences();
-    }
-
-    void Start()
-    {
-        
-            StartTimerSequence();
-        
     }
 
     public void StartTimerSequence()
@@ -45,6 +40,7 @@ public class VisualTimerBar : MonoBehaviour
 
         timeLeft -= Time.deltaTime;
         float t = Mathf.Clamp01(timeLeft / duration);
+
         if (fillBar != null)
             fillBar.fillAmount = t;
 
@@ -57,14 +53,7 @@ public class VisualTimerBar : MonoBehaviour
 
     private System.Collections.IEnumerator SequenceBeforeTimer()
     {
-        yield return new WaitForSeconds(0.4f);
-
-        if (Time.timeScale > 0f)
-        {
-            Time.timeScale = 0f;
-            pausedByThisScript = true;
-        }
-
+        // Show countdown text if available
         if (countdownText != null)
         {
             countdownText.gameObject.SetActive(true);
@@ -72,11 +61,7 @@ public class VisualTimerBar : MonoBehaviour
             countdownText.gameObject.SetActive(false);
         }
 
-        if (pausedByThisScript)
-        {
-            Time.timeScale = 1f;
-        }
-
+        // Begin the timer
         timeLeft = duration;
         timerRunning = true;
     }
@@ -108,14 +93,13 @@ public class VisualTimerBar : MonoBehaviour
         {
             endPanel.SetActive(true);
             if (endText != null)
-                endText.text = "Time's up!";
+                endText.text = endMessage;
             GameManager1.EndTurn();
         }
     }
 
     private void AutoWireUIReferences()
     {
-        // Auto-wire from children if not assigned
         if (fillBar == null)
             fillBar = GetComponentInChildren<Image>();
 

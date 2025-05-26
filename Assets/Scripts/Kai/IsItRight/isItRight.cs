@@ -13,9 +13,11 @@ public class isItRight : MonoBehaviour
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
     [SerializeField] private AudioClip backgroundMusic;
     [SerializeField] private AudioPool audioPool;
-    [SerializeField] private List<string> wordList = new() {
+    [SerializeField]
+    private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
     };
+
     private int currentMistakes = 0;
     private bool gameOver = false;
     private int displayedMaxMistakes;
@@ -29,15 +31,10 @@ public class isItRight : MonoBehaviour
     private List<int> flippedIndices;
     private List<int> flippableIndices;
 
-
-
     public static isItRight Instance;
-    public readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f); // nice, strong green
+    public readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f);
     public GameObject letterTilePrefab;
     public Transform letterParent;
-
-
-
 
     void Awake() => Instance = this;
 
@@ -48,43 +45,41 @@ public class isItRight : MonoBehaviour
         UpdateMistakeUI();
         LoadNextWord();
     }
+
     void LoadNextWord()
     {
-        if(RightWords == 3)
+        if (RightWords >= 3)
         {
             PlayerData.currentPlayerTurn.AddScore(1);
             GameManager1.EndTurn();
-        }
-        if (currentWordIndex >= wordList.Count)
-        {
-            Debug.Log("🎉 All words complete!");
             return;
         }
 
+        if (currentWordIndex >= wordList.Count)
+        {
+            Debug.Log("🎉 All words complete!");
+            GameManager1.EndTurn(); // fallback
+            return;
+        }
 
         string nextWord = wordList[currentWordIndex];
         Debug.Log("🔤 Starting word: " + nextWord);
 
-        // 🔢 Dynamically set allowed mistakes based on word length
         int length = nextWord.Length;
-
         currentMistakes = 0;
         UpdateMistakeUI();
-
         GenerateWord(nextWord);
     }
+
     public void GenerateWord(string word)
     {
         CleanupOldTiles();
-
         InitState();
-
         CreateTiles(word);
-
         EnsureMinimumFlips(word.Length);
-
         FinalizeWordSetup();
     }
+
     private void CleanupOldTiles()
     {
         allTiles.Clear();
@@ -94,6 +89,7 @@ public class isItRight : MonoBehaviour
         }
         spawnedTiles.Clear();
     }
+
     private void InitState()
     {
         fixedCount = 0;
@@ -108,6 +104,7 @@ public class isItRight : MonoBehaviour
     {
         System.Random rand = new();
         HashSet<string> nonFlippableLetters = new() { "l", "o", "x", "s", "z", "i", " ", "" };
+
         for (int i = 0; i < word.Length; i++)
         {
             string correct = word[i].ToString();
@@ -134,9 +131,9 @@ public class isItRight : MonoBehaviour
             allTiles.Add(tile);
         }
     }
+
     private void EnsureMinimumFlips(int wordLength)
     {
-        // Sätt minsta antal bokstäver som måste vara fel:
         int distinctLetters = spawnedTiles.Select(t => t.correctLetter).Distinct().Count();
         int minFlipped = distinctLetters > 5 ? 3 : Mathf.Min(2, wordLength);
 
@@ -162,7 +159,6 @@ public class isItRight : MonoBehaviour
 
     private void FinalizeWordSetup()
     {
-        // Don't touch displayedMaxMistakes here
         UpdateMistakeUI();
     }
 
@@ -178,6 +174,7 @@ public class isItRight : MonoBehaviour
             WinGame();
         }
     }
+
     public void OnWrongLetterTapped(NewLetter tile)
     {
         if (gameOver) return;
@@ -192,32 +189,18 @@ public class isItRight : MonoBehaviour
         {
             LoseGame();
         }
-
     }
-    /*public void StartMistakeTextFloat()
-    {
-        Vector3 originalPos = mistakeText.transform.localPosition;
-
-        Sequence floatSeq = DOTween.Sequence();
-
-        floatSeq.Append(
-            mistakeText.transform.DOLocalMove(originalPos + new Vector3(10f, 10f, 0f), 1f)
-        );
-        floatSeq.Append(
-            mistakeText.transform.DOLocalMove(originalPos + new Vector3(-10f, -10f, 0f), 1f)
-        );
-        floatSeq.SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-    }*/
 
     private void UpdateMistakeUI()
     {
         mistakeText.text = $"Mistakes: {currentMistakes}/{maxMistakes}";
     }
+
     public void ShakeMistakeText()
     {
         mistakeText.transform.DOShakePosition(
             duration: 0.4f,
-            strength: new Vector3(10f, 0f, 0f), // shake only sideways
+            strength: new Vector3(10f, 0f, 0f),
             vibrato: 10,
             randomness: 90,
             snapping: false,
@@ -225,36 +208,39 @@ public class isItRight : MonoBehaviour
         );
     }
 
-
     private IEnumerator PlayVictorySequence()
     {
         audioPool.PlaySound(posAll, 2f, Random.Range(0.9f, 1f));
         float delay = 0.05f;
+
         foreach (NewLetter tile in allTiles)
         {
             tile.SetVictoryColor(victoryGreen);
-            tile.StartCoroutine(tile.Bounce()); // 🟢 studsa i ordning
+            tile.StartCoroutine(tile.Bounce());
             yield return new WaitForSeconds(delay);
         }
 
+        RightWords++; // ✅ Increment correct word count
         currentWordIndex++;
         currentMistakes = 0;
         gameOver = false;
 
         Invoke(nameof(LoadNextWord), 1.5f);
     }
+
     private IEnumerator PlayLoseSequence()
     {
         audioPool.PlaySound(negAll, 2f, Random.Range(0.9f, 1f));
         float flashDelay = 0.08f;
+
         foreach (var tile in allTiles)
         {
             tile.GetComponent<Button>().interactable = false;
             StartCoroutine(tile.AnimateShake());
-            yield return new WaitForSeconds(flashDelay); // left to right
+            yield return new WaitForSeconds(flashDelay);
         }
 
-        yield return new WaitForSeconds(0.4f); // wait before greying out
+        yield return new WaitForSeconds(0.4f);
 
         foreach (var tile in allTiles)
         {
@@ -262,7 +248,8 @@ public class isItRight : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.4f);
-        
+
+        GameManager1.EndTurn(); // ✅ Return to Wheel after loss
     }
 
     void WinGame()
@@ -270,15 +257,11 @@ public class isItRight : MonoBehaviour
         Debug.Log("🏆 You fixed the word: " + wordList[currentWordIndex]);
         StartCoroutine(PlayVictorySequence());
     }
+
     private void LoseGame()
     {
         gameOver = true;
         Debug.Log("💀 You lost!");
-
         StartCoroutine(PlayLoseSequence());
-
-
-        // Du kan lägga till mer: ljud, grafik, restart-knapp etc.
     }
-
 }

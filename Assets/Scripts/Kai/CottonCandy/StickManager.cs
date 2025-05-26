@@ -180,7 +180,7 @@ public class StickManager : MonoBehaviour
             playerInteractionSource.Stop();
             PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
-            Time.timeScale = 0f;
+            Time.timeScale = 1f;
             GameManager1.EndTurn();
         }
 

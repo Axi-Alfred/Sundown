@@ -33,16 +33,4 @@ public class PlayerEntry : MonoBehaviour
     {
         PlayerPrep.instance.ShowPicture(Player);
     }
-
-    public void HideEntry()
-    {
-        playerName.enabled = false;
-        playerIcon.enabled = false; 
-    }
-
-    public void ShowEntry()
-    {
-        playerName.enabled = true;
-        playerIcon.enabled = true;
-    }
 }

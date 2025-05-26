@@ -19,7 +19,7 @@ public class CurrentPlayerDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        text.text = PlayerData.currentPlayerTurn.PlayerName;
-        playerSprite.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+        text.text = PlayerManager.Instance.currentPlayerTurn.PlayerName;
+        playerSprite.sprite = PlayerManager.Instance.currentPlayerTurn.PlayerIcon;
     }
 }

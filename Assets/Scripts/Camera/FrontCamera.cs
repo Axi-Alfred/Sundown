@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -187,7 +187,7 @@ public class FrontCamera : MonoBehaviour
     {
         int width = original.width;
         int height = original.height;
-        Texture2D rotated = new Texture2D(height, width); 
+        Texture2D rotated = new Texture2D(height, width);
 
         for (int i = 0; i < width; ++i)
         {
@@ -228,7 +228,7 @@ public class FrontCamera : MonoBehaviour
         Texture2D tempBackgroundTexture = new Texture2D(width, height);
 
         Color[] filterPixels = tempFilterSprite.texture.GetPixels();
-        Color[] newPixels = new Color[width * height]; 
+        Color[] newPixels = new Color[width * height];
 
         for (int i = 0; i < filterPixels.Length; i++)
         {

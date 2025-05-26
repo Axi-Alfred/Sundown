@@ -1,88 +1,134 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class SceneTransition : MonoBehaviour
 {
-    public static Animator animator;
-    private static object nextSceneToLoad;
-
-    [Header("Optional Message Before Fade")]
-    [Tooltip("If true, a message will appear before fade-out.")]
-    public bool showMessage = false;
-
-    [Tooltip("The message to display on screen (e.g. 'You Win!')")]
-    public string messageText = "Level Complete!";
-
-    [Tooltip("UI Text component used to show the message.")]
+    [Header("UI Elements")]
     public TMP_Text messageUI;
 
-    [Tooltip("Duration the message is shown before fading (in seconds)")]
+    [Header("Fade Settings")]
+    public Material circleFadeMaterial;
+    public float fadeDuration = 1.5f;
     public float messageDuration = 3f;
 
-    private void Awake()
+    private string targetSceneName;
+    private bool fadingIn = false;
+    private bool fadingOut = false;
+
+    private Material runtimeMat;
+    private float fadeStartTime;
+    private Image image;
+
+    void Awake()
     {
-        animator = GetComponent<Animator>();
-        animator.SetTrigger("FadeIn");
+        Initialize();
+    }
+
+    public void Initialize(bool autoStartFadeIn = true)
+    {
+        image = GetComponent<Image>();
+        if (image == null)
+        {
+            Debug.LogError("[SceneTransition] Missing Image component.");
+            return;
+        }
+
+        Material baseMat = circleFadeMaterial != null ? circleFadeMaterial : image.material;
+        runtimeMat = new Material(baseMat);
+        runtimeMat.SetFloat("_Cutoff", 0f); // Start hidden
+        image.material = runtimeMat;
+        image.enabled = true;
 
         if (messageUI != null)
             messageUI.gameObject.SetActive(false);
+
+        if (autoStartFadeIn)
+            StartCoroutine(StartFadeNextFrame());
     }
 
-    /// <summary>
-    /// Call this to begin a transition to a scene, with optional pause/message.
-    /// </summary>
-    public static void FadeOut(object scene)
+
+    private IEnumerator StartFadeNextFrame()
     {
-        nextSceneToLoad = scene;
-        instance.StartCoroutine(instance.FadeOutWithMessage());
+        yield return null;
+        StartFadeIn();
     }
 
-    // Reference to self (set in Awake)
-    private static SceneTransition instance;
-
-    private void Start()
+    public void StartFadeIn()
     {
-        instance = this;
+        if (runtimeMat == null) return;
+        fadingIn = true;
+        fadeStartTime = Time.realtimeSinceStartup;
+        runtimeMat.SetFloat("_Cutoff", 0f);
+        Debug.Log("[SceneTransition] Starting fade-in.");
     }
 
-    private IEnumerator FadeOutWithMessage()
+    public void StartFadeOut(string sceneName)
     {
-        if (showMessage && messageUI != null)
+        if (string.IsNullOrEmpty(sceneName))
         {
-            Time.timeScale = 0f; // Pause game
-            messageUI.text = messageText;
-            messageUI.gameObject.SetActive(true);
-
-            yield return StartCoroutine(WaitForRealtimeSeconds(messageDuration));
-
-            messageUI.gameObject.SetActive(false);
-            Time.timeScale = 1f; // Resume game
+            Debug.LogError("[SceneTransition] StartFadeOut called with empty scene name.");
+            return;
         }
 
-        animator.SetTrigger("FadeOut");
+        if (runtimeMat == null)
+        {
+            Debug.LogError("[SceneTransition] Cannot fade out, runtime material is null.");
+            return;
+        }
+
+        targetSceneName = sceneName;
+        fadingOut = true;
+        fadeStartTime = Time.realtimeSinceStartup;
+        runtimeMat.SetFloat("_Cutoff", 1.5f);
+        Debug.Log("[SceneTransition] Starting fade-out to: " + targetSceneName);
     }
 
-    private IEnumerator WaitForRealtimeSeconds(float seconds)
+    void Update()
     {
-        float start = Time.realtimeSinceStartup;
-        while (Time.realtimeSinceStartup < start + seconds)
+        if (runtimeMat == null) return;
+
+        float elapsed = Time.realtimeSinceStartup - fadeStartTime;
+
+        if (fadingIn)
         {
-            yield return null;
+            float cutoff = Mathf.Lerp(0f, 1.5f, elapsed / fadeDuration);
+            runtimeMat.SetFloat("_Cutoff", cutoff);
+
+            if (elapsed >= fadeDuration)
+            {
+                runtimeMat.SetFloat("_Cutoff", 1.5f);
+                fadingIn = false;
+                Debug.Log("[SceneTransition] Fade-in complete.");
+            }
+        }
+
+        if (fadingOut)
+        {
+            float cutoff = Mathf.Lerp(1.5f, 0f, elapsed / fadeDuration);
+            runtimeMat.SetFloat("_Cutoff", cutoff);
+
+            if (elapsed >= fadeDuration)
+            {
+                fadingOut = false;
+                Debug.Log("[SceneTransition] Fade-out complete. Loading: " + targetSceneName);
+                LoadSceneAfterTransition();
+            }
         }
     }
 
-    // Called via Animation Event at the end of FadeOut animation
-    public void LoadSceneAfterTransition()
+    private void LoadSceneAfterTransition()
     {
-        if (nextSceneToLoad is string sceneName)
+        Time.timeScale = 1f;
+        if (!string.IsNullOrEmpty(targetSceneName))
         {
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(targetSceneName);
         }
-        else if (nextSceneToLoad is int sceneIndex)
+        else
         {
-            SceneManager.LoadScene(sceneIndex);
+            Debug.LogError("[SceneTransition] Target scene is empty!");
         }
     }
 }

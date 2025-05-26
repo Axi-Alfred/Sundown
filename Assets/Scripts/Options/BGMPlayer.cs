@@ -1,35 +1,51 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class BGMPlayer : MonoBehaviour
 {
+    public static BGMPlayer Instance { get; private set; }
+    private float fadeDuration = 0.75f;
+
     public AudioClip musicClip;
     public float delayInSeconds = 0f; // 🕒 How long to wait before starting music
 
-    private AudioSource audio;
+    private AudioSource audioSource;
 
     void Awake()
     {
-        audio = GetComponent<AudioSource>();
-        audio.clip = musicClip;
-        audio.loop = true;
-        audio.playOnAwake = false;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        // Optional: Keep playing across scenes
-        DontDestroyOnLoad(gameObject);
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = musicClip;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+
+
 
         // Delay playback
         if (delayInSeconds > 0)
             Invoke(nameof(PlayMusic), delayInSeconds);
         else
             PlayMusic();
+
+        audioSource.pitch = audioSource.pitch * GameManager1.gameSpeedMultiplier;
     }
 
     private void PlayMusic()
     {
         if (musicClip != null)
         {
-            audio.Play();
+            audioSource.Play();
         }
+    }
+
+    public void FadeOutMusic()
+    {
+        audioSource.DOFade(0f, fadeDuration);
     }
 }

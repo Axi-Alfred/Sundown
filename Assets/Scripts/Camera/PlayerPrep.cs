@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ public class PlayerPrep : MonoBehaviour
 {
     public static PlayerPrep instance;
 
-    [SerializeField] private GameObject entryPrefab; //Prefaben för varje individuellt entry av spelare
+    [SerializeField] private GameObject entryPrefab; //Prefaben fï¿½r varje individuellt entry av spelare
     [SerializeField] private GameObject iconContainer;
     [SerializeField] private TMP_Text playersText;
     [SerializeField] private GameObject startGameButton;
@@ -30,7 +30,7 @@ public class PlayerPrep : MonoBehaviour
 
         entriesArray = new GameObject[PlayerData.numberOfPlayers];
 
-        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        //Loopen ï¿½r till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         while (transform.childCount > 0)
         {
             Destroy(transform.GetChild(0).gameObject);
@@ -74,7 +74,7 @@ public class PlayerPrep : MonoBehaviour
             currentEntry.transform.SetParent(gameObject.transform);
             currentEntry.GetComponent<PlayerEntry>().Player = player;
             currentEntry.GetComponent<PlayerEntry>().LoadEntry();
-            currentEntry.GetComponent<PlayerEntry>().HideEntry();
+            currentEntry.transform.localScale = Vector3.zero;
 
             entriesArray[i] = currentEntry;
             i++;
@@ -106,12 +106,21 @@ public class PlayerPrep : MonoBehaviour
     private IEnumerator StartGameCoroutine()
     {
         yield return StartCoroutine(IconsFadeOutDOTween());
-        SceneTransition.FadeOut("Wheel");
+        SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
+        if (transition != null)
+        {
+            transition.StartFadeOut("Wheel");
+        }
+        else
+        {
+            Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
+            SceneManager.LoadScene("Wheel");
+        }
     }
 
     public IEnumerator IconsFadeOutDOTween()
     {
-        float longestTweenDuration = 0.4f;
+        float longestTweenDuration = 0.5f;
 
         for (int i = 0; i < entriesArray.Length; i++)
         {
@@ -119,11 +128,11 @@ public class PlayerPrep : MonoBehaviour
             RectTransform rt = entryObject.GetComponent<RectTransform>();
             Vector3 originalScale = rt.localScale;
 
-            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale * 0.1f, 0.25f).SetEase(Ease.InQuad)).OnComplete(() => entryObject.GetComponent<PlayerEntry>().HideEntry());
+            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.15f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale * 0.1f, 0.25f).SetEase(Ease.InQuad)).OnComplete(() => entryObject.transform.localScale = Vector3.zero);
         }
 
         float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;
-        yield return new WaitForSeconds(totalDuration-0.25f);
+        yield return new WaitForSeconds(totalDuration);
     }
 
     public IEnumerator IconsFadeInDOTween()
@@ -142,8 +151,6 @@ public class PlayerPrep : MonoBehaviour
         textSequence.AppendInterval(1.5f);
         textSequence.Join(textRT.DOAnchorPosY(300, 0.6f).SetEase(Ease.OutQuad));
 
-        //yield return textSequence.WaitForCompletion();
-
         yield return new WaitForSeconds(0.5f);
 
         float longestTweenDuration = 0.4f;
@@ -154,11 +161,13 @@ public class PlayerPrep : MonoBehaviour
             RectTransform rt = entryObject.GetComponent<RectTransform>();
             Vector3 originalScale = rt.localScale;
 
-            entryObject.GetComponent<PlayerEntry>().ShowEntry();
+            rt.localScale = Vector3.one * 0.1f;
 
-            rt.localScale = originalScale * 0.1f;
-
-            DOTween.Sequence().AppendInterval(i * delayBetweenEntries).Append(rt.DOScale(originalScale * 1.2f, 0.25f).SetEase(Ease.OutQuad)).Append(rt.DOScale(originalScale, 0.15f).SetEase(Ease.InQuad));    
+            Sequence s = DOTween.Sequence();
+            s.AppendInterval(i * delayBetweenEntries);
+            SFXLibrary.Instance.Play(3);
+            s.Append(rt.DOScale(Vector3.one * 1.2f, 0.25f).SetEase(Ease.OutQuad));
+            s.Append(rt.DOScale(Vector3.one, 0.15f).SetEase(Ease.InQuad));
         }
 
         float totalDuration = (entriesArray.Length - 1) * delayBetweenEntries + longestTweenDuration;

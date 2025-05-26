@@ -21,7 +21,7 @@ public class ClownElopeManager : MonoBehaviour
             Debug.Log("🎯 GAME OVER!");
 
             // Pause game
-            Time.timeScale = 0;
+            Time.timeScale = 1;
 
             // End turn or load next scene
             GameManager1.EndTurn();

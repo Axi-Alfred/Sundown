@@ -1,86 +1,81 @@
 ﻿using UnityEngine;
-using TMPro;
+using System.Collections;
 
 public class BalloonGameManager : MonoBehaviour
 {
     public static BalloonGameManager Instance;
 
-    private int hiddenScore = 0;
-    public int scoreNeededToWin = 20;
+    [Header("Balloon Prefabs")]
+    public GameObject[] colorBalloons; // Assign the 4 colored balloon prefabs
+    public GameObject blackBalloonPrefab;
 
-    public float gameDuration = 30f;
-    private float timer;
+    [Header("Spawn Settings")]
+    public Transform[] spawnPoints; // Now an array of 3 spawn positions
+    public float spawnInterval = 0.75f; // Faster spawn
 
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI timerText;
+    [Header("Pause Effect")]
+    public GameObject blackScreenOverlay; // Fullscreen UI image
 
-    private bool gameEnded = false;
+    [Header("Tracking")]
+    public int poppedBalloons = 0;
 
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        Instance = this;
     }
 
-    void Start()
+    private void Start()
     {
-        timer = gameDuration;
-        UpdateScoreText();
+        StartCoroutine(SpawnLoop());
+        blackScreenOverlay.SetActive(false);
     }
 
-    void Update()
+    IEnumerator SpawnLoop()
     {
-        if (gameEnded) return;
-
-        timer -= Time.deltaTime;
-
-        if (timerText != null)
-            timerText.text = $"Time: {Mathf.Ceil(timer)}";
-
-        if (timer <= 0)
+        while (true)
         {
-            CheckWinCondition();
+            SpawnBalloon();
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
-    public void BalloonPopped(bool isNegative)
+    void SpawnBalloon()
     {
-        if (gameEnded) return;
+        Transform chosenSpawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        Vector2 spawnPos = chosenSpawn.position;
 
-        if (isNegative)
-            hiddenScore = Mathf.Max(0, hiddenScore - 2);
-        else
-            hiddenScore++;
+        GameObject prefabToSpawn = (Random.value < 0.1f)
+            ? blackBalloonPrefab
+            : colorBalloons[Random.Range(0, colorBalloons.Length)];
 
-        UpdateScoreText(); // make sure this updates UI
+        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
     }
-
-
-    void UpdateScoreText()
+    public void RegisterBalloonPop()
     {
-        if (scoreText != null)
-            scoreText.text = $"Score: {hiddenScore}";
-    }
+        poppedBalloons++;
 
-    public void CheckWinCondition()
-    {
-        if (gameEnded) return;
-        gameEnded = true;
-
-        if (hiddenScore >= scoreNeededToWin)
+        if (poppedBalloons >= 20)
         {
-            Debug.Log("✅ You Win!");
+            poppedBalloons = 0;
             PlayerData.currentPlayerTurn.AddScore(1);
+            Debug.Log("🎉 Score awarded!");
+            GameManager1.EndTurn(); // ✅ Go to Wheel scene
         }
-        else
-        {
-            Debug.Log("❌ You Lose!");
-        }
+    }
 
-        // Stop spawning balloons
-        BalloonSpawner spawner = FindObjectOfType<BalloonSpawner>();
-        if (spawner) spawner.StopAllCoroutines();
 
-        GameManager1.EndTurn();
+
+    public void TriggerBlackBalloon()
+    {
+        StartCoroutine(PauseGameWithOverlay());
+    }
+
+    IEnumerator PauseGameWithOverlay()
+    {
+        Time.timeScale = 0f;
+        blackScreenOverlay.SetActive(true);
+        yield return new WaitForSecondsRealtime(1f);
+        blackScreenOverlay.SetActive(false);
+        Time.timeScale = 1f;
     }
 }

@@ -35,6 +35,7 @@ TagManager:
   - Game13
   - RandomGame
   - Balloon
+  - Pin
   layers:
   - Default
   - TransparentFX

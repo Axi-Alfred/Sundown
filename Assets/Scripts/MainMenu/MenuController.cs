@@ -1,129 +1,73 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject creditsPanel; // Panel showing credits
+    [SerializeField] private GameObject creditsPanel;
     [SerializeField] private GameObject playPanel;
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject optionsPanel;
     [SerializeField] private GameObject wheelSettingsPanel;
 
-    //Det är jag Sadra som har skrivit den här bara för att testa scene transition, don worry about this :)
-    //[SerializeField] private SceneTransition sceneTransition;
-
     public string mainMenuSceneName = "HuvudMenu";
 
     private void Update()
     {
-        if (creditsPanel != null && creditsPanel.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseCredits();
-            }
-        }
-
-        if (playPanel != null && playPanel.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                ClosePlay();   
-            }
-        }
-
-        if (settingsPanel != null && settingsPanel.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseSettings();
-            }
-        }
-
-        if (optionsPanel != null && optionsPanel.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseOptions();
-            }
-        }
-
-        if (wheelSettingsPanel != null && wheelSettingsPanel.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseWheelSettings();
-            }
-        }
+        if (creditsPanel != null && creditsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            CloseCredits();
+        if (playPanel != null && playPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            ClosePlay();
+        if (settingsPanel != null && settingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            CloseSettings();
+        if (optionsPanel != null && optionsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            CloseOptions();
+        if (wheelSettingsPanel != null && wheelSettingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
+            CloseWheelSettings();
     }
 
     public void ConfirmGame()
     {
-        StartCoroutine(PlayerData.AssignPlayers());
+        StartCoroutine(ConfirmGameRoutine());
+    }
+
+    private IEnumerator ConfirmGameRoutine()
+    {
+        Debug.Log("[MenuController] Assigning players...");
+        yield return PlayerData.AssignPlayers();
         CoroutineHost.instance.Run(GameManager1.RoundsLoop());
-        SceneTransition.FadeOut("X 1Camera");
-        //SceneManager.LoadScene("X 1Camera"); // Ersätt Scene 1 med den första scenen
+
+        Debug.Log("[MenuController] Players assigned.");
+
+        SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
+        if (transition != null)
+        {
+            transition.StartFadeOut("X 1Camera");
+        }
+        else
+        {
+            Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
+            SceneManager.LoadScene("X 1Camera");
+        }
     }
 
-    public void ShowPlay()
+    public void ShowPanelWithDelay(GameObject panel) => StartCoroutine(DelayedShowPanel(panel));
+    private IEnumerator DelayedShowPanel(GameObject panel)
     {
-        playPanel.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        panel.SetActive(true);
     }
 
-    public void ClosePlay()
-    {
-        playPanel.SetActive(false);
-    }
-
-    public void ShowOptions()
-    {
-        optionsPanel.SetActive(true);
-    }
-
-    public void CloseOptions()
-    {
-        optionsPanel.SetActive(false);
-    }
-
-    public void ShowWheelSettings()
-    {
-        wheelSettingsPanel.SetActive(true);
-    }
-
-    public void CloseWheelSettings()
-    {
-        wheelSettingsPanel.SetActive(false);
-    }
-
-    public void ShowSettings()
-    {
-        settingsPanel.SetActive(true);
-    }
-
-    public void CloseSettings()
-    {
-        settingsPanel.SetActive(false);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    public void ShowCredits()
-    {
-        creditsPanel.SetActive(true);
-    }
-
-    public void CloseCredits()
-    {
-        creditsPanel.SetActive(false);
-    }
-
-    public void ReturnToMenu()
-    {
-        SceneManager.LoadScene(mainMenuSceneName);
-    }
+    public void ShowPlayWithDelay() => ShowPanelWithDelay(playPanel);
+    public void ClosePlay() => playPanel.SetActive(false);
+    public void ShowSettingsWithDelay() => ShowPanelWithDelay(settingsPanel);
+    public void CloseSettings() => settingsPanel.SetActive(false);
+    public void ShowOptionsWithDelay() => ShowPanelWithDelay(optionsPanel);
+    public void CloseOptions() => optionsPanel.SetActive(false);
+    public void ShowWheelSettingsWithDelay() => ShowPanelWithDelay(wheelSettingsPanel);
+    public void CloseWheelSettings() => wheelSettingsPanel.SetActive(false);
+    public void QuitGame() => Application.Quit();
+    public void ShowCreditsWithDelay() => ShowPanelWithDelay(creditsPanel);
+    public void CloseCredits() => creditsPanel.SetActive(false);
+    public void ReturnToMenu() => SceneManager.LoadScene(mainMenuSceneName);
 }

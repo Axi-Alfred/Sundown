@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviour
 
     public void NextTurn()
     {
-        List<Player> tempPlayers = new List<Player>(PlayerData.playersArray);
+        List<Player> tempPlayers = new List<Player>(PlayerManager.Instance.playersArray);
 
 
         int placeHolderTurn = Random.Range(0, tempPlayers.Count);
-        PlayerData.currentPlayerTurn = tempPlayers[placeHolderTurn];
+        PlayerManager.Instance.currentPlayerTurn = tempPlayers[placeHolderTurn];
         tempPlayers.RemoveAt(placeHolderTurn);
 
         //while (placeHolderTurn =! )

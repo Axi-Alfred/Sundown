@@ -1,19 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player
 {
-    public int PlayerId { get; private set; } //Tjena det e Sadra som har skrivit de här, om någon ser det här och undrar vad det är för något fråga gärna så kan jag förklara :D
+    public int PlayerId { get; private set; }
     public int PlayerScore { get; private set; } = 0;
     public bool HasPlayed { get; set; }
     public int CurrentIconInt { get; private set; }
 
     private string playerName;
-    public string PlayerName {  get { return playerName; } set { playerName = value; }}
+    public string PlayerName { get { return playerName; } set { playerName = value; } }
 
     private Sprite playerIcon;
-    public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; }}
+    public Sprite PlayerIcon { get { return playerIcon; } set { playerIcon = value; } }
 
 
     public Player(string name, int iD)
