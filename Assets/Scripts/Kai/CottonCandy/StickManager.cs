@@ -118,9 +118,9 @@ public class StickManager : MonoBehaviour
                 float angle = Vector2.SignedAngle(lastDirection, currentDirection);
 
                 // ✅ Boost rotation sensitivity on mobile
-#if UNITY_ANDROID || UNITY_IOS
+                #if UNITY_ANDROID || UNITY_IOS
                 angle *= 1.5f;
-#endif
+                #endif
 
                 if (Mathf.Abs(angle) > 0.2f)
                 {
