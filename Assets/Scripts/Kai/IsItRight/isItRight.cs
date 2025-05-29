@@ -13,6 +13,8 @@ public class isItRight : MonoBehaviour
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
     [SerializeField] private AudioClip backgroundMusic;
     [SerializeField] private AudioPool audioPool;
+    [SerializeField] private Transform bounceTarget;
+
     [SerializeField]
     private List<string> wordList = new() {
         "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
@@ -138,6 +140,9 @@ public class isItRight : MonoBehaviour
             NewLetter tile = go.GetComponent<NewLetter>();
 
             tile.Setup(shown, correct, isCorrect, startsCorrect);
+            tile.transform.localScale = Vector3.zero;
+            tile.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetDelay(i * 0.05f);
+
 
             // Rotate only flippable and incorrectly placed letters
             tile.contentTransform.localRotation = startsCorrect || !isFlippable
@@ -236,25 +241,25 @@ public class isItRight : MonoBehaviour
             fadeOut: true
         );
     }
-
     private IEnumerator PlayVictorySequence()
     {
         audioPool.PlaySound(posAll, 2f, Random.Range(0.9f, 1f));
-        float delay = 0.05f;
+        float delayStep = 0.05f;
 
-        foreach (NewLetter tile in allTiles)
+        for (int i = 0; i < spawnedTiles.Count; i++)
         {
-            tile.SetVictoryColor(victoryGreen);
-            tile.StartCoroutine(tile.Bounce());
-            yield return new WaitForSeconds(delay);
+            // Apply uniform green and only jump
+            spawnedTiles[i].SetVictoryColor(victoryGreen);
+            StartCoroutine(spawnedTiles[i].VictoryJump(i * delayStep));
         }
 
-        RightWords++; // ✅ Increment correct word count
+        RightWords++;
         currentWordIndex++;
         currentMistakes = 0;
         gameOver = false;
 
-        Invoke(nameof(LoadNextWord), 1.5f);
+        yield return new WaitForSeconds(spawnedTiles.Count * delayStep + 0.5f);
+        LoadNextWord();
     }
 
     private IEnumerator PlayLoseSequence()
@@ -280,6 +285,10 @@ public class isItRight : MonoBehaviour
 
         GameManager1.EndTurn(); // ✅ Return to Wheel after loss
     }
+    public void CorrectPop()
+    {
+        transform.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
+    }
 
     void WinGame()
     {
@@ -293,4 +302,5 @@ public class isItRight : MonoBehaviour
         Debug.Log("💀 You lost!");
         StartCoroutine(PlayLoseSequence());
     }
+
 }

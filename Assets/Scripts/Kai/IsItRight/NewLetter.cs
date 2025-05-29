@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,10 @@ public class NewLetter : MonoBehaviour
     public string letter; // ← Add this if needed for GameManager
     public RectTransform letterTextTransform;
     public Transform contentTransform; // används för flip
-    public Transform bounceTarget;     // används för bounce (hela knappen)
+    [SerializeField] private GameObject dissolveFX;
+    [SerializeField] private Transform bounceTarget;
+
+
 
 
     public bool isCorrect;
@@ -61,101 +65,75 @@ public class NewLetter : MonoBehaviour
         GetComponent<Image>().color = Color.white;
         hasBeenPressed = false;
     }
-
     private IEnumerator AnimateFlip()
     {
-        float duration = 0.15f;
-        float elapsed = 0f;
-        Quaternion startRotation = contentTransform.localRotation;
-        Quaternion endRotation = Quaternion.identity;
+        contentTransform.DOLocalRotate(Vector3.zero, 0.2f, RotateMode.Fast)
+                        .SetEase(Ease.OutQuad);
 
-        while (elapsed < duration)
+        yield return new WaitForSeconds(0.2f);
+
+        // ✅ FX
+        if (dissolveFX != null)
         {
-            contentTransform.localRotation = Quaternion.Slerp(startRotation, endRotation, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
+            GameObject fx = Instantiate(dissolveFX, transform.position, Quaternion.identity);
+            fx.transform.localScale = Vector3.one * 0.5f;
         }
 
-        contentTransform.localRotation = endRotation;
+        // ✅ Bounce + color
+        Transform target = bounceTarget != null ? bounceTarget : transform;
+        target.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
+        GetComponent<Image>().DOColor(isItRight.Instance.victoryGreen, 0.3f);
 
-        // Update visuals
+        // Disable & notify
         GetComponent<Button>().interactable = false;
-        GetComponent<Image>().color = isItRight.Instance.victoryGreen;
         isItRight.Instance.OnCorrectLetterTapped(this);
     }
 
-
     public IEnumerator AnimateShake()
-    {
-        Vector3 originalPos = transform.localPosition;
-        float shakeAmount = 10f;
-        float shakeDuration = 0.2f;
-        float elapsed = 0f;
+{
+    Vector3 originalPos = transform.localPosition;
 
-        while (elapsed < shakeDuration)
-        {
-            float offsetX = Random.Range(-1f, 1f) * shakeAmount;
-            transform.localPosition = originalPos + new Vector3(offsetX, 0f, 0f);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+    // Use DOTween shake (X only)
+    transform.DOLocalMoveX(originalPos.x + 10f, 0.05f)
+             .SetLoops(4, LoopType.Yoyo)
+             .OnComplete(() =>
+             {
+                 transform.localPosition = originalPos;
 
-        transform.localPosition = originalPos;
+                 GetComponent<Image>().DOColor(Color.red, 0.2f);
+                 GetComponent<Button>().interactable = false;
 
-        // Show red & disable
-        GetComponent<Image>().color = Color.red;
-        isItRight.Instance.OnWrongLetterTapped(this);
-        GetComponent<Button>().interactable = false;
-    }
+                 isItRight.Instance.OnWrongLetterTapped(this);
+             });
+
+    yield return new WaitForSeconds(0.25f);
+}
+
     public IEnumerator ShowVictoryState(Color green)
     {
         yield return FadeToColor(green);
     }
-
-
     public IEnumerator FadeToColor(Color targetColor)
     {
-        Image img = GetComponent<Image>();
-        Color startColor = img.color;
-        float duration = 0.3f;
-        float t = 0f;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime / duration;
-            img.color = Color.Lerp(startColor, targetColor, t);
-            yield return null;
-        }
+        GetComponent<Image>().DOColor(targetColor, 0.3f);
+        yield return new WaitForSeconds(0.3f);
     }
+
     public IEnumerator Bounce()
     {
-        Vector3 originalScale = bounceTarget.localScale;
-        Vector3 target = originalScale * 1.2f;
-        float t = 0f;
+        if (bounceTarget == null) yield break;
 
-        while (t < 0.1f)
-        {
-            t += Time.deltaTime;
-            bounceTarget.localScale = Vector3.Lerp(originalScale, target, t / 0.1f);
-            yield return null;
-        }
-
-        t = 0f;
-        while (t < 0.1f)
-        {
-            t += Time.deltaTime;
-            bounceTarget.localScale = Vector3.Lerp(target, originalScale, t / 0.1f);
-            yield return null;
-        }
-        bounceTarget.localScale = Vector3.one;
+        bounceTarget.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
+        yield return new WaitForSeconds(0.3f);
     }
+
     public void ResetTile()
     {
         hasBeenPressed = false;
         StopAllCoroutines(); // cancel fades/shakes/etc.
 
         Image img = GetComponent<Image>();
-        img.color = Color.white;
+        img.DOColor(Color.white, 0.2f);
 
         GetComponent<Button>().interactable = true;
 
@@ -165,7 +143,7 @@ public class NewLetter : MonoBehaviour
     public void SetVictoryColor(Color green)
     {
         StopAllCoroutines();
-        GetComponent<Image>().color = green;
+        GetComponent<Image>().DOColor(green, 0.3f);
 
         if (letterText == null)
         {
@@ -178,6 +156,30 @@ public class NewLetter : MonoBehaviour
         }
 
         GetComponent<Button>().interactable = false;
+    }
+    public IEnumerator VictoryJump(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Transform target = bounceTarget != null ? bounceTarget : transform;
+        Vector3 originalPos = target.localPosition;
+
+        // ✅ Don't touch color
+        // ✅ Optional: still show correct letter if needed
+        if (letterText != null)
+            letterText.text = correctLetter;
+
+        // ✅ Punch upward
+        float jumpHeight = 40f;
+        float jumpTime = 0.2f;
+
+        target.DOLocalMoveY(originalPos.y + jumpHeight, jumpTime)
+              .SetEase(Ease.OutQuad)
+              .OnComplete(() =>
+              {
+                  target.DOLocalMoveY(originalPos.y, jumpTime)
+                        .SetEase(Ease.InQuad);
+              });
     }
 
 
