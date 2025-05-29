@@ -21,6 +21,10 @@ public class StickManager : MonoBehaviour
     [SerializeField] private float winScale = 1.5f;
     [SerializeField] private Animator cottonCandyMachine;
 
+    [Header("Parallax Settings")]
+    [SerializeField] private Transform[] parallaxLayers;
+    [SerializeField] private float parallaxStrength = 0.2f; // max movement multiplier
+    [SerializeField] private Vector2 parallaxLimit = new Vector2(0.5f, 0.3f); // max movement in X/Y
 
     private AudioSource machineSource;
     private AudioSource playerInteractionSource;
@@ -98,6 +102,7 @@ public class StickManager : MonoBehaviour
     void MoveStick(Vector3 position)
     {
         transform.position = position;
+        UpdateParallaxLayers();
 
         Vector2 toCenter = (Vector2)candyMachineCenter.position - (Vector2)stickTip.position;
 
@@ -193,6 +198,24 @@ public class StickManager : MonoBehaviour
 
 
     }
+    void UpdateParallaxLayers()
+    {
+        Vector2 offset = (Vector2)(stickTip.position - candyMachineCenter.position);
+
+        for (int i = 0; i < parallaxLayers.Length; i++)
+        {
+            if (parallaxLayers[i] == null) continue;
+
+            float depthFactor = (i + 1) / (float)parallaxLayers.Length;
+
+            float xMove = Mathf.Clamp(offset.x * parallaxStrength * depthFactor, -parallaxLimit.x, parallaxLimit.x);
+            float yMove = Mathf.Clamp(offset.y * parallaxStrength * depthFactor, -parallaxLimit.y, parallaxLimit.y);
+
+            Vector3 targetOffset = new Vector3(xMove, yMove, 0f);
+            parallaxLayers[i].localPosition = targetOffset;
+        }
+    }
+
 
     void automaticSpinner()
     {
