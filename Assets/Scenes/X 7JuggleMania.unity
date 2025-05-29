@@ -205,7 +205,6 @@ MonoBehaviour:
   isAlive: 1
   currentObject: {fileID: 0}
   linkedButton: {fileID: 426554232}
-  sfxLibrary: {fileID: 0}
 --- !u!1 &264481155
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +288,6 @@ MonoBehaviour:
   isAlive: 1
   currentObject: {fileID: 0}
   linkedButton: {fileID: 1424651588}
-  sfxLibrary: {fileID: 0}
 --- !u!1 &282367170
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +672,6 @@ MonoBehaviour:
   isAlive: 1
   currentObject: {fileID: 0}
   linkedButton: {fileID: 999750618}
-  sfxLibrary: {fileID: 0}
 --- !u!1 &794131012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1211,10 @@ PrefabInstance:
     - target: {fileID: 6083310683954071535, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: m_Name
       value: SceneController
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
+      propertyPath: enableTimer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration
@@ -2227,7 +2228,6 @@ MonoBehaviour:
   isAlive: 1
   currentObject: {fileID: 0}
   linkedButton: {fileID: 1602814530}
-  sfxLibrary: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
