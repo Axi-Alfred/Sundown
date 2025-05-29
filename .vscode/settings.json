@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ClownElope.sln"
+    "dotnet.defaultSolution": "ClownElope.sln",
+    "cSpell.words": [
+        "Behaviour"
+    ]
 }

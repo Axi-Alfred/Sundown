@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 641853066782825974}
   - component: {fileID: 3276508966999666987}
   - component: {fileID: 8342953564787128818}
-  - component: {fileID: -4565180403641549129}
-  - component: {fileID: 8913100092063632143}
   m_Layer: 0
   m_Name: Clown1
   m_TagString: Clown
@@ -150,30 +148,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &-4565180403641549129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5823898155569132510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc7637e9c17f4f6418bd1f69113a87c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hastighet: 2
---- !u!114 &8913100092063632143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5823898155569132510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bc651552352d6944aa89799842542e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  "h\xF6gerGr\xE4ns": 15
-  "nedreGr\xE4ns": -10

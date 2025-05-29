@@ -1,59 +1,85 @@
+using System.Collections;
 using UnityEngine;
 
 public class TrampolineBounce : MonoBehaviour
 {
     // Dessa värden styr hur mycket clownen studsar uppåt och åt sidan
-    public float uppåtkraft = 10f;      // Hur högt clownen studsar
-    public float maxSidokraft = 5f;     // Maximal kraft åt sidan
+    public float upwardForce = 10f;       // Hur högt clownen studsar
+    public float maxSideForce = 5f;       // Maximal kraft åt sidan
 
-    private void OnCollisionEnter2D(Collision2D kollision)
+    public Animator trampolineAnimator; // Animator för trampolinen
+
+    private IEnumerator ResetBounceFlag()
+    {
+        // Vänta lite tills Bounce startar
+        yield return new WaitForSeconds(0.1f);
+
+        // Stäng av flaggan så Idle kan nås
+        trampolineAnimator.SetBool("isBouncing", false);
+    }
+
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         // Kontrollera om det som träffar trampolinen är en clown
-        GameObject objektSomTräffade = kollision.gameObject;
+        GameObject hitObject = collision.gameObject;
 
-        if (objektSomTräffade.CompareTag("Clown"))
+        if (hitObject.CompareTag("Clown"))
         {
             // Hämta clownens Rigidbody2D
-            Rigidbody2D clownKropp = objektSomTräffade.GetComponent<Rigidbody2D>();
+            Rigidbody2D clownRb = hitObject.GetComponent<Rigidbody2D>();
 
             // Kontrollera att Rigidbody2D finns
-            if (clownKropp != null)
+            if (clownRb != null)
             {
                 // Nollställ fallhastigheten (bara y-led)
-                Vector2 nuvarandeHastighet = clownKropp.velocity;
-                nuvarandeHastighet.y = 0f;
-                clownKropp.velocity = nuvarandeHastighet;
+                Vector2 currentVelocity = clownRb.velocity;
+                currentVelocity.y = 0f;
+                clownRb.velocity = currentVelocity;
 
                 // Räkna ut var clownen träffade trampolinen
-                Vector3 clownPosition = clownKropp.transform.position;
-                Vector3 trampolinPosition = transform.position;
+                Vector3 clownPosition = clownRb.transform.position;
+                Vector3 trampolinePosition = transform.position;
 
-                float skillnadIXLed = clownPosition.x - trampolinPosition.x;
+                float xDifference = clownPosition.x - trampolinePosition.x;
 
                 // Bestäm hur mycket kraft som ska ges åt sidan
-                float sidKraft = 0f;
+                float sideForce = 0f;
 
                 // Om clownen är till vänster om mitten
-                if (skillnadIXLed < 0f)
+                if (xDifference < 0f)
                 {
-                    sidKraft = -maxSidokraft;
+                    sideForce = -maxSideForce;
                 }
                 // Om clownen är till höger om mitten
-                else if (skillnadIXLed > 0f)
+                else if (xDifference > 0f)
                 {
-                    sidKraft = maxSidokraft;
+                    sideForce = maxSideForce;
                 }
                 // Om clownen är exakt i mitten
                 else
                 {
-                    sidKraft = 0f;
+                    sideForce = 0f;
                 }
 
                 // Skapa kraftvektor
-                Vector2 studsKraft = new Vector2(sidKraft, uppåtkraft);
+                Vector2 bounceForce = new Vector2(sideForce, upwardForce);
 
                 // Applicera kraften
-                clownKropp.AddForce(studsKraft, ForceMode2D.Impulse);
+                clownRb.AddForce(bounceForce, ForceMode2D.Impulse);
+
+                // Trigga bounce-animation
+                if (trampolineAnimator != null)
+                {
+                    trampolineAnimator.SetBool("isBouncing", true);
+                    StartCoroutine(ResetBounceFlag());
+
+                    Debug.Log("BOUNCE triggered at " + Time.time);
+
+                }
+
+
             }
         }
     }
