@@ -11,9 +11,10 @@ public class isItRight : MonoBehaviour
     [SerializeField] private int maxMistakes = 3;
     [SerializeField] private TMP_Text mistakeText;
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
-    [SerializeField] private AudioClip backgroundMusic;
     [SerializeField] private AudioPool audioPool;
     [SerializeField] private Transform bounceTarget;
+    [SerializeField] private AudioClip spawnPop;
+
 
     [SerializeField]
     private List<string> wordList = new() {
@@ -141,7 +142,15 @@ public class isItRight : MonoBehaviour
 
             tile.Setup(shown, correct, isCorrect, startsCorrect);
             tile.transform.localScale = Vector3.zero;
-            tile.transform.DOScale(1f, 0.4f).SetEase(Ease.OutBack).SetDelay(i * 0.05f);
+
+            tile.transform.DOScale(1f, 0.4f)
+                .SetEase(Ease.OutBack)
+                .SetDelay(i * 0.05f)
+                .OnStart(() =>
+                {
+                    audioPool.PlaySound(spawnPop, 0.8f, Random.Range(0.95f, 1.1f));
+                });
+
 
 
             // Rotate only flippable and incorrectly placed letters
