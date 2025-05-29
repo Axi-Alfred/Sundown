@@ -14,11 +14,11 @@ public class isItRight : MonoBehaviour
     [SerializeField] private AudioPool audioPool;
     [SerializeField] private Transform bounceTarget;
     [SerializeField] private AudioClip spawnPop;
+    [SerializeField] private TMP_Text introText;
 
 
-    [SerializeField]
     private List<string> wordList = new() {
-        "apple", "hello", "world", "dream", "mirror", "flip", "level", "cloud", "right", "brain"
+        "clown", "pies", "unicycle", "circus", "cake", "ball", "happy", "confetti", "balloon", "juggling", "gymnastics", "magician", "acrobat", "elephant", "show", "illusionist", "carnival", "popcorn", "jester"
     };
 
     private int currentMistakes = 0;
@@ -40,13 +40,27 @@ public class isItRight : MonoBehaviour
     public Transform letterParent;
 
     void Awake() => Instance = this;
-
     void Start()
     {
         audioPool = FindObjectOfType<AudioPool>();
         currentMistakes = 0;
+
+        // Shuffle only if wordList has values
+        if (wordList != null && wordList.Count > 0)
+            wordList = wordList.OrderBy(x => Random.value).ToList();
+
         UpdateMistakeUI();
         LoadNextWord();
+        if (introText != null)
+        {
+            introText.alpha = 0;
+            introText.DOFade(1f, 1f).SetEase(Ease.InOutSine) // fade in
+                     .OnComplete(() =>
+                     {
+                         introText.DOFade(0f, 1f).SetDelay(8f); // wait 2 sec, fade out
+                     });
+        }
+
     }
 
     void LoadNextWord()
@@ -174,16 +188,16 @@ public class isItRight : MonoBehaviour
             allTiles.Add(tile);
         }
     }
-
-
     private void EnsureMinimumFlips(int wordLength)
     {
-        int distinctLetters = spawnedTiles.Select(t => t.correctLetter).Distinct().Count();
-        int minFlipped = distinctLetters > 5 ? 3 : Mathf.Min(2, wordLength);
+        int maxMistakesThisRound = 2;
+
+        // Bestäm antal att flippa: minst 2, max 3 (eller så många som finns)
+        int desiredFlips = Mathf.Clamp(flippableIndices.Count, 2, 3);
 
         System.Random rand = new();
 
-        while (flippedIndices.Count < minFlipped)
+        while (flippedIndices.Count < desiredFlips)
         {
             var unflipped = flippableIndices.Except(flippedIndices).ToList();
             if (unflipped.Count == 0) break;
@@ -196,8 +210,18 @@ public class isItRight : MonoBehaviour
             tile.isCorrect = true;
         }
 
-        totalToFix = spawnedTiles.Count(t => t.isCorrect);
-        displayedMaxMistakes = totalToFix;
+        totalToFix = flippedIndices.Count;
+
+        // 🔁 Anpassa tillåtna misstag efter svårighet (flippbara bokstäver)
+        if (totalToFix >= 3)
+            maxMistakesThisRound = 3;
+        else if (totalToFix == 2)
+            maxMistakesThisRound = 2;
+        else
+            maxMistakesThisRound = 1;
+
+        maxMistakes = maxMistakesThisRound;
+        displayedMaxMistakes = maxMistakes;
     }
 
     private void FinalizeWordSetup()
@@ -233,10 +257,9 @@ public class isItRight : MonoBehaviour
             LoseGame();
         }
     }
-
     private void UpdateMistakeUI()
     {
-        mistakeText.text = $"Mistakes: {currentMistakes}/{maxMistakes}";
+        mistakeText.text = $"Mistakes: {currentMistakes}/{displayedMaxMistakes}";
     }
 
     public void ShakeMistakeText()
