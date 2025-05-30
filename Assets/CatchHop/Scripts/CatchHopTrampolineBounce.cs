@@ -1,13 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class TrampolineBounce : MonoBehaviour
+public class CatchHopTrampolineBounce : MonoBehaviour
 {
-    // Dessa värden styr hur mycket clownen studsar uppåt och åt sidan
     public float upwardForce = 10f;       // Hur högt clownen studsar
     public float maxSideForce = 5f;       // Maximal kraft åt sidan
 
-    public Animator trampolineAnimator; // Animator för trampolinen
+    public Animator trampolineAnimator;   // Animator för trampolinen
+
+    void Start()
+    {
+        // Se till att trampolinen startar i idle-läget
+        if (trampolineAnimator != null)
+        {
+            trampolineAnimator.SetBool("isBouncing", false);
+        }
+    }
 
     private IEnumerator ResetBounceFlag()
     {
@@ -18,19 +26,15 @@ public class TrampolineBounce : MonoBehaviour
         trampolineAnimator.SetBool("isBouncing", false);
     }
 
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        // Kontrollera om det som träffar trampolinen är en clown
         GameObject hitObject = collision.gameObject;
 
+        // Kontrollera om det som träffar trampolinen är en clown
         if (hitObject.CompareTag("Clown"))
         {
-            // Hämta clownens Rigidbody2D
             Rigidbody2D clownRb = hitObject.GetComponent<Rigidbody2D>();
 
-            // Kontrollera att Rigidbody2D finns
             if (clownRb != null)
             {
                 // Nollställ fallhastigheten (bara y-led)
@@ -41,26 +45,17 @@ public class TrampolineBounce : MonoBehaviour
                 // Räkna ut var clownen träffade trampolinen
                 Vector3 clownPosition = clownRb.transform.position;
                 Vector3 trampolinePosition = transform.position;
-
                 float xDifference = clownPosition.x - trampolinePosition.x;
 
                 // Bestäm hur mycket kraft som ska ges åt sidan
                 float sideForce = 0f;
-
-                // Om clownen är till vänster om mitten
                 if (xDifference < 0f)
                 {
                     sideForce = -maxSideForce;
                 }
-                // Om clownen är till höger om mitten
                 else if (xDifference > 0f)
                 {
                     sideForce = maxSideForce;
-                }
-                // Om clownen är exakt i mitten
-                else
-                {
-                    sideForce = 0f;
                 }
 
                 // Skapa kraftvektor
@@ -74,12 +69,9 @@ public class TrampolineBounce : MonoBehaviour
                 {
                     trampolineAnimator.SetBool("isBouncing", true);
                     StartCoroutine(ResetBounceFlag());
-
-                    Debug.Log("BOUNCE triggered at " + Time.time);
-
                 }
 
-
+                Debug.Log("BOUNCE triggered at " + Time.time);
             }
         }
     }
