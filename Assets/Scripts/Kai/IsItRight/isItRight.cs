@@ -86,6 +86,7 @@ public class isItRight : MonoBehaviour
         currentMistakes = 0;
         UpdateMistakeUI();
         GenerateWord(nextWord);
+        currentWordIndex++;
     }
 
     public void GenerateWord(string word)
@@ -215,13 +216,11 @@ public class isItRight : MonoBehaviour
         // 🔁 Anpassa tillåtna misstag efter svårighet (flippbara bokstäver)
         if (totalToFix >= 3)
             maxMistakesThisRound = 3;
-        else if (totalToFix == 2)
-            maxMistakesThisRound = 2;
         else
-            maxMistakesThisRound = 1;
+            maxMistakesThisRound = 2;
+
 
         maxMistakes = maxMistakesThisRound;
-        displayedMaxMistakes = maxMistakes;
     }
 
     private void FinalizeWordSetup()
@@ -259,7 +258,7 @@ public class isItRight : MonoBehaviour
     }
     private void UpdateMistakeUI()
     {
-        mistakeText.text = $"Mistakes: {currentMistakes}/{displayedMaxMistakes}";
+        mistakeText.text = $"Mistakes: {currentMistakes}/{maxMistakes}";
     }
 
     public void ShakeMistakeText()
