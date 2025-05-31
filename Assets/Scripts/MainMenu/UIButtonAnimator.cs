@@ -27,4 +27,27 @@ public class UIButtonAnimator : MonoBehaviour
             audioSource.PlayOneShot(clickSound);
         }
     }
+
+    public void PlayClickAndThen(System.Action afterDelay)
+    {
+        StartCoroutine(PlayThenRun(afterDelay));
+    }
+
+    private IEnumerator PlayThenRun(System.Action callback)
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Pressed");
+        }
+
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+
+        yield return new WaitForSeconds(0.2f); // Anpassa till längd på ljud/animation
+
+        callback?.Invoke();
+    }
+
 }

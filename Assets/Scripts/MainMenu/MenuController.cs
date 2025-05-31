@@ -6,9 +6,6 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private GameObject creditsPanel;
     [SerializeField] private GameObject playPanel;
-    [SerializeField] private GameObject settingsPanel;
-    [SerializeField] private GameObject optionsPanel;
-    [SerializeField] private GameObject wheelSettingsPanel;
 
     public string mainMenuSceneName = "HuvudMenu";
 
@@ -18,12 +15,6 @@ public class MenuController : MonoBehaviour
             CloseCredits();
         if (playPanel != null && playPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
             ClosePlay();
-        if (settingsPanel != null && settingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-            CloseSettings();
-        if (optionsPanel != null && optionsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-            CloseOptions();
-        if (wheelSettingsPanel != null && wheelSettingsPanel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
-            CloseWheelSettings();
     }
 
     public void ConfirmGame()
@@ -60,14 +51,20 @@ public class MenuController : MonoBehaviour
 
     public void ShowPlayWithDelay() => ShowPanelWithDelay(playPanel);
     public void ClosePlay() => playPanel.SetActive(false);
-    public void ShowSettingsWithDelay() => ShowPanelWithDelay(settingsPanel);
-    public void CloseSettings() => settingsPanel.SetActive(false);
-    public void ShowOptionsWithDelay() => ShowPanelWithDelay(optionsPanel);
-    public void CloseOptions() => optionsPanel.SetActive(false);
-    public void ShowWheelSettingsWithDelay() => ShowPanelWithDelay(wheelSettingsPanel);
-    public void CloseWheelSettings() => wheelSettingsPanel.SetActive(false);
     public void QuitGame() => Application.Quit();
     public void ShowCreditsWithDelay() => ShowPanelWithDelay(creditsPanel);
     public void CloseCredits() => creditsPanel.SetActive(false);
-    public void ReturnToMenu() => SceneManager.LoadScene(mainMenuSceneName);
+    public void ReturnToMenu(GameObject button)
+    {
+        UIButtonAnimator animator = button.GetComponent<UIButtonAnimator>();
+
+        if(animator != null)
+        {
+            animator.PlayClickAndThen(() =>
+            {
+                SceneManager.LoadScene(mainMenuSceneName);
+            });
+        }
+    }
+       
 }
