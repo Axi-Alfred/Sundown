@@ -120,14 +120,17 @@ public class StickManager : MonoBehaviour
             {
                 float angle = Vector2.SignedAngle(lastDirection, currentDirection);
 
-                #if UNITY_ANDROID || UNITY_IOS
-                angle *= 1.5f; // det ska samlas sockervadd lite fortare på touchskärm. Angle = totala rotationen
+#if UNITY_ANDROID || UNITY_IOS
+                angle *= 1.5f; // rotations sensitivity boost på mobilen
+#endif
 
                 if (Mathf.Abs(angle) > 0.2f)
                 {
                     rotationAccumulation += Mathf.Abs(angle);
                 }
             }
+
+
 
 
             while (rotationAccumulation >= spawnThreshold)
