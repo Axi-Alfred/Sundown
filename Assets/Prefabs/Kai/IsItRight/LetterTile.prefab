@@ -203,14 +203,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c57fbf37b4e76441920deff27b7f3ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dissolveFX: {fileID: 0}
+  bounceTarget: {fileID: 6456215329705504416}
   letterText: {fileID: 2371929322331640245}
   displayedLetter: 
   correctLetter: 
   letter: 
   letterTextTransform: {fileID: 5170053317059988893}
   contentTransform: {fileID: 7044620999966316313}
-  dissolveFX: {fileID: 0}
-  bounceTarget: {fileID: 6456215329705504416}
   isCorrect: 0
 --- !u!1 &6241529901493554068
 GameObject:
@@ -304,12 +304,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 70
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 70
   m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

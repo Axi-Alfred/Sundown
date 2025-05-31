@@ -4,39 +4,37 @@ using UnityEngine;
 
 public class StickManager : MonoBehaviour
 {
-    [Header("Audio")]
+    [Header("Ljud")]
     [SerializeField] private AudioClip machineHum;
     [SerializeField] private AudioClip cottonCandy;
 
-    [Header("References")]
+    [Header("Referenser")]
     public Transform stickTip;
     public Transform candyMachineCenter;
     [SerializeField] private GameObject cottonCandyObject;
 
-    [Header("Growth Settings")]
-    [SerializeField] private float detectionRadius = 2f;
+    [Header("Inställningar för sockervadden")]
+    [SerializeField] private float detectionRadius = 2f; // HUr nära behöver vi vara för att trigga sockervaddsskapandet?
     [SerializeField] private float spawnThreshold = 90f;
     [SerializeField] private float scalePerSpinAlongStick = 0.03f;
     [SerializeField] private float scalePerSpinHorizontal = 0.01f;
     [SerializeField] private float winScale = 1.5f;
     [SerializeField] private Animator cottonCandyMachine;
 
-    [Header("Parallax Settings")]
+    [Header("Parallax inställningar")]
     [SerializeField] private Transform[] parallaxLayers;
-    [SerializeField] private float parallaxStrength = 0.2f; // max movement multiplier
-    [SerializeField] private Vector2 parallaxLimit = new Vector2(0.5f, 0.3f); // max movement in X/Y
+    [SerializeField] private float parallaxStrength = 0.2f;
+    [SerializeField] private Vector2 parallaxLimit = new Vector2(0.5f, 0.3f);
 
     private AudioSource machineSource;
     private AudioSource playerInteractionSource;
     private Camera mainCam;
-
-
-    private Vector2 lastDirection;
-    private float rotationAccumulation = 0f;
-    private bool hasWon = false;
-
     private Transform cottonCandyTransform;
 
+    private Vector2 lastDirection;
+
+    private float rotationAccumulation = 0f;
+    private bool hasWon = false;
     private bool hasTriggeredAnimation = false;
 
 
@@ -44,7 +42,6 @@ public class StickManager : MonoBehaviour
     {
         mainCam = Camera.main;
 
-        // Sound
         machineSource = gameObject.AddComponent<AudioSource>();
         machineSource.clip = machineHum;
         machineSource.loop = true;
@@ -53,7 +50,6 @@ public class StickManager : MonoBehaviour
 
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
 
-        // Instantiate
         GameObject fluff = Instantiate(cottonCandyObject, stickTip.position, Quaternion.identity, stickTip);
         cottonCandyTransform = fluff.transform;
 
@@ -61,14 +57,14 @@ public class StickManager : MonoBehaviour
         cottonCandyTransform.localScale = Vector3.zero;
     }
 
-    void Update()
+    void Update() // Hantera input baserat på platform
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         HandleMouseInput();
 #elif UNITY_ANDROID || UNITY_IOS
         HandleTouchInput();
 #else
-        HandleMouseInput(); // fallback
+        HandleMouseInput();
 #endif
 
         automaticSpinner();
@@ -101,8 +97,10 @@ public class StickManager : MonoBehaviour
 
     void MoveStick(Vector3 position)
     {
+        // Flyttar stickan och uppdaterar parrallax
+
         transform.position = position;
-        UpdateParallaxLayers();
+        UpdateParallaxLayers(); // Ska följa sockervaddsPinnen
 
         Vector2 toCenter = (Vector2)candyMachineCenter.position - (Vector2)stickTip.position;
 
@@ -110,7 +108,7 @@ public class StickManager : MonoBehaviour
         {
             Vector2 currentDirection = toCenter.normalized;
 
-            if (!hasTriggeredAnimation)
+            if (!hasTriggeredAnimation) // maskinen ska animeras endast en gång
             {
                 cottonCandyMachine.SetTrigger("cottonCandy");
                 hasTriggeredAnimation = true;
@@ -122,10 +120,8 @@ public class StickManager : MonoBehaviour
             {
                 float angle = Vector2.SignedAngle(lastDirection, currentDirection);
 
-                // ✅ Boost rotation sensitivity on mobile
                 #if UNITY_ANDROID || UNITY_IOS
-                angle *= 1.5f;
-                #endif
+                angle *= 1.5f; // det ska samlas sockervadd lite fortare på touchskärm. Angle = totala rotationen
 
                 if (Mathf.Abs(angle) > 0.2f)
                 {
@@ -158,7 +154,6 @@ public class StickManager : MonoBehaviour
     {
         if (cottonCandyTransform == null) return;
 
-        // Play cotton candy sound, cotton candy sound will loop while collecting
         if (!playerInteractionSource.isPlaying)
         {
             playerInteractionSource.clip = cottonCandy;
@@ -167,24 +162,19 @@ public class StickManager : MonoBehaviour
         }
 
 
-        // Get current scale
         Vector3 currentScale = cottonCandyTransform.localScale;
         Vector3 newScale = currentScale;
 
-        // ✅ Grow along the stick's direction (mostly vertical)
-        Vector3 growthDirection = stickTip.up; // Direction the stick tip is facing
+        Vector3 growthDirection = stickTip.up;
 
-        // Scale along the stick's direction
         newScale += growthDirection * scalePerSpinAlongStick;
 
-        // ✅ Slight horizontal growth (fluff)
         newScale.x += scalePerSpinHorizontal;
         newScale.z += scalePerSpinHorizontal;
 
         cottonCandyTransform.localScale = newScale;
         cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2);
 
-        // ✅ Win condition
         if (!hasWon && newScale.magnitude >= winScale)
         {
             hasWon = true;
@@ -217,7 +207,7 @@ public class StickManager : MonoBehaviour
     }
 
 
-    void automaticSpinner()
+    void automaticSpinner() // Endast för debugging
     {
         if (Input.GetKey(KeyCode.F))
         {

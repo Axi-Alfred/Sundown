@@ -7,20 +7,18 @@ using UnityEngine.UI;
 
 public class NewLetter : MonoBehaviour
 {
-    public TextMeshProUGUI letterText;
+    // Script för att kontrollera utseendet på varje bokstav/tile
 
-    public string displayedLetter;
-    public string correctLetter;
-    public string letter; // ← Add this if needed for GameManager
-    public RectTransform letterTextTransform;
-    public Transform contentTransform; // används för flip
-    [SerializeField] private GameObject dissolveFX;
     [SerializeField] private Transform bounceTarget;
 
+    public TextMeshProUGUI letterText; // Visar bokstaven
+    public RectTransform letterTextTransform;
+    public Transform contentTransform; // För att rotera bokstaven
 
-
-
+    public string displayedLetter; // vad som visas för bokstaven
+    public string correctLetter; // vad bokstaven egentligen innehåller
     public bool isCorrect;
+
     private bool hasBeenPressed = false;
 
     public void Setup(string shown, string correct, bool isCorrectLetter, bool startsCorrect)
@@ -35,7 +33,6 @@ public class NewLetter : MonoBehaviour
         letterText.text = shown;
         GetComponent<Image>().color = Color.white;
 
-        // Set interaction based on if letter is empty or not
         Button button = GetComponent<Button>();
         button.interactable = !string.IsNullOrEmpty(shown);
 
@@ -53,7 +50,7 @@ public class NewLetter : MonoBehaviour
             StartCoroutine(AnimateShake());
     }
 
-    public void ForceFlip()
+    public void ForceFlip() // Forcerar flip om vi inte har tillräckligt med inkorrekta bokstäver
     {
         isCorrect = true;
         displayedLetter = correctLetter;
@@ -65,35 +62,25 @@ public class NewLetter : MonoBehaviour
         GetComponent<Image>().color = Color.white;
         hasBeenPressed = false;
     }
-    private IEnumerator AnimateFlip()
+    private IEnumerator AnimateFlip() // Flippar bokstaven tillbaka till normalt
     {
         contentTransform.DOLocalRotate(Vector3.zero, 0.2f, RotateMode.Fast)
                         .SetEase(Ease.OutQuad);
 
         yield return new WaitForSeconds(0.2f);
 
-        // ✅ FX
-        if (dissolveFX != null)
-        {
-            GameObject fx = Instantiate(dissolveFX, transform.position, Quaternion.identity);
-            fx.transform.localScale = Vector3.one * 0.5f;
-        }
-
-        // ✅ Bounce + color
         Transform target = bounceTarget != null ? bounceTarget : transform;
         target.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
         GetComponent<Image>().DOColor(isItRight.Instance.victoryGreen, 0.3f);
 
-        // Disable & notify
         GetComponent<Button>().interactable = false;
         isItRight.Instance.OnCorrectLetterTapped(this);
     }
 
-    public IEnumerator AnimateShake()
+    public IEnumerator AnimateShake() // Om spelaren trycker på fel ord
 {
     Vector3 originalPos = transform.localPosition;
 
-    // Use DOTween shake (X only)
     transform.DOLocalMoveX(originalPos.x + 10f, 0.05f)
              .SetLoops(4, LoopType.Yoyo)
              .OnComplete(() =>
@@ -109,7 +96,7 @@ public class NewLetter : MonoBehaviour
     yield return new WaitForSeconds(0.25f);
 }
 
-    public IEnumerator ShowVictoryState(Color green)
+    public IEnumerator ShowVictoryState(Color green) // Byter färg på bakgrunderna till bokstäverna
     {
         yield return FadeToColor(green);
     }
@@ -119,7 +106,7 @@ public class NewLetter : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
     }
 
-    public IEnumerator Bounce()
+    public IEnumerator Bounce() // Studsar ordet uppåt
     {
         if (bounceTarget == null) yield break;
 
@@ -127,18 +114,17 @@ public class NewLetter : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
     }
 
-    public void ResetTile()
+    public void ResetTile() // Reset och pausar alla animationer som pågår
     {
         hasBeenPressed = false;
-        StopAllCoroutines(); // cancel fades/shakes/etc.
+        StopAllCoroutines();
 
         Image img = GetComponent<Image>();
         img.DOColor(Color.white, 0.2f);
 
         GetComponent<Button>().interactable = true;
 
-        // 🔁 Sätt tillbaka displayedLetter om den finns
-        letterText.text = displayedLetter ?? correctLetter ?? "?";
+        letterText.text = displayedLetter ?? correctLetter ?? "?"; // Visar ? om inget finns. ?? betyder använd om inte är null
     }
     public void SetVictoryColor(Color green)
     {
@@ -157,19 +143,17 @@ public class NewLetter : MonoBehaviour
 
         GetComponent<Button>().interactable = false;
     }
-    public IEnumerator VictoryJump(float delay)
+    public IEnumerator VictoryJump(float delay) // Orden studsar upp och ned och visar rätt ord
     {
         yield return new WaitForSeconds(delay);
 
         Transform target = bounceTarget != null ? bounceTarget : transform;
         Vector3 originalPos = target.localPosition;
 
-        // ✅ Don't touch color
-        // ✅ Optional: still show correct letter if needed
+
         if (letterText != null)
             letterText.text = correctLetter;
 
-        // ✅ Punch upward
         float jumpHeight = 40f;
         float jumpTime = 0.2f;
 

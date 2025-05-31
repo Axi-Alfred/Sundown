@@ -8,51 +8,59 @@ using DG.Tweening;
 
 public class isItRight : MonoBehaviour
 {
+    // Det här är min game manager för kortspelet. Har som syfte att presentera ord till spelaren som spelaren sen kommer att behöva rätta, eftersom orden är upp och ned/flippade. OBS roterar inte orden
+
+    [Header("Misstagshantering")]
     [SerializeField] private int maxMistakes = 3;
     [SerializeField] private TMP_Text mistakeText;
+
+    [Header("Ljud")]
     [SerializeField] private AudioClip correct, incorrect, posAll, negAll;
-    [SerializeField] private AudioPool audioPool;
-    [SerializeField] private Transform bounceTarget;
     [SerializeField] private AudioClip spawnPop;
+    [SerializeField] private AudioPool audioPool;
+
+    [Header("Visuella element")]
+    [SerializeField] private Transform bounceTarget;
     [SerializeField] private TMP_Text introText;
 
-
-    private List<string> wordList = new() {
-        "clown", "pies", "unicycle", "circus", "cake", "ball", "happy", "confetti", "balloon", "juggling", "gymnastics", "magician", "acrobat", "elephant", "show", "illusionist", "carnival", "popcorn", "jester"
-    };
-
+    // Variabler för spelinformation
     private int currentMistakes = 0;
-    private bool gameOver = false;
-    private int displayedMaxMistakes;
     private int currentWordIndex = 0;
     private int totalToFix = 0;
     private int fixedCount = 0;
-    private int RightWords = 0;
+    private int rightWords = 0;
 
+    private bool gameOver = false;
+
+    // ordHantering. Tiles = varje bokstav. Indices = platsen som självaste bokstaven har i ett ord. T.ex. Bokstaven "o" har index 2 i ordet "Clown"
     private List<NewLetter> allTiles = new();
-    private List<NewLetter> spawnedTiles = new();
-    private List<int> flippedIndices;
+    private List<NewLetter> spawnedTiles = new(); // Tiles som visas just nu
+    private List<int> flippedIndices; // Tiles som startas som flipped (inkorrekt)
     private List<int> flippableIndices;
+    private List<string> wordList = new() { // Lista på ord som vi behöver fixa
+        "clown", "pies", "unicycle", "circus", "cake", "ball", "happy", "confetti", "balloon", "juggling", "gymnastics", "magician", "acrobat", "elephant", "show", "carnival", "popcorn", "jester"
+    };
 
     public static isItRight Instance;
     public readonly Color victoryGreen = new Color(0.2f, 0.8f, 0.2f, 1f);
     public GameObject letterTilePrefab;
     public Transform letterParent;
 
-    void Awake() => Instance = this;
+    void Awake() => Instance = this; // Gör att isItRight kan kommas åt globalt av andra scripts. Mest för NewLetter
     void Start()
     {
         audioPool = FindObjectOfType<AudioPool>();
         currentMistakes = 0;
 
-        // Shuffle only if wordList has values
+        // Blandar ordlistan
         if (wordList != null && wordList.Count > 0)
-            wordList = wordList.OrderBy(x => Random.value).ToList();
+            wordList = wordList.OrderBy(x => Random.value).ToList(); 
 
         UpdateMistakeUI();
         LoadNextWord();
         if (introText != null)
         {
+            // fade-in och fade-out effekt för introText (hinten)
             introText.alpha = 0;
             introText.DOFade(1f, 1f).SetEase(Ease.InOutSine) // fade in
                      .OnComplete(() =>
@@ -65,19 +73,22 @@ public class isItRight : MonoBehaviour
 
     void LoadNextWord()
     {
-        if (RightWords >= 3)
+        if (rightWords >= 3) // Om spelaren svarar korrekt på 3 ord tar spelet slut
         {
             PlayerData.currentPlayerTurn.AddScore(1);
             GameManager1.EndTurn();
             return;
         }
 
-        if (currentWordIndex >= wordList.Count)
+        if (currentWordIndex >= wordList.Count) // Om spelaren får slut på ord tar spelet slut
         {
+            PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("🎉 All words complete!");
-            GameManager1.EndTurn(); // fallback
+            GameManager1.EndTurn();
             return;
         }
+
+        // Ladda nästa ord och återställ
 
         string nextWord = wordList[currentWordIndex];
         Debug.Log("🔤 Starting word: " + nextWord);
@@ -100,6 +111,7 @@ public class isItRight : MonoBehaviour
 
     private void CleanupOldTiles()
     {
+        // ta sönder alla gamla ordtiles och rensa listan
         allTiles.Clear();
         foreach (NewLetter tile in spawnedTiles)
         {
@@ -110,6 +122,7 @@ public class isItRight : MonoBehaviour
 
     private void InitState()
     {
+        // starta om variablerna när vi laddar ett nytt ord
         fixedCount = 0;
         totalToFix = 0;
         currentMistakes = 0;
@@ -120,36 +133,38 @@ public class isItRight : MonoBehaviour
 
     private void CreateTiles(string word)
     {
+        // Skapas en tile för varje bokstav i ett ord
         System.Random rand = new();
-        HashSet<char> nonFlippableLetters = new()
+        HashSet<char> nonFlippableLetters = new() // Symmetriska bokstäver eller svårlästa bokstäver som alltid ska vara korrekta
     {
         'l', 'o', 'x', 's', 'z', 'i', 'u', 'n', 'h',
         'O', 'X', 'S', 'Z', 'I', 'U', 'N', 'H', 'V', 'C'
     };
 
-        for (int i = 0; i < word.Length; i++)
+        for (int i = 0; i < word.Length; i++) // Loppar igenom varje bokstav i ett ord och kontrollerar om det går att flippa det
         {
             char letterChar = word[i];
             string correct = letterChar.ToString();
             bool isFlippable = !nonFlippableLetters.Contains(letterChar);
 
-            // Determine if letter starts correct
+            // 40% chans att en bokstav är korrekt från början
             bool startsCorrect = !isFlippable || rand.NextDouble() < 0.4f;
 
-            // Unflippable letters appear as empty strings if incorrect
+            // Om bokstaven är korrekt från början, visa bokstaven, annars visa den upp och ner/flippad
+            // Om ordet inte kan flippas eller är inkorrekt, visa ett blanksteg
             string shown = startsCorrect
                 ? correct
                 : (isFlippable ? correct : "");
 
-            bool isCorrect = isFlippable && !startsCorrect;
+            bool isCorrect = isFlippable && !startsCorrect; // Ett ord är korrekt om det går att flippa och startar som inkorrekt
 
-            if (isCorrect)
+            if (isCorrect) // Räkna anttalet rättade ord och hur många som behöver fixas
             {
                 flippedIndices.Add(i);
                 totalToFix++;
             }
 
-            if (isFlippable)
+            if (isFlippable) // håller koll på vilka ord som kan flippas
                 flippableIndices.Add(i);
 
             GameObject go = Instantiate(letterTilePrefab, letterParent);
@@ -158,7 +173,7 @@ public class isItRight : MonoBehaviour
             tile.Setup(shown, correct, isCorrect, startsCorrect);
             tile.transform.localScale = Vector3.zero;
 
-            tile.transform.DOScale(1f, 0.4f)
+            tile.transform.DOScale(1f, 0.4f) // orden skalas upp och ned när dom spawnar in
                 .SetEase(Ease.OutBack)
                 .SetDelay(i * 0.05f)
                 .OnStart(() =>
@@ -168,16 +183,16 @@ public class isItRight : MonoBehaviour
 
 
 
-            // Rotate only flippable and incorrectly placed letters
+            // Rotera endast inkorrekta bokstäver
             tile.contentTransform.localRotation = startsCorrect || !isFlippable
                 ? Quaternion.identity
                 : Quaternion.Euler(0, 0, 180);
 
-            // Disable interaction if the letter is empty
+            // Inaktivera att redan rättade bokstäver kan klickas på igen
             Button button = go.GetComponent<Button>();
             if (string.IsNullOrEmpty(shown))
             {
-                button.interactable = false; // non-interactive
+                button.interactable = false;
             }
             else
             {
@@ -191,16 +206,15 @@ public class isItRight : MonoBehaviour
     }
     private void EnsureMinimumFlips(int wordLength)
     {
-        int maxMistakesThisRound = 2;
-
-        // Bestäm antal att flippa: minst 2, max 3 (eller så många som finns)
-        int desiredFlips = Mathf.Clamp(flippableIndices.Count, 2, 3);
+        // Det ska finnas minst 2 eller 3 bokstäver som behöver fixas
+        int minMistakesAllowed = 2;
+        int desiredFlips = Mathf.Clamp(flippableIndices.Count, minMistakesAllowed, 3);
 
         System.Random rand = new();
 
-        while (flippedIndices.Count < desiredFlips)
+        while (flippedIndices.Count < desiredFlips) // Flippa randomiserat med bokstäver om det inte finns tillräckligt med inkorrekta bokstäver
         {
-            var unflipped = flippableIndices.Except(flippedIndices).ToList();
+            var unflipped = flippableIndices.Except(flippedIndices).ToList(); // Except ger mig alla bokstäver som går att fixas förutom dom som inte redan är flippade, så vi kan flippa dom
             if (unflipped.Count == 0) break;
 
             int idx = unflipped[rand.Next(unflipped.Count)];
@@ -208,27 +222,22 @@ public class isItRight : MonoBehaviour
 
             var tile = spawnedTiles[idx];
             tile.ForceFlip();
-            tile.isCorrect = true;
+            tile.isCorrect = true; // denna tile behöver bli fixad
         }
 
         totalToFix = flippedIndices.Count;
 
-        // 🔁 Anpassa tillåtna misstag efter svårighet (flippbara bokstäver)
-        if (totalToFix >= 3)
-            maxMistakesThisRound = 3;
-        else
-            maxMistakesThisRound = 2;
-
-
-        maxMistakes = maxMistakesThisRound;
+        // maxMistakes ska vara minst 3, om det finns två misstag så kan maxMistakes vara 2
+        maxMistakes = totalToFix >= 3 ? 3 : minMistakesAllowed;
     }
+
 
     private void FinalizeWordSetup()
     {
         UpdateMistakeUI();
     }
 
-    public void OnCorrectLetterTapped(NewLetter tile)
+    public void OnCorrectLetterTapped(NewLetter tile) // När ett ord har blivit rättat
     {
         Debug.Log("✅ Correct letter tapped: " + tile.correctLetter);
         audioPool.PlaySound(correct, 2f, Random.Range(0.8f, 1.2f));
@@ -284,7 +293,7 @@ public class isItRight : MonoBehaviour
             StartCoroutine(spawnedTiles[i].VictoryJump(i * delayStep));
         }
 
-        RightWords++;
+        rightWords++;
         currentWordIndex++;
         currentMistakes = 0;
         gameOver = false;
@@ -314,7 +323,7 @@ public class isItRight : MonoBehaviour
 
         yield return new WaitForSeconds(0.4f);
 
-        GameManager1.EndTurn(); // ✅ Return to Wheel after loss
+        GameManager1.EndTurn();
     }
     public void CorrectPop()
     {
@@ -323,7 +332,7 @@ public class isItRight : MonoBehaviour
 
     void WinGame()
     {
-        Debug.Log("🏆 You fixed the word: " + wordList[currentWordIndex]);
+        Debug.Log("🏆You fixed the word: " + wordList[currentWordIndex]);
         StartCoroutine(PlayVictorySequence());
     }
 
