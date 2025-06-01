@@ -257,7 +257,7 @@ PrefabInstance:
     - target: {fileID: 3543543275428829020, guid: 99dcf990d59097b459831564ace73506, type: 3}
       propertyPath: musicClip
       value: 
-      objectReference: {fileID: 8300000, guid: 77e99c6abb8310a4fb25e54aa4740594, type: 3}
+      objectReference: {fileID: 8300000, guid: 8027f0755cd934d44a2b175de6e76f61, type: 3}
     - target: {fileID: 7719853169740158259, guid: 99dcf990d59097b459831564ace73506, type: 3}
       propertyPath: m_Name
       value: BGMPlayer
@@ -671,7 +671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
