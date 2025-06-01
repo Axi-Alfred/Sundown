@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpinWheel : MonoBehaviour
 {
-    public string tag {  get; private set; }
+    public new string tag {  get; private set; }
 
     [Header("Wheel Settings")]
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
@@ -23,6 +23,8 @@ public class SpinWheel : MonoBehaviour
     [Header("Editor Testing")]
     [SerializeField] private bool allowKeyboardSpin = true;
     [SerializeField] private KeyCode spinKey = KeyCode.Space;
+    [SerializeField] private GameObject keyboardHintText;
+
 
     private Rigidbody2D rb2D;
     private Vector2 lastTouchPos;
@@ -91,21 +93,28 @@ public class SpinWheel : MonoBehaviour
                 hasSpinned = true;
                 hasReachedMotionThreshold = false;
 
-                Handheld.Vibrate();
+#if UNITY_ANDROID || UNITY_IOS // Kompilera endast på mobiler
+Handheld.Vibrate();
+#endif
+
                 StartCoroutine(LaunchMinigameByPointer());
             }
         }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
         if (allowKeyboardSpin && Input.GetKeyDown(spinKey) && !isSpinning && !hasSpinned)
         {
             SpinWithButton();
+            if (keyboardHintText != null)
+                keyboardHintText.SetActive(false); // Dölj när man snurrar
         }
 #endif
 
         if (Input.touchCount > 0 && !isSpinning && !hasSpinned)
         {
             SpinTheWheel(Input.GetTouch(0));
+            if (keyboardHintText != null)
+                keyboardHintText.SetActive(false); // Dölj även om man snurrar via touch
         }
 
         pointer.WheelHasSpinned(hasSpinned);
