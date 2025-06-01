@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 208614413}
   - component: {fileID: 208614412}
   m_Layer: 0
-  m_Name: ClownElope_Background
+  m_Name: ClownElopeBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,26 +217,14 @@ GameObject:
   - component: {fileID: 357296704}
   - component: {fileID: 357296703}
   - component: {fileID: 357296702}
-  - component: {fileID: 357296701}
+  - component: {fileID: 357296705}
   m_Layer: 0
-  m_Name: ClownElope_TopWall
+  m_Name: ClownElopeTopWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &357296701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 357296700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2abcfa52baf6d488f5d02aeac3e93e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &357296702
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -349,6 +337,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &357296705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357296700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2a7fa0eff48394c8253264e4c2c224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &499130467
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 499130469}
   - component: {fileID: 499130468}
   m_Layer: 0
-  m_Name: ClownElope_Spawner
+  m_Name: ClownElopeSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 499130467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a598fad3888674481c30cd52a5b115, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a9ec84589da2bf47b8b71d34cc6e0a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 4691298738706794840, guid: fc915e24741c0934c94f9ccd853b640d, type: 3}
@@ -506,7 +506,7 @@ GameObject:
   - component: {fileID: 614391990}
   - component: {fileID: 614391989}
   m_Layer: 0
-  m_Name: ClownElope_Manager
+  m_Name: ClownElopeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -521,10 +521,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 614391988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c89a9a40c8192848b9836f3c767adf1, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f484915f43635e4d80f5aa2c98f4f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxEscaped: 10
+  savedCount: 0
+  targetSavedClowns: 20
 --- !u!4 &614391990
 Transform:
   m_ObjectHideFlags: 0
@@ -551,26 +553,14 @@ GameObject:
   - component: {fileID: 839405788}
   - component: {fileID: 839405787}
   - component: {fileID: 839405786}
-  - component: {fileID: 839405785}
+  - component: {fileID: 839405789}
   m_Layer: 0
-  m_Name: ClownElope_BottomWall
+  m_Name: ClownElopeBottomWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &839405785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839405784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2abcfa52baf6d488f5d02aeac3e93e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &839405786
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -683,6 +673,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &839405789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839405784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2a7fa0eff48394c8253264e4c2c224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1256381511
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,26 +696,15 @@ GameObject:
   - component: {fileID: 1256381515}
   - component: {fileID: 1256381514}
   - component: {fileID: 1256381513}
-  - component: {fileID: 1256381512}
+  - component: {fileID: 1256381517}
+  - component: {fileID: 1256381518}
   m_Layer: 0
-  m_Name: ClownElope_CenterZone
+  m_Name: ClownElopeCenterZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1256381512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1256381511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 659f6d14815b83b45a063e39085a22ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &1256381513
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -816,6 +807,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1256381517
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256381511}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 78da56678ef7c784d834edd34aafd95a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1256381518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256381511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a8a29fea7f1984cb442ce624adefd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tentAnimator: {fileID: 0}
 --- !u!1 &1693567822
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,26 +852,14 @@ GameObject:
   - component: {fileID: 1693567826}
   - component: {fileID: 1693567825}
   - component: {fileID: 1693567824}
-  - component: {fileID: 1693567823}
+  - component: {fileID: 1693567827}
   m_Layer: 0
-  m_Name: ClownElope_LeftWall
+  m_Name: ClownElopeLeftWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1693567823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1693567822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2abcfa52baf6d488f5d02aeac3e93e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1693567824
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -953,12 +966,24 @@ Transform:
   m_GameObject: {fileID: 1693567822}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: 0, z: 0}
+  m_LocalPosition: {x: -9.45, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1693567827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693567822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2a7fa0eff48394c8253264e4c2c224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2019291760
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,26 +995,14 @@ GameObject:
   - component: {fileID: 2019291764}
   - component: {fileID: 2019291763}
   - component: {fileID: 2019291762}
-  - component: {fileID: 2019291761}
+  - component: {fileID: 2019291765}
   m_Layer: 0
-  m_Name: ClownElope_RightWall
+  m_Name: ClownElopeRightWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2019291761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019291760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef2abcfa52baf6d488f5d02aeac3e93e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &2019291762
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1096,12 +1109,24 @@ Transform:
   m_GameObject: {fileID: 2019291760}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 0}
+  m_LocalPosition: {x: 9.58, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 12, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2019291765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019291760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd2a7fa0eff48394c8253264e4c2c224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

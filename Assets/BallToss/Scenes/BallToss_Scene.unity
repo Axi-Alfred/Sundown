@@ -284,6 +284,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057cacdd3cde6584bbe611a72b96ce19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  startTouchPos: {x: 0, y: 0}
+  endTouchPos: {x: 0, y: 0}
+  isDragging: 0
+  originalScale: {x: 0, y: 0, z: 0}
+  screenHeightThreshold: 0.25
+  maxDragY: 1
   tossForce: 5
   shrinkSpeed: 0.2
 --- !u!114 &799846620
@@ -298,6 +305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81df2bb43c5ab0c4c9b32c3ee2f90fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startScale: {x: 0, y: 0, z: 0}
+  minScale: 0.3
+  maxHeight: 10
+  startY: 0
 --- !u!1 &994849248
 GameObject:
   m_ObjectHideFlags: 0

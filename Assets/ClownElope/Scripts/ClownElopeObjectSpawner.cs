@@ -27,14 +27,12 @@ public class ClownElopeObjectSpawner : MonoBehaviour
     // Array med olika utseenden på clowner
     public Sprite[] clownSprites;
 
-    // Start körs en gång när spelet startar
     void Start()
     {
         // Hitta referensen till spelets manager
         gameManager = FindObjectOfType<ClownElopeManager>();
     }
 
-    // Update körs en gång per frame
     void Update()
     {
         // Om spelet är över, gör ingenting
@@ -63,36 +61,53 @@ public class ClownElopeObjectSpawner : MonoBehaviour
     // Funktion som skapar ett nytt objekt
     void SpawnObject()
     {
-        // Skapa nytt objekt vid spawnerns position
-        GameObject newObject = Instantiate(objectToSpawn, transform.position, Quaternion.identity);
+        // Välj en slumpmässig riktning för clownen att röra sig åt
+        float randomX = Random.Range(-1f, 1f);
+        float randomY = Random.Range(-1f, 1f);
+        Vector2 moveDirection = new Vector2(randomX, randomY);
+        moveDirection = moveDirection.normalized; // Normalisera för jämn hastighet
 
-        // Byt ut objektets sprite till en slumpmässig clown (om det finns sprites)
+        // Räkna ut spawnposition (utanför tältområdet)
+        float distanceFromCenter = 1.2f;
+        Vector3 centerPosition = transform.position;
+        float offsetX = moveDirection.x * distanceFromCenter;
+        float offsetY = moveDirection.y * distanceFromCenter;
+        Vector3 spawnPosition = new Vector3(centerPosition.x + offsetX, centerPosition.y + offsetY, centerPosition.z);
+
+        // Skapa ett nytt clownobjekt
+        GameObject clownObject = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
+
+        // Ge clownen ett slumpmässigt utseende
         if (clownSprites.Length > 0)
         {
-            Sprite randomSprite = clownSprites[Random.Range(0, clownSprites.Length)];
-            SpriteRenderer spriteRenderer = newObject.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
+            // Välj en slumpmässig clownsprite
+            int randomIndex = Random.Range(0, clownSprites.Length);
+            Sprite randomClownFace = clownSprites[randomIndex];
+
+            // Applicera på sprite renderer
+            SpriteRenderer clownRenderer = clownObject.GetComponent<SpriteRenderer>();
+            if (clownRenderer != null)
             {
-                spriteRenderer.sprite = randomSprite;
+                clownRenderer.sprite = randomClownFace;
+            }
+            else
+            {
+                Debug.LogWarning("Clown saknar SpriteRenderer!");
             }
         }
 
-        // Ge objektet en riktning och fart
-        Rigidbody2D rb = newObject.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        // Ge clownen fart
+        Rigidbody2D clownPhysics = clownObject.GetComponent<Rigidbody2D>();
+        if (clownPhysics != null)
         {
-            // Slumpa en riktning (X och Y mellan -1 och 1)
-            float x = Random.Range(-1f, 1f);
-            float y = Random.Range(-1f, 1f);
-
-            // Skapa en normaliserad vektor för jämn fart
-            Vector2 direction = new Vector2(x, y).normalized;
-
-            // Ge objektet en fart i den riktningen
-            rb.velocity = direction * objectSpeed;
+            clownPhysics.velocity = moveDirection * objectSpeed;
+        }
+        else
+        {
+            Debug.LogWarning("Clown kan inte röra sig utan Rigidbody2D!");
         }
 
-        // Öka objektets fart för nästa spawn
+        // Gör spelet svårare för nästa spawn
         objectSpeed = objectSpeed + speedAcceleration;
 
         // Se till att farten inte blir för hög
@@ -101,4 +116,5 @@ public class ClownElopeObjectSpawner : MonoBehaviour
             objectSpeed = 10f;
         }
     }
+
 }
