@@ -52,6 +52,7 @@ public class FallingVikingGameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("🛡️ You win! Enough vikings caught.");
+        FindObjectOfType<StarBurstDOTween>().TriggerBurst();
         PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }

@@ -142,4 +142,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - clip: {fileID: 8300000, guid: 5554471c1820f614fb6e949019547170, type: 3}
+  - clips: []
+    description: 
+    pitchMin: 0.95
+    pitchMax: 1.05
+    volumeMin: 0.9
+    volumeMax: 1
+  - clips: []
+    description: 
+    pitchMin: 0.95
+    pitchMax: 1.05
+    volumeMin: 0.9
+    volumeMax: 1
+  - clips: []
+    description: 
+    pitchMin: 0.95
+    pitchMax: 1.05
+    volumeMin: 0.9
+    volumeMax: 1
+  - clips: []
+    description: 
+    pitchMin: 0.95
+    pitchMax: 1.05
+    volumeMin: 0.9
+    volumeMax: 1
+  - clips: []
+    description: 
+    pitchMin: 0.95
+    pitchMax: 1.05
+    volumeMin: 0.9
+    volumeMax: 1
