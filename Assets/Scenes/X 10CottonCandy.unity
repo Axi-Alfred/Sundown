@@ -6337,18 +6337,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 15084007}
     m_Modifications:
     - target: {fileID: 2142861934026907589, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.67
-      objectReference: {fileID: 0}
-    - target: {fileID: 2142861934026907589, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.075
-      objectReference: {fileID: 0}
-    - target: {fileID: 2142861934026907589, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.6962818
-      objectReference: {fileID: 0}
-    - target: {fileID: 2142861934026907589, guid: 688b513da80ca854da981870267bab91, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.01
       objectReference: {fileID: 0}
@@ -6393,21 +6381,9 @@ PrefabInstance:
       value: CottonCandyP
       objectReference: {fileID: 0}
     - target: {fileID: 6970156226611514187, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: ShapeModule.donutRadius
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970156226611514187, guid: 688b513da80ca854da981870267bab91, type: 3}
       propertyPath: moveWithCustomTransform
       value: 
       objectReference: {fileID: 15084007}
-    - target: {fileID: 6970156226611514187, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 6970156226611514187, guid: 688b513da80ca854da981870267bab91, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 0.2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
