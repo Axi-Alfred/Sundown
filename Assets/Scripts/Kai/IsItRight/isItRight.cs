@@ -75,6 +75,7 @@ public class isItRight : MonoBehaviour
     {
         if (rightWords >= 3) // Om spelaren svarar korrekt på 3 ord tar spelet slut
         {
+            FindObjectOfType<StarBurstDOTween>().TriggerBurst();
             PlayerData.currentPlayerTurn.AddScore(1);
             GameManager1.EndTurn();
             return;

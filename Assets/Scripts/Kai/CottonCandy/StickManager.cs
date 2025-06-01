@@ -182,6 +182,7 @@ public class StickManager : MonoBehaviour
         {
             hasWon = true;
             playerInteractionSource.Stop();
+            FindObjectOfType<StarBurstDOTween>().TriggerBurst();
             PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
             Time.timeScale = 1f;

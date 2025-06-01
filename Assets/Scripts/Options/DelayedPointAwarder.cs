@@ -19,6 +19,7 @@ public class DelayedPointAwarder : MonoBehaviour
 
         hasAwardedPoint = true;
         Debug.Log("🏆 Delayed point awarded!");
+        FindObjectOfType<StarBurstDOTween>().TriggerBurst();
         PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
