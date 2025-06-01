@@ -50,4 +50,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/X 15CatchHop_Main.unity
     guid: 53bcbfd63f339c3449c8f24789feec05
+  - enabled: 1
+    path: Assets/Scenes/NoCameraPrepp.unity
+    guid: 6e70942b7710cd84f815e75285ddcd5d
+  - enabled: 1
+    path: Assets/Scenes/CameraPermissionScene.unity
+    guid: 834f2f0b1b59f2743bfa15055dda5004
   m_configObjects: {}

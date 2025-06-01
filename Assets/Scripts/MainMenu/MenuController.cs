@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
@@ -39,16 +40,25 @@ public class MenuController : MonoBehaviour
 
         Debug.Log("[MenuController] Players assigned.");
 
-        SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
-        if (transition != null)
+        if (Permission.HasUserAuthorizedPermission(Permission.Camera))
         {
-            transition.StartFadeOut("X 1Camera");
+            SceneTransition transition = GameObject.FindObjectOfType<SceneTransition>();
+            if (transition != null)
+            {
+                transition.StartFadeOut("X 1Camera");
+            }
+            else
+            {
+                Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
+                SceneManager.LoadScene("X 1Camera");
+            }
         }
         else
         {
-            Debug.LogWarning("[MenuController] SceneTransition not found, loading scene directly.");
-            SceneManager.LoadScene("X 1Camera");
+            SceneManager.LoadScene("CameraPermissionScene");
         }
+
+        
     }
 
     public void ShowPanelWithDelay(GameObject panel) => StartCoroutine(DelayedShowPanel(panel));

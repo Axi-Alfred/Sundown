@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FrontCamera : MonoBehaviour
@@ -27,11 +28,13 @@ public class FrontCamera : MonoBehaviour
     private float aspectRatio;
     private float imageRotation = -90;
 
+    //Permission controlls
+    //private bool dialogHasAppeared = false;
+
     private void Start()
     {
         iconsManager = GetComponent<IconsManager>();
-
-        StartCoroutine(WaitForCameraPermission()); //Before initializing you need to first check permission using this coroutine
+        InitializeCamera();
     }
     private void InitializeCamera()
     {
@@ -102,16 +105,6 @@ public class FrontCamera : MonoBehaviour
 
         faceTemplate.gameObject.SetActive(false);
         cameraPreview.gameObject.SetActive(false);
-    }
-
-    private IEnumerator WaitForCameraPermission()
-    {
-        if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
-            Permission.RequestUserPermission(Permission.Camera);
-
-        yield return new WaitUntil(() => Permission.HasUserAuthorizedPermission(Permission.Camera));
-
-        InitializeCamera();
     }
 
     public void RetakePictureButton()
