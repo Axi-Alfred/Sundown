@@ -310,7 +310,6 @@ RectTransform:
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &620978941
-=======
 --- !u!1 &601164509
 GameObject:
   m_ObjectHideFlags: 0
