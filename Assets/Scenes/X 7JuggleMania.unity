@@ -411,7 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedSpot: {fileID: 209469038}
   normalSprite: {fileID: 0}
-  deadSprite: {fileID: 21300000, guid: cada2902bce6c944c841c2f939d2ace0, type: 3}
+  deadSprite: {fileID: 21300000, guid: c334031a15dfc434b813d77acb435581, type: 3}
 --- !u!114 &426554233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,7 +857,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].description
-      value: Grabbing a Knife
+      value: 'Hammer
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[0].clips.Array.size
@@ -865,7 +867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].clips.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[2].clips.Array.size
@@ -878,7 +880,7 @@ PrefabInstance:
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].clips.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 72c8213d3ed5842459323edc8a313328, type: 3}
+      objectReference: {fileID: 8300000, guid: ae1a61a8e2a03fa43a5f5bb093bc30c9, type: 3}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].clips.Array.data[1]
       value: 
@@ -1018,7 +1020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedSpot: {fileID: 574582061}
   normalSprite: {fileID: 0}
-  deadSprite: {fileID: 21300000, guid: cada2902bce6c944c841c2f939d2ace0, type: 3}
+  deadSprite: {fileID: 21300000, guid: c334031a15dfc434b813d77acb435581, type: 3}
 --- !u!114 &999750619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,6 +1218,10 @@ PrefabInstance:
       value: SceneController
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
+      propertyPath: enableTimer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration
       value: 15
       objectReference: {fileID: 0}
@@ -1332,7 +1338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedSpot: {fileID: 264481159}
   normalSprite: {fileID: 0}
-  deadSprite: {fileID: 21300000, guid: cada2902bce6c944c841c2f939d2ace0, type: 3}
+  deadSprite: {fileID: 21300000, guid: c334031a15dfc434b813d77acb435581, type: 3}
 --- !u!114 &1424651589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1707,6 +1713,63 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &1594382268
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3047228049225228019, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_Name
+      value: StarBurstController
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 411.01233
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 197.60997
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 53.990067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
 --- !u!1 &1602814528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1760,7 +1823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedSpot: {fileID: 2069851380}
   normalSprite: {fileID: 0}
-  deadSprite: {fileID: 21300000, guid: cada2902bce6c944c841c2f939d2ace0, type: 3}
+  deadSprite: {fileID: 21300000, guid: c334031a15dfc434b813d77acb435581, type: 3}
 --- !u!114 &1602814531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1906,9 +1969,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialBackground: {fileID: 21300000, guid: f88a80a40d9c29c4c9ad41bc8e361b42, type: 3}
-  oneDeadBackground: {fileID: 21300000, guid: dd84f9df6bd8f21458a490bab040a882, type: 3}
-  twoDeadBackground: {fileID: 21300000, guid: 428dd22c230b7e648a8f15dff5c94fd6, type: 3}
-  threeDeadBackground: {fileID: 21300000, guid: 91e3aaf0ce96bfc4591d935a87cf7209, type: 3}
+  oneDeadBackground: {fileID: 21300000, guid: f88a80a40d9c29c4c9ad41bc8e361b42, type: 3}
+  twoDeadBackground: {fileID: 21300000, guid: dd84f9df6bd8f21458a490bab040a882, type: 3}
+  threeDeadBackground: {fileID: 21300000, guid: dd84f9df6bd8f21458a490bab040a882, type: 3}
 --- !u!114 &1782102374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2245,3 +2308,4 @@ SceneRoots:
   - {fileID: 934166595}
   - {fileID: 997829190}
   - {fileID: 1322456324}
+  - {fileID: 1594382268}

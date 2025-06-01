@@ -7,11 +7,13 @@ public class HelmetCatchTrigger : MonoBehaviour
         if (other.CompareTag("Viking"))
         {
             Destroy(other.gameObject);
+            SFX.Play(1);
             FallingVikingGameManager.Instance.OnVikingCaught();
         }
         else if (other.CompareTag("Axe"))
         {
             Destroy(other.gameObject);
+            SFX.Play(2);
             FallingVikingGameManager.Instance.OnAxeCaught();
         }
     }

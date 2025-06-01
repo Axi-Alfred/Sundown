@@ -57,6 +57,7 @@ public class BalloonGameManager : MonoBehaviour
         if (poppedBalloons >= 20)
         {
             poppedBalloons = 0;
+            FindObjectOfType<StarBurstDOTween>().TriggerBurst();
             PlayerManager.Instance.currentPlayerTurn.AddScore(1);
             Debug.Log("🎉 Score awarded!");
             GameManager1.EndTurn(); // ✅ Go to Wheel scene

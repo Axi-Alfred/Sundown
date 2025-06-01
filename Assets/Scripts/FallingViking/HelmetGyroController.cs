@@ -27,10 +27,11 @@ public class HelmetGyroController : MonoBehaviour
         if (!gyroEnabled) return;
 
         float tilt = gyro.gravity.x;
-        Vector3 movement = new Vector3(tilt * speed, 0, 0);
-        transform.Translate(movement * Time.deltaTime);
+        Vector3 newPosition = transform.position + new Vector3(tilt * speed * Time.deltaTime, 0, 0);
+        newPosition.x = Mathf.Clamp(newPosition.x, -7f, 7f);
+        newPosition.y = transform.position.y;  // lock Y
+        newPosition.z = transform.position.z;  // lock Z (if needed)
 
-        float clampedX = Mathf.Clamp(transform.position.x, -7f, 7f);
-        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
+        transform.position = newPosition;
     }
 }
