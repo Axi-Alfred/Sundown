@@ -38,15 +38,15 @@ public class Pointer : MonoBehaviour
 
         if (wheel.tag != null) nextGameText.text = SpinWheel.GetDisplayNameForTag(wheel.tag) + " will begin now!";
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!nextGameText.gameObject.activeSelf)
-            nextGameText.gameObject.SetActive(true);
-
+        if (!nextGameText.gameObject.activeSelf) nextGameText.gameObject.SetActive(true);
         StartCoroutine(GameTextPopupDOTween());
         ScreenShake.instance.TriggerShake();
 
-        // INTE STARTA SCENEN HÄR — låt SpinWheel sköta det!
+        string tag = other.tag;
+        StartCoroutine(Timer(tag));
     }
 
     public void WheelHasSpinned(bool spinning)
@@ -85,5 +85,4 @@ public class Pointer : MonoBehaviour
 
         yield return null;
     }
-
 }
