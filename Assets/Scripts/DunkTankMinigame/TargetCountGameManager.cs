@@ -34,6 +34,7 @@ public class TargetCounterGameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("🏆 All targets hit! Point awarded.");
+        FindObjectOfType<StarBurstDOTween>().TriggerBurst();
         PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }

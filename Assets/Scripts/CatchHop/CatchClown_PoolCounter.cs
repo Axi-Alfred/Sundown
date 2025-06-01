@@ -27,8 +27,10 @@ public class CatchClown_PoolCounter : MonoBehaviour
                 // Kontrollera om vi nått max
                 if (nuvarandeAntalClowner >= maxAntalClowner)
                 {
+                    FindObjectOfType<StarBurstDOTween>().TriggerBurst();
+                    PlayerData.currentPlayerTurn.AddScore(1);
+                    GameManager1.EndTurn();
                     Debug.Log("Spelet är slut: 10 clowner har landat i poolen.");
-                    Time.timeScale = 0f; // Stoppa spelet
                 }
             }
         }
