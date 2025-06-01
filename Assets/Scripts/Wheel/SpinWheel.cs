@@ -93,7 +93,7 @@ public class SpinWheel : MonoBehaviour
                 hasSpinned = true;
                 hasReachedMotionThreshold = false;
 
-#if UNITY_ANDROID || UNITY_IOS // Kompilera endast på mobiler
+#if UNITY_ANDROID || UNITY_IOS
 Handheld.Vibrate();
 #endif
 
