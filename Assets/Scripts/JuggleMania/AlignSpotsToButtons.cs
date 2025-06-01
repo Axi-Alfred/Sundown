@@ -4,7 +4,7 @@ public class AlignSpotsRuntime : MonoBehaviour
 {
     public RectTransform[] handButtons; // Your 4 hand UI buttons (RectTransform)
     public Transform[] spots;           // Your 4 world-space spot objects
-    public Camera uiCamera;              // Your Main Camera
+    public Camera uiCamera;              
 
     void Update()
     {
