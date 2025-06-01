@@ -58,7 +58,7 @@ public class LeaderBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(Time.timeScale);
     }
 
     private void InitializeLeaderBoard()
@@ -175,6 +175,8 @@ public class LeaderBoard : MonoBehaviour
             yield return new WaitForSeconds(delayBetweenEntries);
         }
 
+
+        SFXLibrary.Instance.Play(2, 1.25f);
         confettiParticles.SetActive(true);
         entriesObjectsList[entriesObjectsList.Count - 1].GetComponent<LeaderBoardEntry>().GiveCrown();
 

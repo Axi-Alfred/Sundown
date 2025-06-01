@@ -61,7 +61,7 @@ public static class GameManager1
         var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
         if (sceneController != null)
         {
-            if (currentRound == PlayerData.numberOfRounds)
+            if (currentRound == PlayerData.numberOfRounds && PlayerData.playersArray.All(Player => Player.HasPlayed))
             {
                 sceneController.nextSceneName = "LeaderBoard";
             }
