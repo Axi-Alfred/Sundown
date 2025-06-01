@@ -507,7 +507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration
-      value: 18
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -842,6 +842,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3543543275428829020, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: musicClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 34ac0d24bb1738240b2bf9a04834fe9f, type: 3}
     - target: {fileID: 7719853169740158259, guid: 99dcf990d59097b459831564ace73506, type: 3}
       propertyPath: m_Name
       value: BGMPlayer
