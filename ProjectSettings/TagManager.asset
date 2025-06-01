@@ -37,6 +37,8 @@ TagManager:
   - Balloon
   - Pin
   - PlayerProjectile
+  - Game14
+  - Game15
   layers:
   - Default
   - TransparentFX
