@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8896018784796781558
+--- !u!1 &3047228049225228019
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,59 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4236178281472935403}
-  - component: {fileID: 4306210406795115289}
-  - component: {fileID: 5534147671767088531}
+  - component: {fileID: 8753743843181049191}
+  - component: {fileID: 455799370800865187}
+  - component: {fileID: 1269347955607351335}
   m_Layer: 0
-  m_Name: SFXLibrary
+  m_Name: StarBurstController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4236178281472935403
+--- !u!4 &8753743843181049191
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8896018784796781558}
+  m_GameObject: {fileID: 3047228049225228019}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.0192232, y: -2.8574, z: -0.013226831}
+  m_LocalPosition: {x: 411.01233, y: 197.60997, z: 53.990067}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &4306210406795115289
+--- !u!114 &455799370800865187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3047228049225228019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e66a54f7aaa67942ab5ef92820f3292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasRect: {fileID: 0}
+  starPrefab: {fileID: 2837777597334576248, guid: 7212953209f1875439175f3bc8384aa7, type: 3}
+  starCount: 20
+  chime: {fileID: 1269347955607351335}
+--- !u!82 &1269347955607351335
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8896018784796781558}
+  m_GameObject: {fileID: 3047228049225228019}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 0e740ae56e767d3449c24504d9904acc, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -129,46 +145,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5534147671767088531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8896018784796781558}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27f55267b513b834a9e33f4474e56778, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - clips: []
-    description: 
-    pitchMin: 0.95
-    pitchMax: 1.05
-    volumeMin: 0.9
-    volumeMax: 1
-  - clips: []
-    description: 
-    pitchMin: 0.95
-    pitchMax: 1.05
-    volumeMin: 0.9
-    volumeMax: 1
-  - clips: []
-    description: 
-    pitchMin: 0.95
-    pitchMax: 1.05
-    volumeMin: 0.9
-    volumeMax: 1
-  - clips: []
-    description: 
-    pitchMin: 0.95
-    pitchMax: 1.05
-    volumeMin: 0.9
-    volumeMax: 1
-  - clips: []
-    description: 
-    pitchMin: 0.95
-    pitchMax: 1.05
-    volumeMin: 0.9
-    volumeMax: 1

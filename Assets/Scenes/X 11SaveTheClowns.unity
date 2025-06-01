@@ -122,6 +122,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &19865414
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3047228049225228019, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_Name
+      value: StarBurstController
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 411.01233
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 197.60997
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 53.990067
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8753743843181049191, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
 --- !u!1 &33297409
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +375,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
+  m_Constraints: 0
 --- !u!212 &485301402
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1303,6 +1360,10 @@ PrefabInstance:
       propertyPath: musicClip
       value: 
       objectReference: {fileID: 8300000, guid: 830a20979da418f4b81e3808b6e643bf, type: 3}
+    - target: {fileID: 5661837328320448353, guid: 99dcf990d59097b459831564ace73506, type: 3}
+      propertyPath: m_Volume
+      value: 0.691
+      objectReference: {fileID: 0}
     - target: {fileID: 7719853169740158259, guid: 99dcf990d59097b459831564ace73506, type: 3}
       propertyPath: m_Name
       value: BGMPlayer
@@ -1362,7 +1423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].clip
@@ -1373,12 +1434,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 5554471c1820f614fb6e949019547170, type: 3}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].pitchMax
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].pitchMin
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].volumeMax
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].volumeMin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[0].description
       value: "Ljudet n\xE4r vikingar faller"
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[1].description
-      value: "ljudet n\xE4r yxor faller"
+      value: "Ljudet n\xE4r vikingar faller"
       objectReference: {fileID: 0}
     - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: sounds.Array.data[2].description
@@ -1388,6 +1465,18 @@ PrefabInstance:
       propertyPath: sounds.Array.data[0].clips.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].clips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[0].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 71f229e4ed4130d43afb2449e0606642, type: 3}
+    - target: {fileID: 5534147671767088531, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
+      propertyPath: sounds.Array.data[1].clips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: afc090b905dbf28439f3300a4a586e10, type: 3}
     - target: {fileID: 8896018784796781558, guid: 0fd26b10ba221e64fb4ee3b665254fec, type: 3}
       propertyPath: m_Name
       value: SFXLibrary
@@ -1411,3 +1500,4 @@ SceneRoots:
   - {fileID: 6634512030198401056}
   - {fileID: 8897919479691751390}
   - {fileID: 146417215}
+  - {fileID: 19865414}
