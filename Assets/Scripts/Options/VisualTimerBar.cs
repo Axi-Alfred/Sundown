@@ -68,6 +68,7 @@ public class VisualTimerBar : MonoBehaviour
 
     private System.Collections.IEnumerator CountdownRealTime()
     {
+        Time.timeScale = 0f;
         string[] steps = { "3", "2", "1", "Start!" };
         foreach (var step in steps)
         {
@@ -76,6 +77,7 @@ public class VisualTimerBar : MonoBehaviour
 
             yield return WaitForRealSeconds(1f);
         }
+        Time.timeScale = 1f;
     }
 
     private System.Collections.IEnumerator WaitForRealSeconds(float time)
