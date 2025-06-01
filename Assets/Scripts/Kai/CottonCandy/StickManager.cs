@@ -4,34 +4,37 @@ using UnityEngine;
 
 public class StickManager : MonoBehaviour
 {
-    [Header("Audio")]
-    [SerializeField] private AudioClip machineHum, crowdSounds, cottonCandy;
+    [Header("Ljud")]
+    [SerializeField] private AudioClip machineHum;
+    [SerializeField] private AudioClip cottonCandy;
 
-    [Header("References")]
+    [Header("Referenser")]
     public Transform stickTip;
     public Transform candyMachineCenter;
     [SerializeField] private GameObject cottonCandyObject;
 
-    [Header("Growth Settings")]
-    [SerializeField] private float detectionRadius = 2f;
+    [Header("Inställningar för sockervadden")]
+    [SerializeField] private float detectionRadius = 2f; // HUr nära behöver vi vara för att trigga sockervaddsskapandet?
     [SerializeField] private float spawnThreshold = 90f;
     [SerializeField] private float scalePerSpinAlongStick = 0.03f;
     [SerializeField] private float scalePerSpinHorizontal = 0.01f;
-    [SerializeField] private float minScale = 0.5f;
-    [SerializeField] private float maxScale = 2.0f;
     [SerializeField] private float winScale = 1.5f;
     [SerializeField] private Animator cottonCandyMachine;
 
+    [Header("Parallax inställningar")]
+    [SerializeField] private Transform[] parallaxLayers;
+    [SerializeField] private float parallaxStrength = 0.2f;
+    [SerializeField] private Vector2 parallaxLimit = new Vector2(0.5f, 0.3f);
 
     private AudioSource machineSource;
-    private AudioSource crowdSource;
     private AudioSource playerInteractionSource;
     private Camera mainCam;
-
-    private Vector2 lastDirection;
-    private float rotationAccumulation = 0f;
     private Transform cottonCandyTransform;
 
+    private Vector2 lastDirection;
+
+    private float rotationAccumulation = 0f;
+    private bool hasWon = false;
     private bool hasTriggeredAnimation = false;
 
 
@@ -39,22 +42,14 @@ public class StickManager : MonoBehaviour
     {
         mainCam = Camera.main;
 
-        // Sound
         machineSource = gameObject.AddComponent<AudioSource>();
         machineSource.clip = machineHum;
         machineSource.loop = true;
         machineSource.volume = 0.8f;
         machineSource.Play();
 
-        crowdSource = gameObject.AddComponent<AudioSource>();
-        crowdSource.clip = crowdSounds;
-        crowdSource.loop = true;
-        crowdSource.volume =1f;
-        crowdSource.Play();
-
         playerInteractionSource = gameObject.AddComponent<AudioSource>();
 
-        // Instantiate
         GameObject fluff = Instantiate(cottonCandyObject, stickTip.position, Quaternion.identity, stickTip);
         cottonCandyTransform = fluff.transform;
 
@@ -62,14 +57,14 @@ public class StickManager : MonoBehaviour
         cottonCandyTransform.localScale = Vector3.zero;
     }
 
-    void Update()
+    void Update() // Hantera input baserat på platform
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         HandleMouseInput();
 #elif UNITY_ANDROID || UNITY_IOS
         HandleTouchInput();
 #else
-        HandleMouseInput(); // fallback
+        HandleMouseInput();
 #endif
 
         automaticSpinner();
@@ -90,15 +85,22 @@ public class StickManager : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Vector3 touchWorldPos = mainCam.ScreenToWorldPoint(touch.position);
-            touchWorldPos.z = 0f;
-            MoveStick(touchWorldPos);
+            if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+            {
+                Vector3 touchWorldPos = mainCam.ScreenToWorldPoint(touch.position);
+                touchWorldPos.z = 0f;
+                MoveStick(touchWorldPos);
+            }
         }
     }
 
+
     void MoveStick(Vector3 position)
     {
+        // Flyttar stickan och uppdaterar parrallax
+
         transform.position = position;
+        UpdateParallaxLayers(); // Ska följa sockervaddsPinnen
 
         Vector2 toCenter = (Vector2)candyMachineCenter.position - (Vector2)stickTip.position;
 
@@ -106,7 +108,7 @@ public class StickManager : MonoBehaviour
         {
             Vector2 currentDirection = toCenter.normalized;
 
-            if (!hasTriggeredAnimation)
+            if (!hasTriggeredAnimation) // maskinen ska animeras endast en gång
             {
                 cottonCandyMachine.SetTrigger("cottonCandy");
                 hasTriggeredAnimation = true;
@@ -118,11 +120,18 @@ public class StickManager : MonoBehaviour
             {
                 float angle = Vector2.SignedAngle(lastDirection, currentDirection);
 
-                if (Mathf.Abs(angle) > 0.5f)
+#if UNITY_ANDROID || UNITY_IOS
+                angle *= 1.5f; // rotations sensitivity boost på mobilen
+#endif
+
+                if (Mathf.Abs(angle) > 0.2f)
                 {
                     rotationAccumulation += Mathf.Abs(angle);
                 }
             }
+
+
+
 
             while (rotationAccumulation >= spawnThreshold)
             {
@@ -148,43 +157,60 @@ public class StickManager : MonoBehaviour
     {
         if (cottonCandyTransform == null) return;
 
-        // Play cotton candy sound
-        playerInteractionSource.PlayOneShot(cottonCandy);
+        if (!playerInteractionSource.isPlaying)
+        {
+            playerInteractionSource.clip = cottonCandy;
+            playerInteractionSource.loop = true;
+            playerInteractionSource.Play();
+        }
 
-        // Get current scale
+
         Vector3 currentScale = cottonCandyTransform.localScale;
         Vector3 newScale = currentScale;
 
-        // ✅ Grow along the stick's direction (mostly vertical)
-        Vector3 growthDirection = stickTip.up; // Direction the stick tip is facing
+        Vector3 growthDirection = stickTip.up;
 
-        // Scale along the stick's direction
         newScale += growthDirection * scalePerSpinAlongStick;
 
-        // ✅ Slight horizontal growth (fluff)
         newScale.x += scalePerSpinHorizontal;
         newScale.z += scalePerSpinHorizontal;
-
-        // ✅ Clamp the size to avoid overgrowth
-        newScale.x = Mathf.Clamp(newScale.x, minScale, maxScale);
-        newScale.y = Mathf.Clamp(newScale.y, minScale, maxScale);
-        newScale.z = Mathf.Clamp(newScale.z, minScale, maxScale);
 
         cottonCandyTransform.localScale = newScale;
         cottonCandyTransform.localPosition = stickTip.up * (newScale.y / 2);
 
-        // ✅ Win condition
-        if (newScale.magnitude >= winScale)
+        if (!hasWon && newScale.magnitude >= winScale)
         {
+            hasWon = true;
+            playerInteractionSource.Stop();
             PlayerData.currentPlayerTurn.AddScore(1);
             Debug.Log("You win!");
             Time.timeScale = 1f;
             GameManager1.EndTurn();
         }
 
+
+
+    }
+    void UpdateParallaxLayers()
+    {
+        Vector2 offset = (Vector2)(stickTip.position - candyMachineCenter.position);
+
+        for (int i = 0; i < parallaxLayers.Length; i++)
+        {
+            if (parallaxLayers[i] == null) continue;
+
+            float depthFactor = (i + 1) / (float)parallaxLayers.Length;
+
+            float xMove = Mathf.Clamp(offset.x * parallaxStrength * depthFactor, -parallaxLimit.x, parallaxLimit.x);
+            float yMove = Mathf.Clamp(offset.y * parallaxStrength * depthFactor, -parallaxLimit.y, parallaxLimit.y);
+
+            Vector3 targetOffset = new Vector3(xMove, yMove, 0f);
+            parallaxLayers[i].localPosition = targetOffset;
+        }
     }
 
-    void automaticSpinner()
+
+    void automaticSpinner() // Endast för debugging
     {
         if (Input.GetKey(KeyCode.F))
         {
