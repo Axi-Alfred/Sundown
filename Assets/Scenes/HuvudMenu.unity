@@ -3558,7 +3558,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "A game by: \n\nAlfred Pereira Fernandez, Sadra Yaghoobzadeh Tari, \nKai
-    Sooksawat, \nLoke Holmberg Sparre & Lucas Edlund"
+    Sooksawat, \nLoke Holmberg Sparre & Lucas Edlund\n\nAssets from:\nAberrantRealities
+    - A circus purpose music\nAndorios - Circus fast music\nKenney Vleugel - Card
+    sounds\nCynicMusic - Music in isItRight\nChatgpt - for some assets and backgrounds\nFreesoundcommunity
+    - for some sfx\n\u201CAt the Fair\u201D by The Green Orbs (YouTube Audio Library)\r\nSource:
+    YouTube Audio Library (https://www.youtube.com/audiolibrary)\r\nLicense: Free
+    to use in videos and projects.\r\nYouTube\r\nShare your videos with friends,
+    family, and the world.\r\n\u201CLe Grand Chase\u201D by Kevin MacLeod\r\nLicensed
+    under CC BY 4.0\r\nhttps://creativecommons.org/licenses/by/4.0/\r\nSource: incompetech.com
+    \r\n\u201CLocal Forecast \u2013 Elevator\u201D by Kevin MacLeod\r\nLicensed under
+    CC BY 4.0\r\nhttps://creativecommons.org/licenses/by/4.0/\r\nSource: incompetech.com\r\n\u201CRodeo
+    Show\u201D by The Green Orbs (YouTube Audio Library)\n\u201CCat Circus\u201D
+    by Doug Maxwell (YouTube Audio Library)\r\n\u201CGoblin Tinker Soldier Spy\u201D
+    by Doug Maxwell (YouTube Audio Library)\nPixabay - mechanical whirring sound
+    in cottonCandy game"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6424,8 +6437,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creditsPanel: {fileID: 768630209}
   playPanel: {fileID: 1530265418}
-  optionsPanel: {fileID: 0}
-  wheelSettingsPanel: {fileID: 0}
   mainMenuSceneName: HuvudMenu
 --- !u!4 &1983119294
 Transform:
