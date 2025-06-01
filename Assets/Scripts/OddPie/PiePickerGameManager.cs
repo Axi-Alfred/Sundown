@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PiePickerGameManager : MonoBehaviour
@@ -28,17 +29,19 @@ public class PiePickerGameManager : MonoBehaviour
 
     void Start()
     {
-        StartRound();
+        StartCoroutine(StartRound());
     }
 
-    void StartRound()
+    IEnumerator StartRound()
     {
         ClearOldPies();
+
+        yield return new WaitForSeconds(1f);  
 
         if (currentRound >= roundsToWin)
         {
             WinGame();
-            return;
+            yield break;
         }
 
         currentRound++;
@@ -69,7 +72,9 @@ public class PiePickerGameManager : MonoBehaviour
         if (wasOdd)
         {
             Debug.Log("✅ Correct pie tapped.");
-            StartRound();
+            SFX.Play(1);
+
+            StartCoroutine(StartRound());  
         }
         else
         {
@@ -82,7 +87,8 @@ public class PiePickerGameManager : MonoBehaviour
     {
         gameOver = true;
         Debug.Log("🏆 You win! Point awarded.");
-        PlayerData.currentPlayerTurn.AddScore(1);
+        FindObjectOfType<StarBurstDOTween>().TriggerBurst(); 
+        PlayerManager.Instance.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
 

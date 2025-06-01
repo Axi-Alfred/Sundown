@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Sounds/SFX/Other.meta
+guid: 29db017a699c82e49a9d6184d5c06d27
+folderAsset: yes
+========
 guid: 834f2f0b1b59f2743bfa15055dda5004
+>>>>>>>> main:Assets/Scenes/CameraPermissionScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
