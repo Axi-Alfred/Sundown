@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 455799370800865187, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
+      propertyPath: canvasRect
+      value: 
+      objectReference: {fileID: 162554416}
     - target: {fileID: 3047228049225228019, guid: 33907798c4d5378429bfa3c54fede265, type: 3}
       propertyPath: m_Name
       value: StarBurstController
