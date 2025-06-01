@@ -36,6 +36,25 @@ public class SpinWheel : MonoBehaviour
 
     public static readonly Dictionary<string, string> tagToScene = new()
 {
+    { "Game1", "X 12ClownElope" },
+    { "Game2", "RandomGame" }, // SKA VARA RANDOM GAME
+    { "Game3", "X 7JuggleMania5" },
+    { "Game4", "X PopTheBalloon" },
+    { "Game5", "RandomGame" }, // RANDOM
+    { "Game6", "X 4OddOneOut" },
+    { "Game7", "RandomGame" }, // RANDOM
+    { "Game8", "X 13DunkTank" },
+    { "Game9", "X 14DontGetHit" },
+    { "Game10", "X 15CatchHop_Main" },
+    { "Game11", "RandomGame" }, // RANDOM
+    { "Game12", "X 11SaveTheClowns" },
+    { "Game13", "X 9SmackedPig" },
+    { "Game14", "X 3IsItRight" },
+    { "Game15", "X 10CottonCandy" }
+};
+    /*
+    public static readonly Dictionary<string, string> tagToScene = new()
+{
     { "Game1", "X 3IsItRight" },
     { "Game2", "X 4OddOneOut" },
     { "Game3", "X 5PopTheBalloon" },
@@ -47,9 +66,28 @@ public class SpinWheel : MonoBehaviour
     { "Game9", "X 13DunkTank" },
     { "Game10", "X 14DontGetHit" },
     { "Game11", "X 15CatchHop_Main" },
-};
-
+};*/
     public static readonly Dictionary<string, string> tagToDisplayName = new()
+{
+    { "Game1", "Clown Elope" },
+    { "Game2", "Random Game!" },
+    { "Game3", "Juggle Mania" },
+    { "Game4", "Pop The Balloon" },
+    { "Game5", "Random Game!" },
+    { "Game6", "Odd One Out" },
+    { "Game7", "Random Game!" },
+    { "Game8", "Dunk Tank" },
+    { "Game9", "Don't Get Hit" },
+    { "Game10", "Catch Hop" },
+    { "Game11", "Random Game!" },
+    { "Game12", "Save the Clowns" },
+    { "Game13", "Pig?" },
+    { "Game14", "Is It Right?" },
+    { "Game15", "Cotton Candy" },
+    { "RandomGame", "Random Game!" },
+
+};
+    /*public static readonly Dictionary<string, string> tagToDisplayName = new()
 {
     { "Game1", "Is It Right?" },
     { "Game2", "Odd One Out" },
@@ -64,8 +102,7 @@ public class SpinWheel : MonoBehaviour
     { "Game11", "Catch Hop" },
     { "Game12", "Random Game!" },
     { "Game13", "Random Game!" }
-};
-
+};*/
 
 
     void Awake()
@@ -93,7 +130,7 @@ public class SpinWheel : MonoBehaviour
                 hasSpinned = true;
                 hasReachedMotionThreshold = false;
 
-#if UNITY_ANDROID || UNITY_IOS
+#if UNITY_ANDROID || UNITY_IOS 
 Handheld.Vibrate();
 #endif
 
@@ -199,66 +236,107 @@ Handheld.Vibrate();
         }
 
         tag = closest.tag;
-        Debug.Log($"[SpinWheel] Slice tag: {tag}");
 
+
+        Debug.Log($"[SpinWheel] 🎯 Slice name: {closest.name}");
+        Debug.Log($"[SpinWheel] 🎯 Slice tag: {tag}");
+        Debug.Log($"[SpinWheel] 🧾 Display name: {GetDisplayNameForTag(tag)}");
+        Debug.Log($"[SpinWheel] 🎬 Scene to load: {GetSceneForTag(tag)}");
+
+        // Set the game name in UI
         if (tagToDisplayName.TryGetValue(tag, out string displayName))
         {
             var ui = FindObjectOfType<WheelDotween>();
             if (ui != null)
+            {
+                Debug.Log($"[SpinWheel] 🧨 Sending display name '{displayName}' to UI");
+                Debug.Log($"[SpinWheel] Sending name to UI: {displayName}");
                 ui.ShowChosenGameName(displayName);
+            }
+            else
+            {
+                Debug.LogWarning("[SpinWheel] ⚠️ WheelDotween not found in scene.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[SpinWheel] ⚠️ No display name found for tag: {tag}");
         }
 
-
+        // Determine the scene to load
         string sceneName;
 
         if (tag == "RandomGame")
         {
             List<string> scenes = new List<string>(tagToScene.Values);
+            scenes.RemoveAll(s => s == "RandomGame"); // Prevent selecting invalid entry
             sceneName = scenes[Random.Range(0, scenes.Count)];
-            Debug.Log($"[SpinWheel] RANDOM pick → {sceneName}");
+            Debug.Log($"[SpinWheel] 🎲 RANDOM pick → {sceneName}");
         }
         else if (!tagToScene.TryGetValue(tag, out sceneName))
         {
-            Debug.LogError($"[SpinWheel] Unknown tag: {tag}");
+            Debug.LogError($"[SpinWheel] ❌ Unknown tag: {tag}");
             yield break;
         }
 
         if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogError("[SpinWheel] Scene name is EMPTY. Aborting spin.");
+            Debug.LogError("[SpinWheel] ❌ Scene name is EMPTY. Aborting spin.");
             yield break;
         }
 
-        Debug.Log($"[SpinWheel] Launching scene: {sceneName}");
+        Debug.Log($"[SpinWheel] 🚀 Launching scene: {sceneName}");
 
         ScenesController controller = FindObjectOfType<ScenesController>();
         if (controller != null)
         {
             controller.nextSceneName = sceneName;
-            Debug.Log($"[SpinWheel] Setting nextSceneName to: {controller.nextSceneName}");
+            Debug.Log($"[SpinWheel] ✅ Setting nextSceneName to: {controller.nextSceneName}");
             controller.TriggerEndNow();
         }
         else
         {
-            Debug.LogError("[SpinWheel] ScenesController not found!");
+            Debug.LogError("[SpinWheel] ❌ ScenesController not found!");
         }
     }
+
     public static string GetDisplayNameForTag(string tag)
     {
         return tagToDisplayName.ContainsKey(tag) ? tagToDisplayName[tag] : "Unknown Game";
     }
-
     public static string GetSceneForTag(string tag)
     {
-        if (tag == "Game12" || tag == "Game13" || tag == "RandomGame")
+        if (tag == "RandomGame")
         {
-            // Pick a real random scene from the valid list
-            List<string> validScenes = new List<string>(tagToScene.Values);
-            return validScenes[Random.Range(0, validScenes.Count)];
+            List<string> randomScenePool = new List<string>
+        {
+            "X 3IsItRight",
+            "X 4OddOneOut",
+            "X 5PopTheBalloon",
+            "X 7JuggleMania",
+            "X 9SmackedPig",
+            "X 10CottonCandy",
+            "X 11SaveTheClowns",
+            "X 12ClownElope",
+            "X 13DunkTank",
+            "X 14DontGetHit",
+            "X 15CatchHop_Main"
+        };
+
+            return randomScenePool[Random.Range(0, randomScenePool.Count)];
         }
 
         return tagToScene.ContainsKey(tag) ? tagToScene[tag] : string.Empty;
     }
+    void OnDrawGizmos()
+    {
+        if (pointerObject != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(pointerObject.transform.position, pointerObject.transform.up * 5f);
+        }
+    }
+
 
 
 }

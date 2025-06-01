@@ -8,6 +8,8 @@ public class WheelDotween : MonoBehaviour
 {
     [SerializeField] private GameObject texts;
     [SerializeField] private SpinWheel spinWheel;
+    [SerializeField] private GameObject pointerObject;
+
 
     [SerializeField] private TMP_Text playerName;
     [SerializeField] private Image playerIcon;
@@ -24,6 +26,8 @@ public class WheelDotween : MonoBehaviour
 
     [Header("Player Identity Display")]
     [SerializeField] private Image playerIconCircle; // CircleMask > PlayerIcon
+
+    private bool nameHasBeenSet = false;
 
     private void Awake()
     {
@@ -201,15 +205,22 @@ public class WheelDotween : MonoBehaviour
         GameManager1.newRoundHasBegun = false;
     }
     public TMP_Text chosenGameText; // 👈 assign in Inspector
-
     public void ShowChosenGameName(string displayName)
     {
         if (chosenGameText != null)
         {
-            chosenGameText.text = $"🎮 {displayName}";
+            Debug.Log($"[WheelDotween] 🧨 Setting game text to: {displayName}");
+            chosenGameText.text = displayName;
+            Debug.Log($"[WheelDotween] ✅ Final text value: {chosenGameText.text}");
             StartCoroutine(ClearChosenName());
         }
+        else
+        {
+            Debug.LogError("[WheelDotween] ❌ chosenGameText is not assigned in Inspector");
+        }
     }
+
+
 
     private IEnumerator ClearChosenName()
     {
