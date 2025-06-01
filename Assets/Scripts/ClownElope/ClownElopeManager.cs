@@ -1,34 +1,72 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
+// Skript som hanterar spelets logik
 public class ClownElopeManager : MonoBehaviour
 {
+    // Variabel som indikerar om spelet är över
     private bool gameOver = false;
 
-    public int maxEscaped = 10;
-    private int escapedCount = 0;
+    // Variabler för räddade och förlorade clowner
+    public int maxEscaped = 10;              // Max antal flyende clowner innan game over
+    private int escapedCount = 0;            // Räknare för flyende clowner
+    public int savedCount = 0;               // Räknare för räddade clowner
+    public int targetSavedClowns = 20;       // Antal clowner som behövs för att vinna
 
+    // Metod som kallas när en clown har flytt
     public void ObjectEscaped()
     {
-        if (gameOver) return;
+        // Om spelet redan är över, gör ingenting
+        if (gameOver == true)
+        {
+            return;
+        }
 
-        escapedCount++;
-        Debug.Log("Objects escaped: " + escapedCount);
+        // Öka räknaren för flyende clowner
+        escapedCount = escapedCount + 1;
 
+        // Skriv ut till konsolen
+        Debug.Log("Antal flyende clowner: " + escapedCount);
+
+        // Kontrollera om för många clowner har flytt
         if (escapedCount >= maxEscaped)
         {
             gameOver = true;
-            Debug.Log("🎯 GAME OVER!");
-
-            // Pause game
-            Time.timeScale = 1;
-
-            // End turn or load next scene
+            Debug.Log("💥 SPELET ÖVER! För många clowner har flytt.");
             GameManager1.EndTurn();
-            // Or: SceneManager.LoadScene("GameOverScene");
+            Time.timeScale = 0f;
         }
     }
 
+    // Metod som kallas när en clown har räddats
+    public void ObjectSaved()
+    {
+        // Om spelet redan är över, gör ingenting
+        if (gameOver == true)
+        {
+            return;
+        }
+
+        // Öka räknaren för räddade clowner
+        savedCount = savedCount + 1;
+
+        // Skriv ut till konsolen
+        Debug.Log("Antal räddade clowner: " + savedCount);
+
+        // Kontrollera om spelaren har räddat tillräckligt många clowner för att vinna
+        if (savedCount >= targetSavedClowns)
+        {
+            gameOver = true;
+            Debug.Log("🎉 GRATTIS! Du har räddat tillräckligt många clowner!");
+            FindObjectOfType<StarBurstDOTween>().TriggerBurst();
+            PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+
+            // ✅ End the round
+            GameManager1.EndTurn();
+            Time.timeScale = 0f;
+        }
+    }
+
+    // Metod som returnerar om spelet är över
     public bool IsGameOver()
     {
         return gameOver;
