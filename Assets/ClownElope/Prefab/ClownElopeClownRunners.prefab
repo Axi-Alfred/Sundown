@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -6355879262328279777}
   - component: {fileID: 7630427227943696984}
   m_Layer: 0
-  m_Name: FlyObject
+  m_Name: ClownElopeClownRunners
   m_TagString: Draggable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
