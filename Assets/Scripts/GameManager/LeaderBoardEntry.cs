@@ -1,37 +1,35 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using DG.Tweening;
 public class LeaderBoardEntry : MonoBehaviour
 {
-    // Assigned externally during instantiation
+    //Det här är scriptet i prefaben som spawnar en gång per spelare i leaderboarden
     public Player Player { get; set; }
     public int Position { get; set; }
 
     [SerializeField] private TMP_Text playerName;
     [SerializeField] private TMP_Text playerScore;
     [SerializeField] private Image playerIcon;
-    [SerializeField] private Image crown;
+    [SerializeField] private GameObject crown;
 
+
+    // Start is called before the first frame update
     void Start()
     {
-        // Nothing needed here right now
+
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // Optional: You can remove this if not used
+
     }
 
     public void LoadEntry()
     {
-        if (Player == null)
-        {
-            Debug.LogWarning("[LeaderBoardEntry] No Player data assigned!");
-            return;
-        }
-
         playerName.text = Player.PlayerName;
         playerScore.text = Player.PlayerScore.ToString();
         playerIcon.sprite = Player.PlayerIcon;
@@ -39,6 +37,13 @@ public class LeaderBoardEntry : MonoBehaviour
 
     public void GiveCrown()
     {
-        crown.enabled = true;
+        RectTransform textRT = crown.GetComponent<RectTransform>();
+        textRT.localScale = Vector3.one * 0.2f;
+
+        Sequence textSequence = DOTween.Sequence();
+        textSequence.AppendCallback(() => crown.SetActive(true));
+        textSequence.Append(textRT.DOScale(1.1f, 0.4f).SetEase(Ease.OutBack));
+        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
+        textSequence.AppendInterval(1.5f);
     }
 }

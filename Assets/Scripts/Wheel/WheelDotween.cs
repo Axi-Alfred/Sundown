@@ -24,8 +24,6 @@ public class WheelDotween : MonoBehaviour
 
     [Header("Player Identity Display")]
     [SerializeField] private Image playerIconCircle; // CircleMask > PlayerIcon
-    [SerializeField] private TMP_Text filterNameTop; // "You are now spinning"
-    [SerializeField] private TMP_Text filterNameBottom; // Large text below wheel
 
     private void Awake()
     {
@@ -43,7 +41,7 @@ public class WheelDotween : MonoBehaviour
 
     private void ShowPlayerVisuals()
     {
-        var player = PlayerManager.Instance.currentPlayerTurn;
+        var player = PlayerData.currentPlayerTurn;
 
         if (player == null)
         {
@@ -72,17 +70,6 @@ public class WheelDotween : MonoBehaviour
         {
             Debug.LogWarning("⚠️ PlayerIcon is null — photo was likely not saved.");
         }
-
-        if (filterNameTop == null || filterNameBottom == null)
-        {
-            Debug.LogError($"❌ FilterNameTop or Bottom is not assigned. Top: {filterNameTop}, Bottom: {filterNameBottom}");
-        }
-        else
-        {
-            filterNameTop.text = player.PlayerName;
-            filterNameBottom.text = player.PlayerName;
-            Debug.Log($"📝 Filter name set: {player.PlayerName}");
-        }
     }
 
 
@@ -90,6 +77,7 @@ public class WheelDotween : MonoBehaviour
     {
         currentRoundNumber.text = GameManager1.currentRound.ToString();
         previousRoundNumber.text = (GameManager1.currentRound - 1).ToString();
+        playerName.text = PlayerData.currentPlayerTurn.PlayerName;
     }
 
     private IEnumerator SceneInitialization()
@@ -189,13 +177,13 @@ public class WheelDotween : MonoBehaviour
 
             Sequence transitionSequence = DOTween.Sequence();
 
-            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.45f));
-            transitionSequence.Join(previousRoundNumber.rectTransform.DOLocalMoveY(-100f, 0.6f).SetEase(Ease.InQuad));
+            transitionSequence.Join(previousRoundNumber.DOFade(0f, 0.3f));
+            transitionSequence.Join(previousRoundNumber.rectTransform.DOLocalMoveY(-100f, 0.3f).SetEase(Ease.InQuad));
 
             yield return new WaitForSeconds(0.4f);
 
-            transitionSequence.Join(currentRoundNumber.DOFade(1f, 0.6f));
-            transitionSequence.Join(currentRoundNumber.rectTransform.DOLocalMoveY(startPos.y, 0.6f).SetEase(Ease.OutElastic));
+            transitionSequence.Join(currentRoundNumber.DOFade(1f, 0.45f));
+            transitionSequence.Join(currentRoundNumber.rectTransform.DOLocalMoveY(startPos.y, 0.3f).SetEase(Ease.OutElastic));
 
             textRT.DOPunchPosition(new Vector3(0, -20, 0), 0.5f, 2);
 

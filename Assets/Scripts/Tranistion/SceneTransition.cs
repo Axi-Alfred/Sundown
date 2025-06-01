@@ -121,6 +121,7 @@ public class SceneTransition : MonoBehaviour
 
     private void LoadSceneAfterTransition()
     {
+        Time.timeScale = 1f;
         if (!string.IsNullOrEmpty(targetSceneName))
         {
             SceneManager.LoadScene(targetSceneName);

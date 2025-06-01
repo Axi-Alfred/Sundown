@@ -37,8 +37,8 @@ public class GameSetupMenu : MonoBehaviour
         Debug.Log("Antal spelare: " + numberOfPlayers);
         Debug.Log("Antal rundor: " + numberOfRounds);
 
-        PlayerManager.Instance.numberOfPlayers = numberOfPlayers;
-        PlayerManager.Instance.numberOfRounds = numberOfRounds;
+        PlayerData.numberOfPlayers = numberOfPlayers;
+        PlayerData.numberOfRounds = numberOfRounds;
 
         // Visa nästa panel
         playerSetupPanel.SetActive(true);

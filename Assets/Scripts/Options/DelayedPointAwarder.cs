@@ -19,7 +19,7 @@ public class DelayedPointAwarder : MonoBehaviour
 
         hasAwardedPoint = true;
         Debug.Log("🏆 Delayed point awarded!");
-        PlayerManager.Instance.currentPlayerTurn.AddScore(1);
+        PlayerData.currentPlayerTurn.AddScore(1);
         GameManager1.EndTurn();
     }
 

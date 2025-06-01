@@ -36,6 +36,7 @@ TagManager:
   - RandomGame
   - Balloon
   - Pin
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX

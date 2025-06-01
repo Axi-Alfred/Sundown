@@ -33,8 +33,7 @@ public class BGMPlayer : MonoBehaviour
         else
             PlayMusic();
 
-        float pitch = audioSource.pitch;
-        pitch = pitch * GameManager1.gameSpeedMultiplier;
+        audioSource.pitch = audioSource.pitch * GameManager1.gameSpeedMultiplier;
     }
 
     private void PlayMusic()

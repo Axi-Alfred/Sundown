@@ -1,27 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NewLetter : MonoBehaviour
 {
-    public TextMeshProUGUI letterText;
+    // Script för att kontrollera utseendet på varje bokstav/tile
 
-    public string displayedLetter;
-    public string correctLetter;
-    public string letter; // ← Add this if needed for GameManager
+    [SerializeField] private Transform bounceTarget;
+
+    public TextMeshProUGUI letterText; // Visar bokstaven
     public RectTransform letterTextTransform;
-    public Transform contentTransform; // används för flip
-    public Transform bounceTarget;     // används för bounce (hela knappen)
+    public Transform contentTransform; // För att rotera bokstaven
 
-
+    public string displayedLetter; // vad som visas för bokstaven
+    public string correctLetter; // vad bokstaven egentligen innehåller
     public bool isCorrect;
+
     private bool hasBeenPressed = false;
 
     public void Setup(string shown, string correct, bool isCorrectLetter, bool startsCorrect)
     {
-        StopAllCoroutines(); // 🛑 Stop lingering fades or shakes
+        StopAllCoroutines();
 
         displayedLetter = shown;
         correctLetter = correct;
@@ -29,30 +31,14 @@ public class NewLetter : MonoBehaviour
         hasBeenPressed = false;
 
         letterText.text = shown;
+        GetComponent<Image>().color = Color.white;
 
-        // ✅ Always reset visuals
-        Image img = GetComponent<Image>();
-        img.color = Color.white;
+        Button button = GetComponent<Button>();
+        button.interactable = !string.IsNullOrEmpty(shown);
 
-        GetComponent<Button>().interactable = true;
+        contentTransform.localRotation = startsCorrect ? Quaternion.identity : Quaternion.Euler(0, 0, 180);
     }
 
-
-    public static string FlipLetter(string c)
-    {
-        Dictionary<char, char> flipMap = new()
-    {
-        { 'a', 'ɐ' }, { 'b', 'q' }, { 'c', 'ɔ' }, { 'd', 'p' }, { 'e', 'ǝ' },
-        { 'f', 'ɟ' }, { 'g', 'ƃ' }, { 'h', 'ɥ' }, { 'i', 'ᴉ' }, { 'j', 'ɾ' },
-        { 'k', 'ʞ' }, { 'l', 'l' }, { 'm', 'ɯ' }, { 'n', 'u' }, { 'o', 'o' },
-        { 'p', 'd' }, { 'q', 'b' }, { 'r', 'ɹ' }, { 's', 's' }, { 't', 'ʇ' },
-        { 'u', 'n' }, { 'v', 'ʌ' }, { 'w', 'ʍ' }, { 'x', 'x' }, { 'y', 'ʎ' },
-        { 'z', 'z' }
-    };
-
-        char ch = c.ToLower()[0];
-        return flipMap.ContainsKey(ch) ? flipMap[ch].ToString() : c;
-    }
     public void OnClick()
     {
         if (hasBeenPressed) return;
@@ -64,149 +50,86 @@ public class NewLetter : MonoBehaviour
             StartCoroutine(AnimateShake());
     }
 
-    public void ForceFlip()
+    public void ForceFlip() // Forcerar flip om vi inte har tillräckligt med inkorrekta bokstäver
     {
         isCorrect = true;
-        displayedLetter = FlipLetter(correctLetter);
-        letterText.text = displayedLetter;
+        displayedLetter = correctLetter;
+        letterText.text = correctLetter;
 
-        // ✅ Reset visuals
+        contentTransform.localRotation = Quaternion.Euler(0, 0, 180);
+
         GetComponent<Button>().interactable = true;
         GetComponent<Image>().color = Color.white;
         hasBeenPressed = false;
     }
-
-
-    private IEnumerator AnimateFlip()
+    private IEnumerator AnimateFlip() // Flippar bokstaven tillbaka till normalt
     {
-        float duration = 0.08f;
-        float elapsed = 0f;
-        Vector3 originalScale = contentTransform.localScale;
+        contentTransform.DOLocalRotate(Vector3.zero, 0.2f, RotateMode.Fast)
+                        .SetEase(Ease.OutQuad);
 
-        while (elapsed < duration)
-        {
-            float progress = elapsed / duration;
-            float scaleX = Mathf.Lerp(1f, 0f, progress);
-            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
+        yield return new WaitForSeconds(0.2f);
 
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        letterText.text = correctLetter;
-        StartCoroutine(Bounce());
-
-
-        // 🟢 Fördröj färgsättning tills efter flip-back är klar
-        elapsed = 0f;
-        while (elapsed < duration)
-        {
-            float progress = elapsed / duration;
-            float scaleX = Mathf.Lerp(0f, 1f, progress);
-            contentTransform.localScale = new Vector3(scaleX, 1f, 1f);
-
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+        Transform target = bounceTarget != null ? bounceTarget : transform;
+        target.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
+        GetComponent<Image>().DOColor(isItRight.Instance.victoryGreen, 0.3f);
 
         GetComponent<Button>().interactable = false;
-
-        if (isCorrect)
-        {
-            GetComponent<Image>().color = isItRight.Instance.victoryGreen;
-            StartCoroutine(Bounce()); // 🟢 studsa på rätt bokstav
-            isItRight.Instance.OnCorrectLetterTapped(this);
-        }
-        else
-        {
-            GetComponent<Image>().color = Color.red;
-            isItRight.Instance.OnWrongLetterTapped(this);
-        }
-
-
+        isItRight.Instance.OnCorrectLetterTapped(this);
     }
 
-    public IEnumerator AnimateShake()
-    {
-        Vector3 originalPos = transform.localPosition;
-        float shakeAmount = 10f;
-        float shakeDuration = 0.2f;
-        float elapsed = 0f;
+    public IEnumerator AnimateShake() // Om spelaren trycker på fel ord
+{
+    Vector3 originalPos = transform.localPosition;
 
-        while (elapsed < shakeDuration)
-        {
-            float offsetX = Random.Range(-1f, 1f) * shakeAmount;
-            transform.localPosition = originalPos + new Vector3(offsetX, 0f, 0f);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
+    transform.DOLocalMoveX(originalPos.x + 10f, 0.05f)
+             .SetLoops(4, LoopType.Yoyo)
+             .OnComplete(() =>
+             {
+                 transform.localPosition = originalPos;
 
-        transform.localPosition = originalPos;
+                 GetComponent<Image>().DOColor(Color.red, 0.2f);
+                 GetComponent<Button>().interactable = false;
 
-        // Show red & disable
-        GetComponent<Image>().color = Color.red;
-        isItRight.Instance.OnWrongLetterTapped(this);
-        GetComponent<Button>().interactable = false;
-    }
-    public IEnumerator ShowVictoryState(Color green)
+                 isItRight.Instance.OnWrongLetterTapped(this);
+             });
+
+    yield return new WaitForSeconds(0.25f);
+}
+
+    public IEnumerator ShowVictoryState(Color green) // Byter färg på bakgrunderna till bokstäverna
     {
         yield return FadeToColor(green);
     }
-
-
     public IEnumerator FadeToColor(Color targetColor)
     {
-        Image img = GetComponent<Image>();
-        Color startColor = img.color;
-        float duration = 0.3f;
-        float t = 0f;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime / duration;
-            img.color = Color.Lerp(startColor, targetColor, t);
-            yield return null;
-        }
+        GetComponent<Image>().DOColor(targetColor, 0.3f);
+        yield return new WaitForSeconds(0.3f);
     }
-    public IEnumerator Bounce()
+
+    public IEnumerator Bounce() // Studsar ordet uppåt
     {
-        Vector3 originalScale = bounceTarget.localScale;
-        Vector3 target = originalScale * 1.2f;
-        float t = 0f;
+        if (bounceTarget == null) yield break;
 
-        while (t < 0.1f)
-        {
-            t += Time.deltaTime;
-            bounceTarget.localScale = Vector3.Lerp(originalScale, target, t / 0.1f);
-            yield return null;
-        }
-
-        t = 0f;
-        while (t < 0.1f)
-        {
-            t += Time.deltaTime;
-            bounceTarget.localScale = Vector3.Lerp(target, originalScale, t / 0.1f);
-            yield return null;
-        }
-        bounceTarget.localScale = Vector3.one;
+        bounceTarget.DOPunchScale(Vector3.one * 0.2f, 0.3f, 10, 1);
+        yield return new WaitForSeconds(0.3f);
     }
-    public void ResetTile()
+
+    public void ResetTile() // Reset och pausar alla animationer som pågår
     {
         hasBeenPressed = false;
-        StopAllCoroutines(); // cancel fades/shakes/etc.
+        StopAllCoroutines();
 
         Image img = GetComponent<Image>();
-        img.color = Color.white;
+        img.DOColor(Color.white, 0.2f);
 
         GetComponent<Button>().interactable = true;
 
-        // 🔁 Sätt tillbaka displayedLetter om den finns
-        letterText.text = displayedLetter ?? correctLetter ?? "?";
+        letterText.text = displayedLetter ?? correctLetter ?? "?"; // Visar ? om inget finns. ?? betyder använd om inte är null
     }
     public void SetVictoryColor(Color green)
     {
         StopAllCoroutines();
-        GetComponent<Image>().color = green;
+        GetComponent<Image>().DOColor(green, 0.3f);
 
         if (letterText == null)
         {
@@ -219,6 +142,28 @@ public class NewLetter : MonoBehaviour
         }
 
         GetComponent<Button>().interactable = false;
+    }
+    public IEnumerator VictoryJump(float delay) // Orden studsar upp och ned och visar rätt ord
+    {
+        yield return new WaitForSeconds(delay);
+
+        Transform target = bounceTarget != null ? bounceTarget : transform;
+        Vector3 originalPos = target.localPosition;
+
+
+        if (letterText != null)
+            letterText.text = correctLetter;
+
+        float jumpHeight = 40f;
+        float jumpTime = 0.2f;
+
+        target.DOLocalMoveY(originalPos.y + jumpHeight, jumpTime)
+              .SetEase(Ease.OutQuad)
+              .OnComplete(() =>
+              {
+                  target.DOLocalMoveY(originalPos.y, jumpTime)
+                        .SetEase(Ease.InQuad);
+              });
     }
 
 

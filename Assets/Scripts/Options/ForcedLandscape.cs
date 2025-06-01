@@ -24,7 +24,8 @@ public class ForcedLandscape : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
 
         // 5. Unfreeze the game
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
+        Time.timeScale = GameManager1.gameSpeedMultiplier; //Viktig rad för att se till att game speeden faktiskt ändras. Om du ändrar nåt i framtiden se till att den här e med och att den e med sist av allt.
 
         if (orientationWarningUI != null)
             orientationWarningUI.SetActive(false);

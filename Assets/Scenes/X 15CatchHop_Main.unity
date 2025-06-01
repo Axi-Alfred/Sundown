@@ -371,7 +371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clownPrefabs:
   - {fileID: 5823898155569132510, guid: ad2916c70c5e7444cbc00ebad2301df6, type: 3}
-  - {fileID: 5823898155569132510, guid: ec764451497b0f64c8f9d4f9af8b8f61, type: 3}
+  - {fileID: 5823898155569132510, guid: 35d15171c889a6b4d985c3084976ec51, type: 3}
   - {fileID: 5823898155569132510, guid: 3ad8fb82b5d5b71488c264af4f488f7a, type: 3}
   spawnPosition: {fileID: 2096803688}
   kanonAnimator: {fileID: 0}
@@ -585,7 +585,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Sprite: {fileID: 21300000, guid: ffcd455bfb8a4ad49a2495def2eaf1cd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8bc71e47476989d43bb33963ca7fb229, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -662,6 +662,10 @@ PrefabInstance:
     - target: {fileID: 6083310683954071535, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: m_Name
       value: SceneController
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
+      propertyPath: enableTimer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration

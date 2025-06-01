@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SpinWheel : MonoBehaviour
 {
+    public string tag {  get; private set; }
+
     [Header("Wheel Settings")]
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
     [SerializeField] private float torqueMultiplier = 50f;
@@ -38,7 +40,7 @@ public class SpinWheel : MonoBehaviour
     { "Game4", "X 7JuggleMania" },
     { "Game5", "X 9SmackedPig" },
     { "Game6", "X 10CottonCandy" },
-    { "Game7", "X 11FallingGods" },
+    { "Game7", "X 11SaveTheClowns" },
     { "Game8", "X 12ClownElope" },
     { "Game9", "X 13DunkTank" },
     { "Game10", "X 14DontGetHit" },
@@ -64,11 +66,13 @@ public class SpinWheel : MonoBehaviour
 
 
 
-    void Start()
+    void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
         wheelCenter = Camera.main.WorldToScreenPoint(transform.position);
-        transform.localRotation = Quaternion.Euler(0, 0, Random.Range(1, 90));
+        float wheelRotation = Random.Range(1, 360);
+        transform.localRotation = Quaternion.Euler(0, 0, wheelRotation);
+        Debug.Log(wheelRotation);
     }
 
     void Update()
@@ -185,7 +189,7 @@ public class SpinWheel : MonoBehaviour
             yield break;
         }
 
-        string tag = closest.tag;
+        tag = closest.tag;
         Debug.Log($"[SpinWheel] Slice tag: {tag}");
 
         if (tagToDisplayName.TryGetValue(tag, out string displayName))

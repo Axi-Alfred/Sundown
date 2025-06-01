@@ -55,7 +55,6 @@ public class SFXLibrary : MonoBehaviour
         audioSource.pitch = pitch;
         audioSource.PlayOneShot(clip);
 
-        audioSource.pitch = 1f;
     }
 
     public void Play(int index, float pitch, float volume)
@@ -68,8 +67,5 @@ public class SFXLibrary : MonoBehaviour
         audioSource.pitch = pitch;
         audioSource.volume = volume;
         audioSource.PlayOneShot(clip);
-
-        audioSource.pitch = 1f;
-        audioSource.volume = 1f;
     }
 }

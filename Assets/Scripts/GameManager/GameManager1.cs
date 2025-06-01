@@ -9,14 +9,14 @@ public static class GameManager1
     private static List<Player> tempPlayersList;
     public static int currentRound;
 
-    public static float gameSpeedMultiplier;
+    public static float gameSpeedMultiplier = 1;
     private static float increasePercentage = 0.15f;
 
     public static bool newRoundHasBegun;
 
     public static IEnumerator PlayerTurnLoop()
     {
-        tempPlayersList = PlayerManager.Instance.playersArray.ToList();
+        tempPlayersList = PlayerData.playersArray.ToList();
         tempPlayersList = tempPlayersList.OrderBy(p => Random.value).ToList();
 
         foreach (Player i in tempPlayersList)
@@ -26,13 +26,14 @@ public static class GameManager1
 
         for (int i = 0; i < tempPlayersList.Count; i++)
         {
-            PlayerManager.Instance.currentPlayerTurn = tempPlayersList[i];
-            Debug.Log("Player turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
+            PlayerData.currentPlayerTurn = tempPlayersList[i];
+            Debug.Log("Player turn: " + PlayerData.currentPlayerTurn.PlayerName);
 
-            yield return new WaitUntil(() => PlayerManager.Instance.currentPlayerTurn.HasPlayed == true);
+            yield return new WaitUntil(() => PlayerData.currentPlayerTurn.HasPlayed == true);
+
             yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Wheel");
 
-            Debug.Log("Player finished turn: " + PlayerManager.Instance.currentPlayerTurn.PlayerName);
+            Debug.Log("Player finished turn: " + PlayerData.currentPlayerTurn.PlayerName);
         }
 
         yield break;
@@ -42,30 +43,33 @@ public static class GameManager1
     {
         gameSpeedMultiplier = 1;
 
-        for (currentRound = 1; currentRound <= PlayerManager.Instance.numberOfRounds; currentRound++)
+        for (currentRound = 1; currentRound <= PlayerData.numberOfRounds; currentRound++)
         {
-            newRoundHasBegun = true;
-            gameSpeedMultiplier = Mathf.Min(1f + (currentRound * increasePercentage), 2f);
+            newRoundHasBegun = true; //Sets till false i WheelDotween när animationen har spelat klar
+            if (currentRound > 1) gameSpeedMultiplier = Mathf.Min(1f + ((currentRound-1) * increasePercentage), 2f);
             yield return PlayerTurnLoop();
         }
 
         Debug.Log("All rounds finished!");
-        SceneManager.LoadScene("LeaderBoard");
     }
 
     public static void EndTurn()
     {
-        PlayerManager.Instance.currentPlayerTurn.HasPlayed = true;
+        PlayerData.currentPlayerTurn.HasPlayed = true;
         Time.timeScale = 1f;
 
         var sceneController = UnityEngine.Object.FindObjectOfType<ScenesController>();
         if (sceneController != null)
         {
-            sceneController.EndGameAndFadeOut(); // ✅ uses nextSceneName
-        }
-        else
-        {
-            UnityEngine.Object.FindObjectOfType<SceneTransition>()?.StartFadeOut("Wheel");
+            if (currentRound == PlayerData.numberOfRounds)
+            {
+                sceneController.nextSceneName = "LeaderBoard";
+            }
+            else
+            {
+                sceneController.nextSceneName = "Wheel";
+            }
+            sceneController.EndGameAndFadeOut();
         }
     }
 }

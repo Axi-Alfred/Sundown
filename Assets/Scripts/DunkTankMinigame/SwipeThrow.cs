@@ -17,6 +17,8 @@ public class SwipeThrow : MonoBehaviour
     private bool isSwipe; //Flag to detect if a swipe is in progress
     private bool hasBallInAir = false; // Prevents multiple balls in the air at the same time
 
+    public AudioClip throwSwooshClip;
+
     public Sprite[] ballSprites; // Array of possible sprites for the ball
     private Sprite nextBallSprite; // The sprite assigned to the next ball to be thrown
     private Coroutine fadeCoroutine; // Track and stop any ongoing fade animation
@@ -109,6 +111,11 @@ public class SwipeThrow : MonoBehaviour
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
         Vector2 force = new Vector2(swipe.x, swipe.y) * forceMultiplier;
         rb.AddForce(force, ForceMode2D.Impulse);
+
+        if(throwSwooshClip != null)
+        {
+            AudioSource.PlayClipAtPoint(throwSwooshClip, spawnPoint.position, 2f);
+        }
 
         hasBallInAir = true;
 

@@ -16,6 +16,10 @@ public class Pointer : MonoBehaviour
 
     [SerializeField] private float gameStartTimer = 2.5f;
 
+    [SerializeField] private TMP_Text nextGameText;
+
+    [SerializeField] private SpinWheel wheel;
+
     void Start()
     {
         GetComponent<BoxCollider2D>().enabled = false;
@@ -25,16 +29,20 @@ public class Pointer : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().enabled = wheelHasSpinned;
 
-        playerText.text = "Now spinning: " + PlayerManager.Instance.currentPlayerTurn.PlayerName;
-        roundText.text = GameManager1.currentRound == PlayerManager.Instance.numberOfRounds
+        playerText.text = "Now spinning: " + PlayerData.currentPlayerTurn.PlayerName;
+        roundText.text = GameManager1.currentRound == PlayerData.numberOfRounds
             ? "Round " + GameManager1.currentRound + ", Final Round"
             : "Round " + GameManager1.currentRound;
 
-        playerSprite.sprite = PlayerManager.Instance.currentPlayerTurn.PlayerIcon;
+        playerSprite.sprite = PlayerData.currentPlayerTurn.PlayerIcon;
+
+        if (wheel.tag != null) nextGameText.text = SpinWheel.GetDisplayNameForTag(wheel.tag) + " will begin now!";
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!nextGameText.gameObject.activeSelf) nextGameText.gameObject.SetActive(true);
+        StartCoroutine(GameTextPopupDOTween());
         ScreenShake.instance.TriggerShake();
 
         string tag = other.tag;
@@ -62,5 +70,19 @@ public class Pointer : MonoBehaviour
             transition.StartFadeOut(sceneName);
         else
             SceneManager.LoadScene(sceneName);
+    }
+
+    private IEnumerator GameTextPopupDOTween()
+    {
+        RectTransform textRT = nextGameText.GetComponent<RectTransform>();
+        textRT.localScale = Vector3.one * 0.2f;
+
+        Sequence textSequence = DOTween.Sequence();
+        textSequence.AppendCallback(() => nextGameText.gameObject.SetActive(true));
+        textSequence.Append(textRT.DOScale(1.1f, 0.3f).SetEase(Ease.OutBack));
+        textSequence.Append(textRT.DOScale(1f, 0.1f).SetEase(Ease.InOutQuad));
+        textSequence.AppendInterval(1.5f);
+
+        yield return null;
     }
 }
