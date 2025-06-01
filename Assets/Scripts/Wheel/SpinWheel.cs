@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpinWheel : MonoBehaviour
 {
-    public string tag {  get; private set; }
+    public new string tag {  get; private set; }
 
     [Header("Wheel Settings")]
     [SerializeField] private float wheelMotionlessThreshold = 0.5f;
@@ -91,7 +91,10 @@ public class SpinWheel : MonoBehaviour
                 hasSpinned = true;
                 hasReachedMotionThreshold = false;
 
-                Handheld.Vibrate();
+#if UNITY_ANDROID || UNITY_IOS
+Handheld.Vibrate();
+#endif
+
                 StartCoroutine(LaunchMinigameByPointer());
             }
         }

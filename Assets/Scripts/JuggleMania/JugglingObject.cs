@@ -20,7 +20,10 @@ public class JugglingObject : MonoBehaviour, IPointerDownHandler
         if (isKnife)
         {
             SFX.Play(2);
-            Handheld.Vibrate();
+#if UNITY_ANDROID || UNITY_IOS
+Handheld.Vibrate();
+#endif
+
             ScreenShakeManager.Instance.Shake();
             currentSpot.KillSpot();
             Destroy(gameObject);
