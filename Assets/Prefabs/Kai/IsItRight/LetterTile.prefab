@@ -66,7 +66,7 @@ RectTransform:
   m_GameObject: {fileID: 3328203379672074029}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7044620999966316313}
@@ -75,7 +75,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -188.5, y: -136}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2780209107031834659
 CanvasRenderer:
@@ -105,9 +105,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: 21300000, guid: fd0c03752eda5d8469af90f313cf6e21, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -203,13 +203,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c57fbf37b4e76441920deff27b7f3ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dissolveFX: {fileID: 0}
+  bounceTarget: {fileID: 6456215329705504416}
   letterText: {fileID: 2371929322331640245}
   displayedLetter: 
   correctLetter: 
   letter: 
   letterTextTransform: {fileID: 5170053317059988893}
   contentTransform: {fileID: 7044620999966316313}
-  bounceTarget: {fileID: 6456215329705504416}
   isCorrect: 0
 --- !u!1 &6241529901493554068
 GameObject:
@@ -278,8 +279,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d030c0fd78801034285dcda22992788d, type: 2}
-  m_sharedMaterial: {fileID: 8310804265985947052, guid: d030c0fd78801034285dcda22992788d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 04e49274d13800e46858a9a34c6a3d37, type: 2}
+  m_sharedMaterial: {fileID: 7111727005351512641, guid: 04e49274d13800e46858a9a34c6a3d37, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -303,13 +304,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.25
+  m_fontSize: 70
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontSizeMax: 70
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

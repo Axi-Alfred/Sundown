@@ -971,6 +971,10 @@ PrefabInstance:
       value: SceneController
       objectReference: {fileID: 0}
     - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
+      propertyPath: enableTimer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6861030255800006172, guid: 496b4c05854240f49a76626840167947, type: 3}
       propertyPath: timerDuration
       value: 10
       objectReference: {fileID: 0}
@@ -1036,7 +1040,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 23a815e8194e7bc45aa1c2876d395847, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8bc71e47476989d43bb33963ca7fb229, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
