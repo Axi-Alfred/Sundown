@@ -16,8 +16,12 @@ MonoBehaviour:
   m_RenderingLayerNames:
   - Default
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - Layer 1
   m_ValidRenderingLayers: 3
+=======
+  m_ValidRenderingLayers: 1
+>>>>>>> Stashed changes
 =======
   m_ValidRenderingLayers: 1
 >>>>>>> Stashed changes
