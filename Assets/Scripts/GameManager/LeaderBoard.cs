@@ -26,8 +26,8 @@ public class LeaderBoard : MonoBehaviour
 
     private void Awake()
     {
-        //PlayerData.numberOfPlayers = 4;
-        //StartCoroutine(PlayerData.AssignPlayers());
+        /*PlayerData.numberOfPlayers = 4;
+        StartCoroutine(PlayerData.AssignPlayers());*/
     }
     // Start is called before the first frame update
     void Start()
@@ -100,7 +100,6 @@ public class LeaderBoard : MonoBehaviour
             SceneManager.LoadScene("HuvudMenu");
         }
 
-        // ✅ Clear data for next game
         PlayerManager.Instance.playersArray = null;
         PlayerManager.Instance.currentPlayerTurn = null;
         PlayerManager.Instance.numberOfPlayers = 0;

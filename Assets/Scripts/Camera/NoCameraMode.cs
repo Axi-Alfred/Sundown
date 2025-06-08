@@ -25,6 +25,12 @@ public class NoCameraMode : MonoBehaviour
 
     [SerializeField] private float filterScaleMultiplier = 1;
 
+    private void Awake()
+    {
+        /*PlayerData.numberOfPlayers = 4;
+        StartCoroutine(PlayerData.AssignPlayers());*/
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -157,7 +163,6 @@ public class NoCameraMode : MonoBehaviour
     private Texture2D ScaleTexture(Texture2D source, int targetWidth, int targetHeight)
     {
         RenderTexture rt = RenderTexture.GetTemporary(targetWidth, targetHeight, 0, RenderTextureFormat.ARGB32);
-
         Graphics.Blit(source, rt);
 
         RenderTexture previous = RenderTexture.active;

@@ -30,7 +30,7 @@ public class PlayerPrep : MonoBehaviour
 
         entriesArray = new GameObject[PlayerData.numberOfPlayers];
 
-        //Loopen �r till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
+        //Loopen är till att ta bort alla tidigare entries i leaderboarden innan man skapar de nya
         while (transform.childCount > 0)
         {
             Destroy(transform.GetChild(0).gameObject);

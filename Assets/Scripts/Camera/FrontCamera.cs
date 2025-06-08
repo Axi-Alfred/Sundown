@@ -64,7 +64,9 @@ public class FrontCamera : MonoBehaviour
         RectTransform rectTransform = cameraPreview.rectTransform;
         rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rectTransform.rect.height * aspectRatio);
         rectTransform.localScale = new Vector3(-1, 1, 1);
+#if UNITY_ANDROID && !UNITY_EDITOR
         rectTransform.localRotation = Quaternion.Euler(0, 0, imageRotation);
+#endif
     }
 
     private void AdjustTakenImageAspectRatio(Texture2D picTexture)
@@ -88,10 +90,12 @@ public class FrontCamera : MonoBehaviour
         picTexture.SetPixels(pixels);
         picTexture.Apply();
 
+#if UNITY_ANDROID && !UNITY_EDITOR
         picTexture = RotateTexture(picTexture, clockwise: true);
         picTexture = FlipTextureVertically(picTexture);
+#endif
 
-        Sprite rotatedSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f));
+        Sprite rotatedSprite = Sprite.Create(picTexture, new Rect(0, 0, picTexture.width, picTexture.height), new Vector2(0.5f, 0.5f)); //rotatedSprite is the same image as pictexture, just only after its been rotated and flipped
         capturedImageDisplay.sprite = rotatedSprite;
 
         AdjustTakenImageAspectRatio(picTexture);
@@ -124,17 +128,18 @@ public class FrontCamera : MonoBehaviour
         int textureHeight = baseTexture.height;
 
         RectTransform capturedRect = capturedImageDisplay.rectTransform;
-        RectTransform faceRect = faceTemplate.rectTransform;
+        RectTransform faceRect = faceTemplate.rectTransform; //The RT of the oval face 
 
+        //Get the right size for the filter depending on the oval face and the captured image sizes
         float relativeWidth = faceRect.rect.width / capturedRect.rect.width;
         float relativeHeight = faceRect.rect.height / capturedRect.rect.height;
-
         int filterWidth = Mathf.RoundToInt(textureWidth * relativeWidth * filterScale);
         int filterHeight = Mathf.RoundToInt(textureHeight * relativeHeight * filterScale);
 
         Texture2D scaledFilter = ScaleTexture(filterTexture, filterWidth, filterHeight);
         Color[] filterPixels = scaledFilter.GetPixels();
 
+        // Calculating where on the image the filter should be applied, after proper scaling
         int startX = (textureWidth - filterWidth) / 2;
         int startY = (textureHeight - filterHeight) / 2;
 
